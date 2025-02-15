@@ -9,12 +9,12 @@ function FitnessTypesPage () {
       <div>
         <h2>Fitness Type</h2>
         <p className="pointer-hover" onClick={() => navigate('/fitnessTypes/RunningMetrics')}>RUNNING</p>
-        <p className="pointer-hover" onClick={() => navigate('/fitnessTypes/SportsMetrics')}>SPORTS</p>
         <p className="pointer-hover" onClick={() => navigate('/fitnessTypes/HikingMetrics')}>HIKING</p>
         <p className="pointer-hover" onClick={() => navigate('/fitnessTypes/CyclingMetrics')}>CYCLING</p>
         <p className="pointer-hover" onClick={() => navigate('/fitnessTypes/SwimmingMetrics')}>SWIMMING</p>
         <p className="pointer-hover" onClick={() => navigate('/fitnessTypes/WeightLiftingMetrics')}>WEIGHT LIFTING</p>
         {/* <p className="pointer-hover" onClick={() => navigate('/fitnessTypes/HikingMetrics')}>BODY WEIGHT EXERCISES</p> */}
+        <p className="pointer-hover" onClick={() => navigate('/fitnessTypes/SportsSelection')}>SPORTS</p>
         {/* <p className="pointer-hover" onClick={() => navigate('/fitnessTypes/StretchMetrics')}>STRETCH</p> */}
         {/* <p className="pointer-hover" onClick={() => navigate('/fitnessTypes/GoalsMetrics')}>GOALS</p> */}
   

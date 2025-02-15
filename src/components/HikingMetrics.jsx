@@ -89,7 +89,7 @@ function HikingMetrics() {
 
 return (
     <Stack>
-        <h2>HIKING METRICS</h2>
+        <Typography fontSize={32}>HIKING METRICS</Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
                     <BarChart

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Stack, Card, Typography } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 
-function SportsMetrics() { 
+function SportsSelection() { 
     const navigate = useNavigate();
 
 
@@ -17,4 +17,4 @@ return (
 
 }
 
-export default SportsMetrics 
+export default SportsSelection 

@@ -6,7 +6,7 @@ import HomePage from "./components/HomePage"
 import FitnessTypesPage from './components/FitnessTypesPage';
 import WeightLiftingMetrics from './components/WeightLiftingMetrics';
 import RunningMetrics from './components/RunningMetrics';
-import SportsMetrics from './components/SportsMetrics';
+import SportsSelection from './components/SportsSelection';
 import StretchMetrics from './components/StretchMetrics';
 import HikingMetrics from './components/HikingMetrics';
 import GoalsMetrics from './components/GoalsMetrics';
@@ -24,6 +24,7 @@ function App() {
           <Route path="/fitnessTypes" element={<FitnessTypesPage />} />
           <Route path="/fitnessTypes/WeightLiftingMetrics" element={<WeightLiftingMetrics />} />
           <Route path="/fitnessTypes/RunningMetrics" element={<RunningMetrics/>} />
+          <Route path="/fitnessTypes/SportsSelection" element={<SportsSelection/>} />
           <Route path="/fitnessTypes/StretchMetrics" element={<StretchMetrics/>} />
           <Route path="/fitnessTypes/HikingMetrics" element={<HikingMetrics/>} />
           <Route path="/fitnessTypes/GoalsMetrics" element={<GoalsMetrics/>} />
