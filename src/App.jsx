@@ -2,14 +2,16 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 
-import HomePage from "./components/HomePage"
-import FitnessTypesPage from './components/FitnessTypesPage';
-import WeightLiftingMetrics from './components/WeightLiftingMetrics';
-import RunningMetrics from './components/RunningMetrics';
-import SportsMetrics from './components/SportsMetrics';
-import StretchMetrics from './components/StretchMetrics';
-import HikingMetrics from './components/HikingMetrics';
-import GoalsMetrics from './components/GoalsMetrics';
+import HomePage from "./pages/HomePage"
+import FitnessTypesPage from './pages/FitnessTypesPage';
+import WeightLiftingMetrics from './pages/WeightLiftingMetrics';
+import RunningMetrics from './pages/RunningMetrics';
+import SportsSelection from './pages/SportsSelection';
+import StretchMetrics from './pages/StretchMetrics';
+import HikingMetrics from './pages/HikingMetrics';
+import GoalsMetrics from './pages/GoalsMetrics';
+import CyclingMetrics from './pages/CyclingMetrics';
+import SwimmingMetrics from './pages/SwimmingMetrics';
 
 
 function App() {
@@ -22,11 +24,12 @@ function App() {
           <Route path="/fitnessTypes" element={<FitnessTypesPage />} />
           <Route path="/fitnessTypes/WeightLiftingMetrics" element={<WeightLiftingMetrics />} />
           <Route path="/fitnessTypes/RunningMetrics" element={<RunningMetrics/>} />
-
-          <Route path="/fitnessTypes/SportsMetrics" element={<SportsMetrics/>} />
+          <Route path="/fitnessTypes/SportsSelection" element={<SportsSelection/>} />
           <Route path="/fitnessTypes/StretchMetrics" element={<StretchMetrics/>} />
           <Route path="/fitnessTypes/HikingMetrics" element={<HikingMetrics/>} />
           <Route path="/fitnessTypes/GoalsMetrics" element={<GoalsMetrics/>} />
+          <Route path="/fitnessTypes/CyclingMetrics" element={<CyclingMetrics/>}/>
+          <Route path="/fitnessTypes/SwimmingMetrics" element={<SwimmingMetrics/>}/>
         </Routes>
       </Router>
     </>

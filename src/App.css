@@ -44,3 +44,17 @@
 .pointer-hover {
   cursor: pointer;
 }
+
+.link {
+  color: white
+}
+
+.button-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #1a1a1a;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  text-align: center;
+}

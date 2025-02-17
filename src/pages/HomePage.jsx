@@ -1,13 +1,12 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function HomePage() {
-    const navigate = useNavigate();
-  
+
     return (
       <div>
         <h2>Fitness Tracker</h2>
         <p>Take charge of your health</p>
-        <button onClick={() => navigate('/fitnessTypes')}>My Metrics</button>
+        <Link to="./fitnessTypes" className="button-link">My Metrics</Link>
       </div>
     );
 }
