@@ -2,16 +2,16 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 
-import HomePage from "./components/HomePage"
-import FitnessTypesPage from './components/FitnessTypesPage';
-import WeightLiftingMetrics from './components/WeightLiftingMetrics';
-import RunningMetrics from './components/RunningMetrics';
-import SportsSelection from './components/SportsSelection';
-import StretchMetrics from './components/StretchMetrics';
-import HikingMetrics from './components/HikingMetrics';
-import GoalsMetrics from './components/GoalsMetrics';
-import CyclingMetrics from './components/CyclingMetrics';
-import SwimmingMetrics from './components/SwimmingMetrics';
+import HomePage from "./pages/HomePage"
+import FitnessTypesPage from './pages/FitnessTypesPage';
+import WeightLiftingMetrics from './pages/WeightLiftingMetrics';
+import RunningMetrics from './pages/RunningMetrics';
+import SportsSelection from './pages/SportsSelection';
+import StretchMetrics from './pages/StretchMetrics';
+import HikingMetrics from './pages/HikingMetrics';
+import GoalsMetrics from './pages/GoalsMetrics';
+import CyclingMetrics from './pages/CyclingMetrics';
+import SwimmingMetrics from './pages/SwimmingMetrics';
 
 
 function App() {
