@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Stack, Card, Typography } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 
@@ -118,8 +118,6 @@ const labels = swimmingData.map((data, index) => `swim ${index + 1}`)
 const graphMargin = 3;
 
 function SwimmingMetrics() {
-    const navigate = useNavigate();
-
     return (
         <Stack>
             <Typography fontSize={32}>SWIMMING METRICS</Typography>
@@ -182,7 +180,7 @@ function SwimmingMetrics() {
                     </Card>
                 </Stack>
             </Stack>
-            <button onClick={() => navigate('/fitnessTypes')}>Back to Fitness Types</button>
+            <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
         </Stack>
     );
 

@@ -1,17 +1,13 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Stack, Card, Typography } from '@mui/material';
-import { BarChart } from '@mui/x-charts';
 
 function SportsSelection() { 
-    const navigate = useNavigate();
-
 
 return (
     <div>
       <h2>SPORTS METRICS</h2>
-      <p>Sports improve your agility, coordination, and overall fitness. Use this section to log each practice sessions and performance stats.</p>
-     
-      <button onClick={() => navigate('/fitnessTypes')}>Back to Fitness Types</button>
+      <p>Sports metrics coming soon!</p>
+      <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
     </div>
   );
 

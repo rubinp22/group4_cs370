@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Stack, Card, Typography } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 
@@ -59,7 +59,6 @@ const hikingData = [
 ]
 
 function HikingMetrics() { 
-    const navigate = useNavigate();
 
     const distance = hikingData.map(data => data.distance);
     const elevationGain = hikingData.map(data => data.elevationGain);
@@ -151,8 +150,7 @@ return (
                 </Card>
             </Stack> 
 
-
-        <button onClick={() => navigate('/fitnessTypes')}>Back to Fitness Types</button>
+            <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
 
     </Stack>
     

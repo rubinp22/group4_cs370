@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Stack, Card, Typography } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 
@@ -82,8 +82,6 @@ const weightLiftData = [
 // Eventually we should allow users to input this data, but I want to keep things simple for now
 
 function WeightLiftingMetrics() {
-    const navigate = useNavigate();
-
     // Pulling individual data from the objects in weightLiftData into their own arrays
     const reps = weightLiftData.map(data => data.reps);
     const sets = weightLiftData.map(data => data.sets);
@@ -197,7 +195,7 @@ function WeightLiftingMetrics() {
                     />
                 </Card>
             </Stack>
-            <button onClick={() => navigate('/fitnessTypes')}>Back to Fitness Types</button>
+            <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
         </Stack>
 
     );
