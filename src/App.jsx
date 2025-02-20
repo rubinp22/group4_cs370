@@ -9,9 +9,10 @@ import RunningMetrics from './pages/RunningMetrics';
 import SportsSelection from './pages/SportsSelection';
 import StretchMetrics from './pages/StretchMetrics';
 import HikingMetrics from './pages/HikingMetrics';
-import GoalsMetrics from './pages/GoalsMetrics';
 import CyclingMetrics from './pages/CyclingMetrics';
 import SwimmingMetrics from './pages/SwimmingMetrics';
+import UserGoals from './pages/UserGoals';
+import NewGoal from './pages/NewGoal';
 
 
 function App() {
@@ -20,16 +21,17 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/fitnessTypes" element={<FitnessTypesPage />} />
-          <Route path="/fitnessTypes/WeightLiftingMetrics" element={<WeightLiftingMetrics />} />
-          <Route path="/fitnessTypes/RunningMetrics" element={<RunningMetrics/>} />
-          <Route path="/fitnessTypes/SportsSelection" element={<SportsSelection/>} />
-          <Route path="/fitnessTypes/StretchMetrics" element={<StretchMetrics/>} />
-          <Route path="/fitnessTypes/HikingMetrics" element={<HikingMetrics/>} />
-          <Route path="/fitnessTypes/GoalsMetrics" element={<GoalsMetrics/>} />
-          <Route path="/fitnessTypes/CyclingMetrics" element={<CyclingMetrics/>}/>
-          <Route path="/fitnessTypes/SwimmingMetrics" element={<SwimmingMetrics/>}/>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/fitnessTypes" element={<FitnessTypesPage />} />
+        <Route path="/fitnessTypes/WeightLiftingMetrics" element={<WeightLiftingMetrics />} />
+        <Route path="/fitnessTypes/RunningMetrics" element={<RunningMetrics/>} />
+        <Route path="/fitnessTypes/SportsSelection" element={<SportsSelection/>} />
+        <Route path="/fitnessTypes/StretchMetrics" element={<StretchMetrics/>} />
+        <Route path="/fitnessTypes/HikingMetrics" element={<HikingMetrics/>} />
+        <Route path="/fitnessTypes/CyclingMetrics" element={<CyclingMetrics/>}/>
+        <Route path="/fitnessTypes/SwimmingMetrics" element={<SwimmingMetrics/>}/>
+        <Route path="/userGoals" element={<UserGoals />} />
+        <Route path="/userGoals/newGoal" element={<NewGoal />} />
         </Routes>
       </Router>
     </>
