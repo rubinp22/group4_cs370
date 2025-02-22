@@ -30,6 +30,7 @@ function App() {
           <Route path="/fitnessTypes/GoalsMetrics" element={<GoalsMetrics/>} />
           <Route path="/fitnessTypes/CyclingMetrics" element={<CyclingMetrics/>}/>
           <Route path="/fitnessTypes/SwimmingMetrics" element={<SwimmingMetrics/>}/>
+          <Route path="/LeaderBoard" element={<LeaderBoard />} />
         </Routes>
       </Router>
     </>
