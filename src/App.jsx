@@ -12,7 +12,7 @@ import HikingMetrics from './pages/HikingMetrics';
 import GoalsMetrics from './pages/GoalsMetrics';
 import CyclingMetrics from './pages/CyclingMetrics';
 import SwimmingMetrics from './pages/SwimmingMetrics';
-
+import LeaderBoard from './pages/LeaderBoard';
 
 function App() {
   return (
@@ -30,7 +30,7 @@ function App() {
           <Route path="/fitnessTypes/GoalsMetrics" element={<GoalsMetrics/>} />
           <Route path="/fitnessTypes/CyclingMetrics" element={<CyclingMetrics/>}/>
           <Route path="/fitnessTypes/SwimmingMetrics" element={<SwimmingMetrics/>}/>
-          <Route path="/LeaderBoard" element={<LeaderBoard />} />
+          <Route path="/LeaderBoard" element={<LeaderBoard/>}/>
         </Routes>
       </Router>
     </>
