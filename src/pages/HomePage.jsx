@@ -8,6 +8,7 @@ function HomePage() {
         <p>Take charge of your health</p>
         <Link to="./fitnessTypes" className="button-link">My Metrics</Link>
         <Link to="./LeaderBoard" className="button-link">Leaderboard</Link>
+        <Link to="./profile" className="button-link">My Profile</Link>
       </div>
     );
 }
