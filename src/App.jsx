@@ -13,6 +13,8 @@ import GoalsMetrics from './pages/GoalsMetrics';
 import CyclingMetrics from './pages/CyclingMetrics';
 import SwimmingMetrics from './pages/SwimmingMetrics';
 import LeaderBoard from './pages/LeaderBoard';
+import ProfilePage from './pages/ProfilePage';
+
 
 function App() {
   return (
@@ -31,6 +33,7 @@ function App() {
           <Route path="/fitnessTypes/CyclingMetrics" element={<CyclingMetrics/>}/>
           <Route path="/fitnessTypes/SwimmingMetrics" element={<SwimmingMetrics/>}/>
           <Route path="/LeaderBoard" element={<LeaderBoard/>}/>
+          <Route path="/profile" element={<ProfilePage/>} />
         </Routes>
       </Router>
     </>
