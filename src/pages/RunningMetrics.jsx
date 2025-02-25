@@ -37,7 +37,7 @@ function RunningMetrics() {
     const cadence = steps.map((data, index) => data / (duration[index] * 60));
 
     const heartRateReserve = avgHeartRate.map((data, index) => 
-        (data - restingHeartRates[fitnessLevel[index]]) / (maxHeartRate[index] - restingHeartRates[fitnessLevel[index]]));
+        Math.abs((data - restingHeartRates[fitnessLevel[index]]) / (maxHeartRate[index] - restingHeartRates[fitnessLevel[index]])));
 
     const MET = heartRateReserve.map((data, index) => (data * (maxMETs[fitnessLevel[index]] - 1) + 1))
 
@@ -71,7 +71,6 @@ function RunningMetrics() {
         setRunningData([])
     }
     
-
 
     return (
         <Stack>

@@ -71,7 +71,7 @@ const grade = elevationGain.map((data, index) => (data / (distance[index] * 5280
 const pace = duration.map((data, index) => data / distance[index]);
 
 const heartRateReserve = avgHeartRate.map((data, index) => 
-    (data - restingHeartRates[fitnessLevel[index]]) / (maxHeartRate[index] - restingHeartRates[fitnessLevel[index]]));
+    Math.abs((data - restingHeartRates[fitnessLevel[index]]) / (maxHeartRate[index] - restingHeartRates[fitnessLevel[index]])));
 
 const MET = heartRateReserve.map((data, index) => (data * (maxMETs[fitnessLevel[index]] - 1) + 1))
 

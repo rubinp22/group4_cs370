@@ -113,7 +113,7 @@ function WeightLiftingMetrics() {
     // A value of 50% indicates you were exercising at 50% of your heart rate reserve
     // Important for calculating the estimated calories burnt during a workout.
     const heartRateReserve = avgHeartRate.map((data, index) => 
-        (data - restingHeartRates[fitnessLevel[index]]) / (maxHeartRate[index] - restingHeartRates[fitnessLevel[index]]));
+        Math.abs((data - restingHeartRates[fitnessLevel[index]]) / (maxHeartRate[index] - restingHeartRates[fitnessLevel[index]])));
 
     // MET = (heartRateReserve * (maxMET - 1)) + 1
     // MET was explained earlier in the documentation, it is crucial for estimating calories burnt
