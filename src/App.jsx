@@ -13,7 +13,6 @@ import GoalsMetrics from './pages/GoalsMetrics';
 import CyclingMetrics from './pages/CyclingMetrics';
 import SwimmingMetrics from './pages/SwimmingMetrics';
 import LeaderBoard from './pages/LeaderBoard';
-import RewardAchievements from './pages/RewardAchievements';
 
 function App() {
   return (
