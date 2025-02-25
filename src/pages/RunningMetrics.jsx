@@ -8,6 +8,7 @@ const restingHeartRates = [100, 70, 50]
 
 function RunningMetrics() {
     const [editingData, setEditingData] = useState(false);
+
     const [distanceIn, setDistanceIn] = useState(0);
     const [durationIn, setDurationIn] = useState(0);
     const [stepsIn, setStepsIn] = useState(0);
@@ -15,6 +16,7 @@ function RunningMetrics() {
     const [maxHeartRateIn, setMaxHeartRateIn] = useState(0);
     const [bodyWeightIn, setBodyWeightIn] = useState(0);
     const [fitnessLevelIn, setFitnessLevelIn] = useState(0);
+    
     const [runningData, setRunningData] = useState([]);
 
     const distance = runningData.map(data => data.distance);
@@ -113,27 +115,27 @@ function RunningMetrics() {
                     />
                 </Card>
             </Stack>
-            <Stack direction="row">
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[
-                            {data: avgHeartRate, label: "Avg Heart Rate" },
-                            {data: maxHeartRate, label: "Max Heart Rate" }
-                        ]}
-                        width={500}
-                        height={300}
-                    />
-                </Card>
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: caloriesBurned, label: "Estimated Calories Burned" }]}
-                        width={500}
-                        height={300}
-                    />
-                </Card>
-            </Stack>
+                <Stack direction="row">
+                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
+                        <BarChart
+                            xAxis={[{ scaleType: "band", data: labels }]}
+                            series={[
+                                {data: avgHeartRate, label: "Avg Heart Rate" },
+                                {data: maxHeartRate, label: "Max Heart Rate" }
+                            ]}
+                            width={500}
+                            height={300}
+                        />
+                    </Card>
+                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
+                        <BarChart
+                            xAxis={[{ scaleType: "band", data: labels }]}
+                            series={[{ data: caloriesBurned, label: "Estimated Calories Burned" }]}
+                            width={500}
+                            height={300}
+                        />
+                    </Card>
+                </Stack>
             <Stack>
                 {!editingData ? (
                     <></>

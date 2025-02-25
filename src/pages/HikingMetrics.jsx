@@ -1,64 +1,24 @@
 import { Link } from 'react-router-dom';
-import { Stack, Card, Typography } from '@mui/material';
+import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
+import { useState } from 'react';
 
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50]
 
-const hikingData = [
-  {
-    distance: 3,          // In miles
-    elevationGain: 500,   // Elevation gain in feet
-    elevationLoss: -200,
-    duration: 1,          // In hours
-    avgHeartRate: 120,
-    maxHeartRate: 145,
-    bodyWeight: 70,       // 70Kg = 154lbs
-    fitnessLevel: 0,
-  },
-  {
-    distance: 4,          
-    elevationGain: 600,
-    elevationLoss: -200,   
-    duration: 1.25,          
-    avgHeartRate: 125,
-    maxHeartRate: 150,
-    bodyWeight: 70,       
-    fitnessLevel: 0,
-  },
-  {
-    distance: 5,          
-    elevationGain: 800,
-    elevationLoss: -300,   
-    duration: 1.25,          
-    avgHeartRate: 120,
-    maxHeartRate: 140,
-    bodyWeight: 70,       
-    fitnessLevel: 1,
-  },
-  {
-    distance: 8,          
-    elevationGain: 1000,
-    elevationLoss: -100,   
-    duration: 1.75,          
-    avgHeartRate: 115,
-    maxHeartRate: 140,
-    bodyWeight: 65,       
-    fitnessLevel: 1,
-  },
-  {
-    distance: 9.50,          
-    elevationGain: 900,
-    elevationLoss: -400,   
-    duration: 2,          
-    avgHeartRate: 125,
-    maxHeartRate: 150,
-    bodyWeight: 65,       
-    fitnessLevel: 2,
-  },
-]
+function HikingMetrics() {
+    const [editingData, setEditingData] = useState(false);
 
-function HikingMetrics() { 
+    const [distanceIn, setDistanceIn] = useState(0);
+    const [elevationGainIn, setElevationGainIn] = useState(0);
+    const [elevationLossIn, setElevationLossIn] = useState(0);
+    const [durationIn, setDurationIn] = useState(0);
+    const [avgHeartRateIn, setAvgHeartRateIn] = useState(0);
+    const [maxHeartRateIn, setMaxHeartRateIn] = useState(0);
+    const [bodyWeightIn, setBodyWeightIn] = useState(0);
+    const [fitnessLevelIn, setFitnessLevelIn] = useState(0);
+
+    const [hikingData, setHikingData] = useState([]);
 
     const distance = hikingData.map(data => data.distance);
     const elevationGain = hikingData.map(data => data.elevationGain);
@@ -85,6 +45,31 @@ function HikingMetrics() {
 
     const labels = hikingData.map((data, index) => `hike ${index + 1}`)
     const graphMargin = 3;
+    const textInputSpacing = 3;
+
+    function handleEdit() {
+        editingData ? setEditingData(false) : setEditingData(true)
+    }
+
+    function handleSubmit() {
+        setHikingData(prevData => [
+            ...prevData,
+            {
+                distance: distanceIn,
+                elevationGain: elevationGainIn,
+                elevationLoss: elevationLossIn,
+                duration: durationIn,
+                avgHeartRate: avgHeartRateIn,
+                maxHeartRate: maxHeartRateIn,
+                bodyWeight: bodyWeightIn,
+                fitnessLevel: fitnessLevelIn
+            }
+        ])
+    }
+
+    function handleReset() {
+        setHikingData([])
+    }
 
 return (
     <Stack>
@@ -148,9 +133,106 @@ return (
                         height={300}
                     />
                 </Card>
-            </Stack> 
+            </Stack>
 
-            <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
+            {!editingData ? (
+                <></>
+            ) : (
+                <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
+                    <Typography marginBottom={5} fontSize={24}>Input Hiking Metrics</Typography>
+                    <Stack direction="column" spacing={textInputSpacing}>
+                        <TextField 
+                            required
+                            variant="filled" 
+                            label="Distance"
+                            type="number"
+                            onChange={(e) => setDistanceIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Miles</InputAdornment>
+                                }}
+                        />
+                        <TextField 
+                            required
+                            variant="filled" 
+                            label="Elevation Gain"
+                            type="number"
+                            onChange={(e) => setElevationGainIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Feet</InputAdornment>
+                                }}
+                        />
+                        <TextField 
+                            required
+                            variant="filled" 
+                            label="Elevation Loss"
+                            type="number"
+                            onChange={(e) => setElevationLossIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Feet</InputAdornment>
+                                }}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Duration"
+                            type="number"
+                            onChange={(e) => setDurationIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Hours</InputAdornment>
+                                }}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Average Heart Rate"
+                            type="number"
+                            onChange={(e) => setAvgHeartRateIn(e.target.value)}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Maximum Heart Rate"
+                            type="number"
+                            onChange={(e) => setMaxHeartRateIn(e.target.value)}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Bodyweight"
+                            type="number"
+                            onChange={(e) => setBodyWeightIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
+                                }}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Fitness Level"
+                            type="number"
+                            onChange={(e) => setFitnessLevelIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
+                                }}
+                        />
+                    </Stack>
+
+                    <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
+                        <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                        <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
+                    </Stack>
+                    
+                </Card>
+                )}
+
+            <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
+                <Button variant="contained" 
+                    onClick={handleEdit}
+                >
+                    {editingData ? "Stop Editing" : "Edit Data"}
+                </Button>
+                <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
+            </Stack>
 
     </Stack>
     
