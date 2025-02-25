@@ -9,7 +9,6 @@ function HomePage() {
         <Link to="./fitnessTypes" className="button-link">My Metrics</Link>
         <Link to="./RewardAchievements" className="button-link">Achievements</Link>
         <Link to="./LeaderBoard" className="button-link">Leaderboard</Link>
-        <Link to="./RewardAchievements" className="button-link">Achievements</Link>
       </div>
     );
 }
