@@ -9,15 +9,25 @@ const restingHeartRates = [100, 70, 50]
 function CyclingMetrics() {
     const [editingData, setEditingData] = useState(false);
 
-    const [distanceIn, setDistanceIn] = useState(0);
-    const [elevationGainIn, setElevationGainIn] = useState(0);
-    const [durationIn, setDurationIn] = useState(0);
-    const [avgHeartRateIn, setAvgHeartRateIn] = useState(0);
-    const [maxHeartRateIn, setMaxHeartRateIn] = useState(0);
-    const [bodyWeightIn, setBodyWeightIn] = useState(0);
-    const [fitnessLevelIn, setFitnessLevelIn] = useState(0);
+    const [distanceIn, setDistanceIn] = useState(undefined);
+    const [elevationGainIn, setElevationGainIn] = useState(undefined);
+    const [durationIn, setDurationIn] = useState(undefined);
+    const [avgHeartRateIn, setAvgHeartRateIn] = useState(undefined);
+    const [maxHeartRateIn, setMaxHeartRateIn] = useState(undefined);
+    const [bodyWeightIn, setBodyWeightIn] = useState(undefined);
+    const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
 
     const [cyclingData, setCyclingData] = useState([]);
+
+    const [errors, setErrors] = useState({
+        distance: false,
+        elevationGain: false,
+        duration: false,
+        avgHeartRate: false,
+        maxHeartRate: false,
+        bodyWeight: false,
+        fitnessLevel: false
+    })
 
     const distance = cyclingData.map(data => data.distance);
     const duration = cyclingData.map(data => data.duration);
@@ -50,18 +60,46 @@ function CyclingMetrics() {
     }
 
     function handleSubmit() {
-        setCyclingData(prevData => [
-            ...prevData,
-            {
-                distance: distanceIn,
-                elevationGain: elevationGainIn,
-                duration: durationIn,
-                avgHeartRate: avgHeartRateIn,
-                maxHeartRate: maxHeartRateIn,
-                bodyWeight: bodyWeightIn,
-                fitnessLevel: fitnessLevelIn
+        if (!isError()) {
+            setCyclingData(prevData => [
+                ...prevData,
+                {
+                    distance: distanceIn,
+                    elevationGain: elevationGainIn,
+                    duration: durationIn,
+                    avgHeartRate: avgHeartRateIn,
+                    maxHeartRate: maxHeartRateIn,
+                    bodyWeight: bodyWeightIn,
+                    fitnessLevel: fitnessLevelIn
+                }
+            ])
+        }
+    }
+
+    function isError() {
+        let newErrors = {
+            distance: (distanceIn === undefined || distanceIn < 1),
+            elevationGain: (elevationGainIn === undefined || elevationGainIn < 1),
+            duration: (durationIn === undefined || durationIn < 1),
+            avgHeartRate: (avgHeartRateIn === undefined || avgHeartRateIn < 1),
+            maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),
+            bodyWeight: (bodyWeightIn === undefined || bodyWeightIn < 1),
+            fitnessLevel: (fitnessLevelIn === undefined || fitnessLevelIn < 0 || fitnessLevelIn > 2),
+
+        }
+
+        setErrors(newErrors);
+
+        let newErrorsArray = Object.values(newErrors)
+        let errorFound = false;
+
+        newErrorsArray.forEach(val => {
+            if (val === true) {
+                errorFound = true;
             }
-        ])
+        })
+
+        return errorFound;
     }
 
     function handleReset() {
@@ -143,6 +181,7 @@ function CyclingMetrics() {
                             variant="filled" 
                             label="Distance"
                             type="number"
+                            error={errors.distance}
                             onChange={(e) => setDistanceIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Miles</InputAdornment>
@@ -153,6 +192,7 @@ function CyclingMetrics() {
                             variant="filled" 
                             label="Elevation Gain"
                             type="number"
+                            error={errors.elevationGain}
                             onChange={(e) => setElevationGainIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Feet</InputAdornment>
@@ -163,6 +203,7 @@ function CyclingMetrics() {
                             variant="filled" 
                             label="Duration"
                             type="number"
+                            error={errors.duration}
                             onChange={(e) => setDurationIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Hours</InputAdornment>
@@ -173,6 +214,7 @@ function CyclingMetrics() {
                             variant="filled" 
                             label="Average Heart Rate"
                             type="number"
+                            error={errors.avgHeartRate}
                             onChange={(e) => setAvgHeartRateIn(e.target.value)}
                         />
                         <TextField 
@@ -180,6 +222,7 @@ function CyclingMetrics() {
                             variant="filled" 
                             label="Maximum Heart Rate"
                             type="number"
+                            error={errors.maxHeartRate}
                             onChange={(e) => setMaxHeartRateIn(e.target.value)}
                         />
                         <TextField 
@@ -187,6 +230,7 @@ function CyclingMetrics() {
                             variant="filled" 
                             label="Bodyweight"
                             type="number"
+                            error={errors.bodyWeight}
                             onChange={(e) => setBodyWeightIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
@@ -197,6 +241,7 @@ function CyclingMetrics() {
                             variant="filled" 
                             label="Fitness Level"
                             type="number"
+                            error={errors.fitnessLevel}
                             onChange={(e) => setFitnessLevelIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>

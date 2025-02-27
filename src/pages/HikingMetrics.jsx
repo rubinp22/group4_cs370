@@ -81,8 +81,6 @@ function HikingMetrics() {
     }
 
     function isError() {
-        // Making a new object with values equal to whether or not the input state meets certain conditions
-        // Will result in an object that holds Boolean values
         let newErrors = {
             distance: (distanceIn === undefined || distanceIn < 1),
             elevationGain: (elevationGainIn === undefined || elevationGainIn < 1),
