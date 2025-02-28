@@ -9,15 +9,25 @@ const restingHeartRates = [100, 70, 50]
 function SwimmingMetrics() {
 const [editingData, setEditingData] = useState(false);
 
-const [lapCountIn, setLapCountIn] = useState(0);
+const [lapCountIn, setLapCountIn] = useState(undefined);
 const [lapTimesIn, setLapTimesIn] = useState([]);
 const [strokeCountIn, setStrokeCountIn] = useState([]);
-const [avgHeartRateIn, setAvgHeartRateIn] = useState(0);
-const [maxHeartRateIn, setMaxHeartRateIn] = useState(0);
-const [bodyWeightIn, setBodyWeightIn] = useState(0);
-const [fitnessLevelIn, setFitnessLevelIn] = useState(0);
+const [avgHeartRateIn, setAvgHeartRateIn] = useState(undefined);
+const [maxHeartRateIn, setMaxHeartRateIn] = useState(undefined);
+const [bodyWeightIn, setBodyWeightIn] = useState(undefined);
+const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
 
 const [swimmingData, setSwimmingData] = useState([]);
+
+const [errors, setErrors] = useState({
+    lapCount: false,
+    lapTime: false,
+    strokeCount: false,
+    avgHeartRate: false,
+    maxHeartRate: false,
+    bodyWeight: false,
+    fitnessLevel: false
+})
 
 const lapCount = swimmingData.map(data => data.lapCount);
 const lapTimes = swimmingData.map(data => data.lapTimes);
@@ -93,18 +103,51 @@ function handleEdit() {
 }
 
 function handleSubmit() {
-    setSwimmingData(prevData => [
-        ...prevData,
-        {
-            lapCount: lapCountIn,
-            lapTimes: lapTimesIn,
-            strokeCount: strokeCountIn,
-            avgHeartRate: avgHeartRateIn,
-            maxHeartRate: maxHeartRateIn,
-            bodyWeight: bodyWeightIn,
-            fitnessLevel: fitnessLevelIn
+    if (!isError()) {
+        setSwimmingData(prevData => [
+            ...prevData,
+            {
+                lapCount: lapCountIn,
+                lapTimes: lapTimesIn,
+                strokeCount: strokeCountIn,
+                avgHeartRate: avgHeartRateIn,
+                maxHeartRate: maxHeartRateIn,
+                bodyWeight: bodyWeightIn,
+                fitnessLevel: fitnessLevelIn
+            }
+        ])
+    }
+}
+
+// This function was the first time I used the some method, so I'm going to document it for my sake.
+// The some() method of Array instances tests whether at least one element in the array
+// passes the test implemented by the provided function. It returns true if, in the array,
+// it finds an element for which the provided function returns true; otherwise it returns
+// false. It doesn't modify the array. 
+function isError() {
+    let newErrors = {
+        lapCount: (lapCountIn === undefined || lapCountIn < 1),
+        lapTime: lapTimesIn.some(val => val === undefined || val < 1),
+        strokeCount: strokeCountIn.some(val => val === undefined || val < 1),
+        avgHeartRate: (avgHeartRateIn === undefined || avgHeartRateIn < 1),
+        maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),
+        bodyWeight: (bodyWeightIn === undefined || bodyWeightIn < 1),
+        fitnessLevel: (fitnessLevelIn === undefined || fitnessLevelIn < 0 || fitnessLevelIn > 2),
+
+    }
+    
+    setErrors(newErrors);
+
+    let newErrorsArray = Object.values(newErrors)
+    let errorFound = false;
+
+    newErrorsArray.forEach(val => {
+        if (val === true) {
+            errorFound = true;
         }
-    ])
+    })
+
+    return errorFound;
 }
 
 function handleReset() {
@@ -196,6 +239,7 @@ function handleLapCountChange(laps) {
                             variant="filled" 
                             label="Lap Count"
                             type="number"
+                            error={errors.lapCount}
                             onChange={(e) => handleLapCountChange(e.target.value)}
                         />
                         {/* Create N number of these text fields depending on the value of lapCount */}
@@ -206,6 +250,7 @@ function handleLapCountChange(laps) {
                                 variant="filled" 
                                 label={`Lap Time ${index + 1}`} 
                                 type="number"
+                                error={errors.lapTime}
                                 onChange={(e) => {
                                     const updatedLapTimes = [...lapTimesIn];
                                     updatedLapTimes[index] = parseInt(e.target.value);
@@ -223,6 +268,7 @@ function handleLapCountChange(laps) {
                                 variant="filled" 
                                 label={`Lap ${index + 1} Stroke Count`} 
                                 type="number"
+                                error={errors.strokeCount}
                                 onChange={(e) => {
                                     const updatedStrokeCounts = [...strokeCountIn];
                                     updatedStrokeCounts[index] = parseInt(e.target.value);
@@ -235,6 +281,7 @@ function handleLapCountChange(laps) {
                             variant="filled" 
                             label="Average Heart Rate"
                             type="number"
+                            error={errors.avgHeartRate}
                             onChange={(e) => setAvgHeartRateIn(e.target.value)}
                         />
                         <TextField 
@@ -242,6 +289,7 @@ function handleLapCountChange(laps) {
                             variant="filled" 
                             label="Maximum Heart Rate"
                             type="number"
+                            error={errors.maxHeartRate}
                             onChange={(e) => setMaxHeartRateIn(e.target.value)}
                         />
                         <TextField 
@@ -249,6 +297,7 @@ function handleLapCountChange(laps) {
                             variant="filled" 
                             label="Bodyweight"
                             type="number"
+                            error={errors.bodyWeight}
                             onChange={(e) => setBodyWeightIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
@@ -259,6 +308,7 @@ function handleLapCountChange(laps) {
                             variant="filled" 
                             label="Fitness Level"
                             type="number"
+                            error={errors.fitnessLevel}
                             onChange={(e) => setFitnessLevelIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
