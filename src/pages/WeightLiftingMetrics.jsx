@@ -23,16 +23,27 @@ const restingHeartRates = [100, 70, 50]
 function WeightLiftingMetrics() {
     const [editingData, setEditingData] = useState(false);
 
-    const [repsIn, setRepsIn] = useState(0);
-    const [setsIn, setSetsIn] = useState(0);
-    const [weightOfWeightsIn, setWeightOfWeightsIn] = useState(0);
-    const [durationIn, setDurationIn] = useState(0);
-    const [avgHeartRateIn, setAvgHeartRateIn] = useState(0);
-    const [maxHeartRateIn, setMaxHeartRateIn] = useState(0);
-    const [bodyWeightIn, setBodyWeightIn] = useState(0);
-    const [fitnessLevelIn, setFitnessLevelIn] = useState(0);
+    const [repsIn, setRepsIn] = useState(undefined);
+    const [setsIn, setSetsIn] = useState(undefined);
+    const [weightOfWeightsIn, setWeightOfWeightsIn] = useState(undefined);
+    const [durationIn, setDurationIn] = useState(undefined);
+    const [avgHeartRateIn, setAvgHeartRateIn] = useState(undefined);
+    const [maxHeartRateIn, setMaxHeartRateIn] = useState(undefined);
+    const [bodyWeightIn, setBodyWeightIn] = useState(undefined);
+    const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
 
     const [weightLiftData, setWeightLiftData] = useState([]);
+
+    const [errors, setErrors] = useState({
+        reps: false,
+        sets: false,
+        weightOfWeights: false,
+        duration: false,
+        avgHeartRate: false,
+        maxHeartRate: false,
+        bodyWeight: false,
+        fitnessLevel: false
+    })
 
     const reps = weightLiftData.map(data => data.reps);
     const sets = weightLiftData.map(data => data.sets);
@@ -83,19 +94,48 @@ function WeightLiftingMetrics() {
     }
 
     function handleSubmit() {
-        setWeightLiftData(prevData => [
-            ...prevData,
-            {
-                reps: repsIn,
-                sets: setsIn,
-                weightOfWeights: weightOfWeightsIn,
-                duration: durationIn,
-                avgHeartRate: avgHeartRateIn,
-                maxHeartRate: maxHeartRateIn,
-                bodyWeight: bodyWeightIn,
-                fitnessLevel: fitnessLevelIn
+        if (!isError()) {
+            setWeightLiftData(prevData => [
+                ...prevData,
+                {
+                    reps: repsIn,
+                    sets: setsIn,
+                    weightOfWeights: weightOfWeightsIn,
+                    duration: durationIn,
+                    avgHeartRate: avgHeartRateIn,
+                    maxHeartRate: maxHeartRateIn,
+                    bodyWeight: bodyWeightIn,
+                    fitnessLevel: fitnessLevelIn
+                }
+            ])
+        }
+    }
+
+    function isError() {
+        let newErrors = {
+            reps: (repsIn === undefined || repsIn < 1),
+            sets: (setsIn === undefined || setsIn < 1),
+            weightOfWeights: (weightOfWeightsIn === undefined || weightOfWeightsIn < 1),
+            duration: (durationIn === undefined || durationIn < 1),
+            avgHeartRate: (avgHeartRateIn === undefined || avgHeartRateIn < 1),
+            maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),
+            bodyWeight: (bodyWeightIn === undefined || bodyWeightIn < 1),
+            fitnessLevel: (fitnessLevelIn === undefined || fitnessLevelIn < 0 || fitnessLevelIn > 2),
+
+        }
+
+        setErrors(newErrors);
+
+        let newErrorsArray = Object.values(newErrors)
+        let errorFound = false;
+
+        newErrorsArray.forEach(val => {
+            if (val === true) {
+                errorFound = true;
             }
-        ])
+        })
+
+        return errorFound;
     }
 
     function handleReset() {
@@ -175,6 +215,7 @@ function WeightLiftingMetrics() {
                             variant="filled" 
                             label="Reps"
                             type="number"
+                            error={errors.reps}
                             onChange={(e) => setRepsIn(e.target.value)}
                         />
                         <TextField 
@@ -182,6 +223,7 @@ function WeightLiftingMetrics() {
                             variant="filled" 
                             label="Sets"
                             type="number"
+                            error={errors.sets}
                             onChange={(e) => setSetsIn(e.target.value)}
                         />
                         <TextField 
@@ -189,6 +231,7 @@ function WeightLiftingMetrics() {
                             variant="filled" 
                             label="Weight of Weights"
                             type="number"
+                            error={errors.weightOfWeights}
                             onChange={(e) => setWeightOfWeightsIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
@@ -199,6 +242,7 @@ function WeightLiftingMetrics() {
                             variant="filled" 
                             label="Duration"
                             type="number"
+                            error={errors.duration}
                             onChange={(e) => setDurationIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Hours</InputAdornment>
@@ -209,6 +253,7 @@ function WeightLiftingMetrics() {
                             variant="filled" 
                             label="Average Heart Rate"
                             type="number"
+                            error={errors.avgHeartRate}
                             onChange={(e) => setAvgHeartRateIn(e.target.value)}
                         />
                         <TextField 
@@ -216,6 +261,7 @@ function WeightLiftingMetrics() {
                             variant="filled" 
                             label="Maximum Heart Rate"
                             type="number"
+                            error={errors.maxHeartRate}
                             onChange={(e) => setMaxHeartRateIn(e.target.value)}
                         />
                         <TextField 
@@ -223,6 +269,7 @@ function WeightLiftingMetrics() {
                             variant="filled" 
                             label="Bodyweight"
                             type="number"
+                            error={errors.bodyWeight}
                             onChange={(e) => setBodyWeightIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
@@ -233,6 +280,7 @@ function WeightLiftingMetrics() {
                             variant="filled" 
                             label="Fitness Level"
                             type="number"
+                            error={errors.fitnessLevel}
                             onChange={(e) => setFitnessLevelIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
