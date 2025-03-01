@@ -62,6 +62,17 @@ function HikingMetrics() {
         editingData ? setEditingData(false) : setEditingData(true)
     }
 
+    function handleClear() {
+        setDistanceIn("");
+        setElevationGainIn("");
+        setElevationLossIn("");
+        setDurationIn("");
+        setAvgHeartRateIn("");
+        setMaxHeartRateIn("");
+        setBodyWeightIn("");
+        setFitnessLevelIn("");
+    }
+
     function handleSubmit() {
         if (!isError()) {
             setHikingData(prevData => [
@@ -187,6 +198,7 @@ return (
                             label="Distance"
                             type="number"
                             error={errors.distance}
+                            value={distanceIn}
                             onChange={(e) => setDistanceIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Miles</InputAdornment>
@@ -198,6 +210,7 @@ return (
                             label="Elevation Gain"
                             type="number"
                             error={errors.elevationGain}
+                            value={elevationGainIn}
                             onChange={(e) => setElevationGainIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Feet</InputAdornment>
@@ -209,6 +222,7 @@ return (
                             label="Elevation Loss"
                             type="number"
                             error={errors.elevationLoss}
+                            value={elevationLossIn}
                             onChange={(e) => setElevationLossIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Feet</InputAdornment>
@@ -220,6 +234,7 @@ return (
                             label="Duration"
                             type="number"
                             error={errors.duration}
+                            value={durationIn}
                             onChange={(e) => setDurationIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Hours</InputAdornment>
@@ -231,6 +246,7 @@ return (
                             label="Average Heart Rate"
                             type="number"
                             error={errors.avgHeartRate}
+                            value={avgHeartRateIn}
                             onChange={(e) => setAvgHeartRateIn(e.target.value)}
                         />
                         <TextField 
@@ -239,6 +255,7 @@ return (
                             label="Maximum Heart Rate"
                             type="number"
                             error={errors.maxHeartRate}
+                            value={maxHeartRateIn}
                             onChange={(e) => setMaxHeartRateIn(e.target.value)}
                         />
                         <TextField 
@@ -248,6 +265,7 @@ return (
                             type="number"
                             onChange={(e) => setBodyWeightIn(e.target.value)}
                             error={errors.bodyWeight}
+                            value={bodyWeightIn}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
                                 }}
@@ -258,6 +276,7 @@ return (
                             label="Fitness Level"
                             type="number"
                             error={errors.fitnessLevel}
+                            value={fitnessLevelIn}
                             onChange={(e) => setFitnessLevelIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
@@ -267,6 +286,7 @@ return (
 
                     <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
                         <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                        <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
                         <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
                     </Stack>
                     

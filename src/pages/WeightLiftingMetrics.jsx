@@ -93,6 +93,17 @@ function WeightLiftingMetrics() {
         editingData ? setEditingData(false) : setEditingData(true)
     }
 
+    function handleClear() {
+        setRepsIn("");
+        setSetsIn("");
+        setWeightOfWeightsIn("");
+        setDurationIn("");
+        setAvgHeartRateIn("");
+        setMaxHeartRateIn("");
+        setBodyWeightIn("");
+        setFitnessLevelIn("");
+    }
+
     function handleSubmit() {
         if (!isError()) {
             setWeightLiftData(prevData => [
@@ -216,6 +227,7 @@ function WeightLiftingMetrics() {
                             label="Reps"
                             type="number"
                             error={errors.reps}
+                            value={repsIn}
                             onChange={(e) => setRepsIn(e.target.value)}
                         />
                         <TextField 
@@ -224,6 +236,7 @@ function WeightLiftingMetrics() {
                             label="Sets"
                             type="number"
                             error={errors.sets}
+                            value={setsIn}
                             onChange={(e) => setSetsIn(e.target.value)}
                         />
                         <TextField 
@@ -232,6 +245,7 @@ function WeightLiftingMetrics() {
                             label="Weight of Weights"
                             type="number"
                             error={errors.weightOfWeights}
+                            value={weightOfWeightsIn}
                             onChange={(e) => setWeightOfWeightsIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
@@ -243,6 +257,7 @@ function WeightLiftingMetrics() {
                             label="Duration"
                             type="number"
                             error={errors.duration}
+                            value={durationIn}
                             onChange={(e) => setDurationIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Hours</InputAdornment>
@@ -254,6 +269,7 @@ function WeightLiftingMetrics() {
                             label="Average Heart Rate"
                             type="number"
                             error={errors.avgHeartRate}
+                            value={avgHeartRateIn}
                             onChange={(e) => setAvgHeartRateIn(e.target.value)}
                         />
                         <TextField 
@@ -262,6 +278,7 @@ function WeightLiftingMetrics() {
                             label="Maximum Heart Rate"
                             type="number"
                             error={errors.maxHeartRate}
+                            value={maxHeartRateIn}
                             onChange={(e) => setMaxHeartRateIn(e.target.value)}
                         />
                         <TextField 
@@ -270,6 +287,7 @@ function WeightLiftingMetrics() {
                             label="Bodyweight"
                             type="number"
                             error={errors.bodyWeight}
+                            value={bodyWeightIn}
                             onChange={(e) => setBodyWeightIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
@@ -281,6 +299,7 @@ function WeightLiftingMetrics() {
                             label="Fitness Level"
                             type="number"
                             error={errors.fitnessLevel}
+                            value={fitnessLevelIn}
                             onChange={(e) => setFitnessLevelIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
@@ -290,6 +309,7 @@ function WeightLiftingMetrics() {
 
                     <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
                         <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                        <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
                         <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
                     </Stack>
                     

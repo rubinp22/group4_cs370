@@ -68,6 +68,16 @@ function RunningMetrics() {
         setRunningData([])
     }
 
+    function handleClear() {
+        setDistanceIn("");
+        setDurationIn("");
+        setStepsIn("");
+        setAvgHeartRateIn("");
+        setMaxHeartRateIn("");
+        setBodyWeightIn("");
+        setFitnessLevelIn("");
+    }
+
     function handleSubmit() {
         if (!isError()) {
             setRunningData(prevData => [
@@ -197,6 +207,7 @@ function RunningMetrics() {
                                 label="Distance"
                                 type="number"
                                 error={errors.distance}
+                                value={distanceIn}
                                 onChange={(e) => setDistanceIn(e.target.value)}
                                 InputProps={{ 
                                     endAdornment: <InputAdornment position='end'>Miles</InputAdornment>
@@ -208,6 +219,7 @@ function RunningMetrics() {
                                 label="Duration"
                                 type="number"
                                 error={errors.duration}
+                                value={durationIn}
                                 onChange={(e) => setDurationIn(e.target.value)}
                                 InputProps={{ 
                                     endAdornment: <InputAdornment position='end'>Hours</InputAdornment>
@@ -218,6 +230,7 @@ function RunningMetrics() {
                                 variant="filled" 
                                 label="Steps"
                                 type="number"
+                                value={stepsIn}
                                 error={errors.steps}
                                 onChange={(e) => setStepsIn(e.target.value)}
                             />
@@ -226,6 +239,7 @@ function RunningMetrics() {
                                 variant="filled" 
                                 label="Average Heart Rate"
                                 type="number"
+                                value={avgHeartRateIn}
                                 error={errors.avgHeartRate}
                                 onChange={(e) => setAvgHeartRateIn(e.target.value)}
                             />
@@ -234,6 +248,7 @@ function RunningMetrics() {
                                 variant="filled" 
                                 label="Maximum Heart Rate"
                                 type="number"
+                                value={maxHeartRateIn}
                                 error={errors.maxHeartRate}
                                 onChange={(e) => setMaxHeartRateIn(e.target.value)}
                             />
@@ -242,6 +257,7 @@ function RunningMetrics() {
                                 variant="filled" 
                                 label="Bodyweight"
                                 type="number"
+                                value={bodyWeightIn}
                                 error={errors.bodyWeight}
                                 onChange={(e) => setBodyWeightIn(e.target.value)}
                                 InputProps={{ 
@@ -253,6 +269,7 @@ function RunningMetrics() {
                                 variant="filled" 
                                 label="Fitness Level"
                                 type="number"
+                                value={fitnessLevelIn}
                                 error={errors.fitnessLevel}
                                 onChange={(e) => setFitnessLevelIn(e.target.value)}
                                 InputProps={{ 
@@ -262,6 +279,7 @@ function RunningMetrics() {
                         </Stack>
                         <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
                             <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                            <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
                             <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
                         </Stack>
                     </Card>

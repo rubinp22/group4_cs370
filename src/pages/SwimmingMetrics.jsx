@@ -102,6 +102,16 @@ function handleEdit() {
     editingData ? setEditingData(false) : setEditingData(true)
 }
 
+function handleClear() {
+    setLapCountIn("");
+    setLapTimesIn([]);
+    setStrokeCountIn([]);
+    setAvgHeartRateIn("");
+    setMaxHeartRateIn("");
+    setBodyWeightIn("");
+    setFitnessLevelIn("");
+}
+
 function handleSubmit() {
     if (!isError()) {
         setSwimmingData(prevData => [
@@ -135,7 +145,7 @@ function isError() {
         fitnessLevel: (fitnessLevelIn === undefined || fitnessLevelIn < 0 || fitnessLevelIn > 2),
 
     }
-    
+
     setErrors(newErrors);
 
     let newErrorsArray = Object.values(newErrors)
@@ -240,6 +250,7 @@ function handleLapCountChange(laps) {
                             label="Lap Count"
                             type="number"
                             error={errors.lapCount}
+                            value={lapCountIn}
                             onChange={(e) => handleLapCountChange(e.target.value)}
                         />
                         {/* Create N number of these text fields depending on the value of lapCount */}
@@ -251,6 +262,7 @@ function handleLapCountChange(laps) {
                                 label={`Lap Time ${index + 1}`} 
                                 type="number"
                                 error={errors.lapTime}
+                                value={lapTimesIn[index]}
                                 onChange={(e) => {
                                     const updatedLapTimes = [...lapTimesIn];
                                     updatedLapTimes[index] = parseInt(e.target.value);
@@ -269,6 +281,7 @@ function handleLapCountChange(laps) {
                                 label={`Lap ${index + 1} Stroke Count`} 
                                 type="number"
                                 error={errors.strokeCount}
+                                value={strokeCountIn[index]}
                                 onChange={(e) => {
                                     const updatedStrokeCounts = [...strokeCountIn];
                                     updatedStrokeCounts[index] = parseInt(e.target.value);
@@ -282,6 +295,7 @@ function handleLapCountChange(laps) {
                             label="Average Heart Rate"
                             type="number"
                             error={errors.avgHeartRate}
+                            value={avgHeartRateIn}
                             onChange={(e) => setAvgHeartRateIn(e.target.value)}
                         />
                         <TextField 
@@ -290,6 +304,7 @@ function handleLapCountChange(laps) {
                             label="Maximum Heart Rate"
                             type="number"
                             error={errors.maxHeartRate}
+                            value={maxHeartRateIn}
                             onChange={(e) => setMaxHeartRateIn(e.target.value)}
                         />
                         <TextField 
@@ -298,6 +313,7 @@ function handleLapCountChange(laps) {
                             label="Bodyweight"
                             type="number"
                             error={errors.bodyWeight}
+                            value={bodyWeightIn}
                             onChange={(e) => setBodyWeightIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
@@ -309,6 +325,7 @@ function handleLapCountChange(laps) {
                             label="Fitness Level"
                             type="number"
                             error={errors.fitnessLevel}
+                            value={fitnessLevelIn}
                             onChange={(e) => setFitnessLevelIn(e.target.value)}
                             InputProps={{ 
                                 endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
@@ -318,6 +335,7 @@ function handleLapCountChange(laps) {
 
                     <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
                         <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                        <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
                         <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
                     </Stack>
                     
