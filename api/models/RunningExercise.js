@@ -8,7 +8,7 @@ const RunningExercise = new mongoose.Schema({
     maxHeartRate: Number,
     bodyWeight: Number,
     fitnessLevel: Number
-})
+});
 
 export default mongoose.model('Running', RunningExercise);
 

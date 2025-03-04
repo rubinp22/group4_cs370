@@ -1,6 +1,7 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import mongoose from 'mongoose'
+import Running from './models/RunningExercise.js'
 
 import 'dotenv/config';
 
@@ -33,6 +34,23 @@ app.use('*', async (c, next) => {
 app.get('/', (c) => {
     return c.text('Hello Hono!')
 })
+
+app.post('exercises/running', async (c) => {
+    // Get the posted content
+    const body = await c.req.json();
+
+    // Create a new exercise with the posted content
+    // In other words, this creates a new record in MongoDB
+    Running.create(body);
+
+    return c.text('Exercise Added');
+})
+
+app.get('/exercises/running', async (c) => {
+    const runningExercises = await Running.find();
+    return c.json(runningExercises);
+})
+
 
 serve({
     fetch: app.fetch,
