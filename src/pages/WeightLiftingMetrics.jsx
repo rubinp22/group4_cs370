@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Stack, Card, Typography } from '@mui/material';
+import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
-
-// Here I am declaring some sample data for weight lifting:
+import { useState } from 'react';
 
 // MET (Metabolic Equivalent of Task) is defined as the energy expenditure for a given task
 // An MET of 1 is measured as the energy expenditure at rest. 
@@ -21,76 +20,40 @@ const maxMETs = [10, 14, 18];
 // 2 - Highly Trained Atheletes: 50
 const restingHeartRates = [100, 70, 50]
 
-// Imagine this data represents someone who is continually improving at weight lifting
-const weightLiftData = [
-    {
-        reps: 15,
-        sets: 2,
-        weightOfWeights: 5,     // in Kg
-        bodyWeight: 70,         // also in Kg, equal to about 154 pounds
-        age: 20,                // will come in handy later on to calculate max heart rates (220 - age)
-        avgHeartRate: 125,      // average heart rate over the duration of the exercise (BPM)
-        maxHeartRate: 156,      // maximum heart rate, not sustained over the duration of the exercise (just peak)
-        duration: 0.25,         // duration of exercise in hours (useful for various calculations)
-        fitnessLevel: 0,        // from 0 to 2, these values index the array of max MET values
-    }, 
-    {
-        reps: 20,               // 5 more reps per set
-        sets: 4,                // Double the sets
-        weightOfWeights: 7.5,
-        bodyWeight: 70,
-        age: 20,
-        avgHeartRate: 125,
-        maxHeartRate: 160,
-        duration: 0.50,         // Therefore, double the duration
-        fitnessLevel: 0,
-    },
-    {
-        reps: 25,               // 5 more reps per set
-        sets: 4,
-        weightOfWeights: 7.5,
-        bodyWeight: 75,
-        age: 20,
-        avgHeartRate: 115,
-        maxHeartRate: 145,
-        duration: 0.60,
-        fitnessLevel: 1,        // Now in better shape
-    }, 
-    {
-        reps: 30,               // More reps
-        sets: 4,
-        weightOfWeights: 7.5,
-        bodyWeight: 75,
-        age: 20,            
-        avgHeartRate: 120,
-        maxHeartRate: 150,
-        duration: 0.50,         // Now they are faster, even with more reps
-        fitnessLevel: 1
-    }, 
-    {
-        reps: 30,
-        sets: 5,
-        weightOfWeights: 10,    // Heavier weights
-        bodyWeight: 80,         // More muscle mass
-        age: 21,                // A year has passed
-        avgHeartRate: 125,
-        maxHeartRate: 158,
-        duration: 0.65,         // Heavier weights take longer
-        fitnessLevel: 2         // Now considered a professional weight lifter (usually takes longer than this but oh well)
-    }
-]
-// Eventually we should allow users to input this data, but I want to keep things simple for now
-
 function WeightLiftingMetrics() {
-    // Pulling individual data from the objects in weightLiftData into their own arrays
+    const [editingData, setEditingData] = useState(false);
+
+    const [repsIn, setRepsIn] = useState(undefined);
+    const [setsIn, setSetsIn] = useState(undefined);
+    const [weightOfWeightsIn, setWeightOfWeightsIn] = useState(undefined);
+    const [durationIn, setDurationIn] = useState(undefined);
+    const [avgHeartRateIn, setAvgHeartRateIn] = useState(undefined);
+    const [maxHeartRateIn, setMaxHeartRateIn] = useState(undefined);
+    const [bodyWeightIn, setBodyWeightIn] = useState(undefined);
+    const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
+
+    const [weightLiftData, setWeightLiftData] = useState([]);
+
+    const [errors, setErrors] = useState({
+        reps: false,
+        sets: false,
+        weightOfWeights: false,
+        duration: false,
+        avgHeartRate: false,
+        maxHeartRate: false,
+        bodyWeight: false,
+        fitnessLevel: false
+    })
+
     const reps = weightLiftData.map(data => data.reps);
     const sets = weightLiftData.map(data => data.sets);
     const weightOfWeights = weightLiftData.map(data => data.weightOfWeights);
-    const bodyWeight = weightLiftData.map(data => data.bodyWeight);
+    const duration = weightLiftData.map(data => data.duration);
     const avgHeartRate = weightLiftData.map(data => data.avgHeartRate);
     const maxHeartRate = weightLiftData.map(data => data.maxHeartRate);
+    const bodyWeight = weightLiftData.map(data => data.bodyWeight);
     const fitnessLevel = weightLiftData.map(data => data.fitnessLevel);
-    const duration = weightLiftData.map(data => data.duration);
+    
 
     // totalReps = reps * sets
     const totalReps = reps.map((data, index) => data * sets[index]);
@@ -113,7 +76,7 @@ function WeightLiftingMetrics() {
     // A value of 50% indicates you were exercising at 50% of your heart rate reserve
     // Important for calculating the estimated calories burnt during a workout.
     const heartRateReserve = avgHeartRate.map((data, index) => 
-        (data - restingHeartRates[fitnessLevel[index]]) / (maxHeartRate[index] - restingHeartRates[fitnessLevel[index]]));
+        Math.abs((data - restingHeartRates[fitnessLevel[index]]) / (maxHeartRate[index] - restingHeartRates[fitnessLevel[index]])));
 
     // MET = (heartRateReserve * (maxMET - 1)) + 1
     // MET was explained earlier in the documentation, it is crucial for estimating calories burnt
@@ -123,16 +86,73 @@ function WeightLiftingMetrics() {
     const caloriesBurned = MET.map((data, index) => parseInt(data * duration[index] * bodyWeight[index]));
 
     const labels = weightLiftData.map((_, index) => `Session ${index + 1}`);
-
     const graphMargin = 3;
+    const textInputSpacing = 3;
 
-    // Stacks are MUI components that quickly let you stack nested components horizontally and vertically instead of 
-    //      manually needing to define flex boxes through CSS
-    // Cards are useful as backdrops to make other components stand out
-    // Typography is an alternative component to any built in HTML text component (like H1 or P)
-    //      Side Note: Page scrapers parsing through HTML will often use H1 components to "sum up" what a web page
-    //      represents. If you use H1's through H6's a lot, you may confuse search engines. But we don't have to 
-    //      worry about that.
+    function handleEdit() {
+        editingData ? setEditingData(false) : setEditingData(true)
+    }
+
+    function handleClear() {
+        setRepsIn("");
+        setSetsIn("");
+        setWeightOfWeightsIn("");
+        setDurationIn("");
+        setAvgHeartRateIn("");
+        setMaxHeartRateIn("");
+        setBodyWeightIn("");
+        setFitnessLevelIn("");
+    }
+
+    function handleSubmit() {
+        if (!isError()) {
+            setWeightLiftData(prevData => [
+                ...prevData,
+                {
+                    reps: repsIn,
+                    sets: setsIn,
+                    weightOfWeights: weightOfWeightsIn,
+                    duration: durationIn,
+                    avgHeartRate: avgHeartRateIn,
+                    maxHeartRate: maxHeartRateIn,
+                    bodyWeight: bodyWeightIn,
+                    fitnessLevel: fitnessLevelIn
+                }
+            ])
+        }
+    }
+
+    function isError() {
+        let newErrors = {
+            reps: (repsIn === undefined || repsIn < 1),
+            sets: (setsIn === undefined || setsIn < 1),
+            weightOfWeights: (weightOfWeightsIn === undefined || weightOfWeightsIn < 1),
+            duration: (durationIn === undefined || durationIn < 1),
+            avgHeartRate: (avgHeartRateIn === undefined || avgHeartRateIn < 1),
+            maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),
+            bodyWeight: (bodyWeightIn === undefined || bodyWeightIn < 1),
+            fitnessLevel: (fitnessLevelIn === undefined || fitnessLevelIn < 0 || fitnessLevelIn > 2),
+
+        }
+
+        setErrors(newErrors);
+
+        let newErrorsArray = Object.values(newErrors)
+        let errorFound = false;
+
+        newErrorsArray.forEach(val => {
+            if (val === true) {
+                errorFound = true;
+            }
+        })
+
+        return errorFound;
+    }
+
+    function handleReset() {
+        setWeightLiftData([])
+    }
+
     return (
         <Stack>
             <Typography fontSize={32}>
@@ -195,7 +215,114 @@ function WeightLiftingMetrics() {
                     />
                 </Card>
             </Stack>
-            <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
+            {!editingData ? (
+                <></>
+            ) : (
+                <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
+                    <Typography marginBottom={5} fontSize={24}>Input Weightlifting Metrics</Typography>
+                    <Stack direction="column" spacing={textInputSpacing}>
+                        <TextField 
+                            required
+                            variant="filled" 
+                            label="Reps"
+                            type="number"
+                            error={errors.reps}
+                            value={repsIn}
+                            onChange={(e) => setRepsIn(e.target.value)}
+                        />
+                        <TextField 
+                            required
+                            variant="filled" 
+                            label="Sets"
+                            type="number"
+                            error={errors.sets}
+                            value={setsIn}
+                            onChange={(e) => setSetsIn(e.target.value)}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Weight of Weights"
+                            type="number"
+                            error={errors.weightOfWeights}
+                            value={weightOfWeightsIn}
+                            onChange={(e) => setWeightOfWeightsIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
+                                }}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Duration"
+                            type="number"
+                            error={errors.duration}
+                            value={durationIn}
+                            onChange={(e) => setDurationIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Hours</InputAdornment>
+                                }}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Average Heart Rate"
+                            type="number"
+                            error={errors.avgHeartRate}
+                            value={avgHeartRateIn}
+                            onChange={(e) => setAvgHeartRateIn(e.target.value)}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Maximum Heart Rate"
+                            type="number"
+                            error={errors.maxHeartRate}
+                            value={maxHeartRateIn}
+                            onChange={(e) => setMaxHeartRateIn(e.target.value)}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Bodyweight"
+                            type="number"
+                            error={errors.bodyWeight}
+                            value={bodyWeightIn}
+                            onChange={(e) => setBodyWeightIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
+                                }}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Fitness Level"
+                            type="number"
+                            error={errors.fitnessLevel}
+                            value={fitnessLevelIn}
+                            onChange={(e) => setFitnessLevelIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
+                                }}
+                        />
+                    </Stack>
+
+                    <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
+                        <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                        <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
+                        <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
+                    </Stack>
+                    
+                </Card>
+            )}
+            <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
+                <Button variant="contained" 
+                    onClick={handleEdit}
+                >
+                    {editingData ? "Stop Editing" : "Edit Data"}
+                </Button>
+                <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
+            </Stack>
         </Stack>
 
     );

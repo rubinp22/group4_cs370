@@ -1,86 +1,121 @@
 import { Link } from 'react-router-dom';
-import { Stack, Card, Typography } from '@mui/material';
+import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
+import { useState } from 'react';
 
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50]
 
-const cyclingData = [
-    {
-        distance: 3,            // in miles
-        duration: 0.75,         // in hours
-        elevationGain: 300,     // in feet
-        avgHeartRate: 100,
-        maxHeartRate: 120,
-        bodyWeight: 70,         // in Kg
-        fitnessLevel: 0
-    },
-    {
-        distance: 5,            
-        duration: 0.75,         
-        elevationGain: 400,     
-        avgHeartRate: 105,
-        maxHeartRate: 120,
-        bodyWeight: 70,         
-        fitnessLevel: 0
-    },
-    {
-        distance: 6,            
-        duration: 1,         
-        elevationGain: 600,     
-        avgHeartRate: 115,
-        maxHeartRate: 135,
-        bodyWeight: 70,         
-        fitnessLevel: 0
-    },
-    {
-        distance: 8,            
-        duration: 1,         
-        elevationGain: 600,     
-        avgHeartRate: 105,
-        maxHeartRate: 120,
-        bodyWeight: 70,         
-        fitnessLevel: 1
-    },
-    {
-        distance: 10,            
-        duration: 1.25,         
-        elevationGain: 700,     
-        avgHeartRate: 90,
-        maxHeartRate: 110,
-        bodyWeight: 70,         
-        fitnessLevel: 2
-    },
-    
-    
-]
-
-const distance = cyclingData.map(data => data.distance);
-const duration = cyclingData.map(data => data.duration);
-const elevationGain = cyclingData.map(data => data.elevationGain);
-const avgHeartRate = cyclingData.map(data => data.avgHeartRate);
-const maxHeartRate = cyclingData.map(data => data.maxHeartRate);
-const bodyWeight = cyclingData.map(data => data.bodyWeight);
-const fitnessLevel = cyclingData.map(data => data.fitnessLevel);
-
-// grade represents the average slope steepness, it doesn't account for downhill slope
-// grade = (elevation / distance) * 100
-const grade = elevationGain.map((data, index) => (data / (distance[index] * 5280)) * 100);
-
-// pace = duration / distance
-const pace = duration.map((data, index) => data / distance[index]);
-
-const heartRateReserve = avgHeartRate.map((data, index) => 
-    (data - restingHeartRates[fitnessLevel[index]]) / (maxHeartRate[index] - restingHeartRates[fitnessLevel[index]]));
-
-const MET = heartRateReserve.map((data, index) => (data * (maxMETs[fitnessLevel[index]] - 1) + 1))
-
-const caloriesBurned = MET.map((data, index) => parseInt(data * duration[index] * bodyWeight[index]));
-
-const labels = cyclingData.map((data, index) => `ride ${index + 1}`)
-const graphMargin = 3;
-
 function CyclingMetrics() {
+    const [editingData, setEditingData] = useState(false);
+
+    const [distanceIn, setDistanceIn] = useState(undefined);
+    const [elevationGainIn, setElevationGainIn] = useState(undefined);
+    const [durationIn, setDurationIn] = useState(undefined);
+    const [avgHeartRateIn, setAvgHeartRateIn] = useState(undefined);
+    const [maxHeartRateIn, setMaxHeartRateIn] = useState(undefined);
+    const [bodyWeightIn, setBodyWeightIn] = useState(undefined);
+    const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
+
+    const [cyclingData, setCyclingData] = useState([]);
+
+    const [errors, setErrors] = useState({
+        distance: false,
+        elevationGain: false,
+        duration: false,
+        avgHeartRate: false,
+        maxHeartRate: false,
+        bodyWeight: false,
+        fitnessLevel: false
+    })
+
+    const distance = cyclingData.map(data => data.distance);
+    const duration = cyclingData.map(data => data.duration);
+    const elevationGain = cyclingData.map(data => data.elevationGain);
+    const avgHeartRate = cyclingData.map(data => data.avgHeartRate);
+    const maxHeartRate = cyclingData.map(data => data.maxHeartRate);
+    const bodyWeight = cyclingData.map(data => data.bodyWeight);
+    const fitnessLevel = cyclingData.map(data => data.fitnessLevel);
+
+    // grade represents the average slope steepness, it doesn't account for downhill slope
+    // grade = (elevation / distance) * 100
+    const grade = elevationGain.map((data, index) => (data / (distance[index] * 5280)) * 100);
+
+    // pace = duration / distance
+    const pace = duration.map((data, index) => data / distance[index]);
+
+    const heartRateReserve = avgHeartRate.map((data, index) => 
+        Math.abs((data - restingHeartRates[fitnessLevel[index]]) / (maxHeartRate[index] - restingHeartRates[fitnessLevel[index]])));
+
+    const MET = heartRateReserve.map((data, index) => (data * (maxMETs[fitnessLevel[index]] - 1) + 1))
+
+    const caloriesBurned = MET.map((data, index) => parseInt(data * duration[index] * bodyWeight[index]));
+
+    const labels = cyclingData.map((data, index) => `ride ${index + 1}`)
+    const graphMargin = 3;
+    const textInputSpacing = 3;
+
+    function handleEdit() {
+        editingData ? setEditingData(false) : setEditingData(true)
+    }
+
+    function handleClear() {
+        setDistanceIn("");
+        setElevationGainIn("");
+        setDurationIn("");
+        setAvgHeartRateIn("");
+        setMaxHeartRateIn("");
+        setBodyWeightIn("");
+        setFitnessLevelIn("");
+    }
+
+    function handleSubmit() {
+        if (!isError()) {
+            setCyclingData(prevData => [
+                ...prevData,
+                {
+                    distance: distanceIn,
+                    elevationGain: elevationGainIn,
+                    duration: durationIn,
+                    avgHeartRate: avgHeartRateIn,
+                    maxHeartRate: maxHeartRateIn,
+                    bodyWeight: bodyWeightIn,
+                    fitnessLevel: fitnessLevelIn
+                }
+            ])
+        }
+    }
+
+    function isError() {
+        let newErrors = {
+            distance: (distanceIn === undefined || distanceIn < 1),
+            elevationGain: (elevationGainIn === undefined || elevationGainIn < 1),
+            duration: (durationIn === undefined || durationIn < 1),
+            avgHeartRate: (avgHeartRateIn === undefined || avgHeartRateIn < 1),
+            maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),
+            bodyWeight: (bodyWeightIn === undefined || bodyWeightIn < 1),
+            fitnessLevel: (fitnessLevelIn === undefined || fitnessLevelIn < 0 || fitnessLevelIn > 2),
+
+        }
+
+        setErrors(newErrors);
+
+        let newErrorsArray = Object.values(newErrors)
+        let errorFound = false;
+
+        newErrorsArray.forEach(val => {
+            if (val === true) {
+                errorFound = true;
+            }
+        })
+
+        return errorFound;
+    }
+
+    function handleReset() {
+        setCyclingData([])
+    }
+    
     return (
         <Stack>
             <Typography fontSize={32}>CYCLING METRICS</Typography>
@@ -145,7 +180,108 @@ function CyclingMetrics() {
                 </Card>
                 </Stack>
             </Stack>
-            <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
+            {!editingData ? (
+                <></>
+            ) : (
+                <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
+                    <Typography marginBottom={5} fontSize={24}>Input Cycling Metrics</Typography>
+                    <Stack direction="column" spacing={textInputSpacing}>
+                        <TextField 
+                            required
+                            variant="filled" 
+                            label="Distance"
+                            type="number"
+                            error={errors.distance}
+                            value={distanceIn}
+                            onChange={(e) => setDistanceIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Miles</InputAdornment>
+                                }}
+                        />
+                        <TextField 
+                            required
+                            variant="filled" 
+                            label="Elevation Gain"
+                            type="number"
+                            error={errors.elevationGain}
+                            value={elevationGainIn}
+                            onChange={(e) => setElevationGainIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Feet</InputAdornment>
+                                }}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Duration"
+                            type="number"
+                            error={errors.duration}
+                            value={durationIn}
+                            onChange={(e) => setDurationIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Hours</InputAdornment>
+                                }}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Average Heart Rate"
+                            type="number"
+                            error={errors.avgHeartRate}
+                            value={avgHeartRateIn}
+                            onChange={(e) => setAvgHeartRateIn(e.target.value)}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Maximum Heart Rate"
+                            type="number"
+                            error={errors.maxHeartRate}
+                            value={maxHeartRateIn}
+                            onChange={(e) => setMaxHeartRateIn(e.target.value)}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Bodyweight"
+                            type="number"
+                            error={errors.bodyWeight}
+                            value={bodyWeightIn}
+                            onChange={(e) => setBodyWeightIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
+                                }}
+                        />
+                        <TextField 
+                            required 
+                            variant="filled" 
+                            label="Fitness Level"
+                            type="number"
+                            error={errors.fitnessLevel}
+                            value={fitnessLevelIn}
+                            onChange={(e) => setFitnessLevelIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
+                                }}
+                        />
+                    </Stack>
+
+                    <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
+                        <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                        <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
+                        <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
+                    </Stack>
+                    
+                </Card>
+            )}
+            <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
+                <Button variant="contained" 
+                    onClick={handleEdit}
+                >
+                    {editingData ? "Stop Editing" : "Edit Data"}
+                </Button>
+                <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
+            </Stack>
         </Stack>
     );
 }
