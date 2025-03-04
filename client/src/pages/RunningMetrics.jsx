@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 
@@ -32,6 +32,42 @@ function RunningMetrics() {
         bodyWeight: false,
         fitnessLevel: false
     })
+
+    // This variable's job is to increment every time new data is added to the database. Since it
+    // is listed in the dependency array for the useEffect hook below, it will cause the hook to run
+    // again, resulting in the updated database data being fetched by Hono.
+    const [fetchCount, setFetchCount] = useState(0);
+
+    // useEffect is a react hook that runs side effects in function components.
+    // It runs after react renders our components, so it doesn't block the rendering process.
+    // Because of this, it is useful for data fetching
+    // Notice how runningData is listed in the dependency array at the end of this useEffect hook?
+    // That means this this hook only runs when the value of fetchCount changes
+    // If the dependency array were empty, it would only run once on mount
+    // If no dependency array is included, it will run after every render. We most likely don't
+    // want to be hitting our API and Database after EVERY re-render
+
+    // Here we are getting data back from our database, which is being interpretted as a
+    // response from our API (res). This res object has some information about the status of 
+    // the API response, as well as the data from our database. That is why I am setting
+    // runningData to res.data, and not res.
+    useEffect(() => {
+        getRunningExercises();
+
+        async function getRunningExercises() {
+            const res = await axios.get('http://localhost:3000/exercises/running-entry', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                params: {
+                    
+                }
+            });
+            setRunningData(res.data);
+        }
+    
+    }, [fetchCount])
+
 
     const distance = runningData.map(data => data.distance);
     const duration = runningData.map(data => data.duration);
@@ -83,18 +119,6 @@ function RunningMetrics() {
 
     async function handleSubmit() {
         if (!isError()) {
-            // setRunningData(prevData => [
-            //     ...prevData,
-            //     {
-            //         distance: distanceIn,
-            //         duration: durationIn,
-            //         steps: stepsIn,
-            //         avgHeartRate: avgHeartRateIn,
-            //         maxHeartRate: maxHeartRateIn,
-            //         bodyWeight: bodyWeightIn,
-            //         fitnessLevel: fitnessLevelIn
-            //     }
-            // ])
 
             const newExercise = {
                 distance: distanceIn,
@@ -108,8 +132,11 @@ function RunningMetrics() {
 
             console.log("about to add new exercise: ", newExercise);
 
+            // Incrementing fetchCount to cause the useEffect hook that fetches data with Hono to run again
+            setFetchCount(prev => prev + 1);
+
             // Add the game via the POST route on the api
-            await axios.post('http://localhost:3000/exercises/running', newExercise, {
+            await axios.post('http://localhost:3000/exercises/running-entry', newExercise, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -123,9 +150,10 @@ function RunningMetrics() {
     function isError() {
         // Making a new object with values equal to whether or not the input state meets certain conditions
         // Will result in an object that holds Boolean values
+
         let newErrors = {
-            distance: (distanceIn === undefined || distanceIn < 1),
-            duration: (durationIn === undefined || durationIn < 1),
+            distance: (distanceIn === undefined || distanceIn < 0),
+            duration: (durationIn === undefined || durationIn < 0),
             steps: (stepsIn === undefined || stepsIn < 1),
             avgHeartRate: (avgHeartRateIn === undefined || avgHeartRateIn < 1),
             maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),

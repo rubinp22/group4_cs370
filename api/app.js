@@ -1,7 +1,7 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import mongoose from 'mongoose'
-import Running from './models/RunningExercise.js'
+import RunningEntries from './models/RunningExercise.js'
 
 import 'dotenv/config';
 
@@ -9,8 +9,11 @@ import 'dotenv/config';
 // Instantiate the API
 const app = new Hono();
 
+const database = "test";
+
 // Connect to mongo
-const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cs370-group-4.ymibp.mongodb.net/?retryWrites=true&w=majority&appName=CS370-Group-4`
+// Here I've added the database variable to the URI. Without specifying this, Mongo defaults to the "test" database
+const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cs370-group-4.ymibp.mongodb.net/${database}?retryWrites=true&w=majority&appName=CS370-Group-4`
 mongoose.connect(MONGO_URI, {
     // I removed useunifiedtopology and useNewUrlParser as they are deprecated options and were causing errors
 })
@@ -35,19 +38,21 @@ app.get('/', (c) => {
     return c.text('Hello Hono!')
 })
 
-app.post('exercises/running', async (c) => {
+app.post('exercises/running-entry', async (c) => {
     // Get the posted content
     const body = await c.req.json();
 
+    console.log("making a new entry with: ", body);
+
     // Create a new exercise with the posted content
     // In other words, this creates a new record in MongoDB
-    Running.create(body);
+    RunningEntries.create(body);
 
     return c.text('Exercise Added');
 })
 
-app.get('/exercises/running', async (c) => {
-    const runningExercises = await Running.find();
+app.get('/exercises/running-entry', async (c) => {
+    const runningExercises = await RunningEntries.find();
     return c.json(runningExercises);
 })
 

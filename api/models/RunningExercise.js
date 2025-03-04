@@ -10,5 +10,5 @@ const RunningExercise = new mongoose.Schema({
     fitnessLevel: Number
 });
 
-export default mongoose.model('Running', RunningExercise);
+export default mongoose.model('RunningEntries', RunningExercise);
 
