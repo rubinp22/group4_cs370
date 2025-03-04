@@ -1,23 +1,20 @@
-import React, {use, useState} from 'react';
+import React, {useState} from 'react';
 import { useNavigate, Link  } from 'react-router-dom';
 import { Stack, Avatar, Button, ButtonGroup, AvatarGroup} from '@mui/material';
 import { amber, blueGrey, orange } from '@mui/material/colors';
+// "Leader of" should be at the top
+const options = ['Miles Per Hour', 'Distance', 'Rebase and merge'];
 
-// The arrays for testing that will be replaced when we get user data proper
 var userName = ["Abel", "Bender", "Chirst", "Don", "Eve"];
 var userDistance = [1.5, 2, 2.5, 4, 1];
 var userMaxHeartRate = [145, 150, 155, 135, 115];
 var userDuration = [0.5, 0.25, 0.3, 0.35, 0.5];
-
-// The arrays needed to store data that will be displayed later
 var leaders = ["1", "2", "3", "4", "5"];
 var leaderData = ["NULL", "NULL", "NULL", "NULL", "NULL"];
-var maxMinMedian = ["max", "min", "median"];
 
 
-function handleButtons(buttonNum, setLeaderType, SetName, SetValues, setMeasure, setMaxMinMedian){
-  // uses a switch state that takes the number value of the button that was used then sets display data accordingly
-  // when setting the display values it uses the arrays at the top and copies them to the html arrays
+function handleButtons(buttonNum, setLeaderType, SetName, SetValues, setMeasure){
+  //could maybe have an if statement in the switch there for other value
   var dataType = "Sorted by ";
   var unitsOfMeasurement = "";
   switch (buttonNum){
@@ -41,13 +38,12 @@ function handleButtons(buttonNum, setLeaderType, SetName, SetValues, setMeasure,
   SetName(leaders.slice(0, 5));
   SetValues(leaderData.slice(0, 5));
   setMeasure(unitsOfMeasurement)
-  setMaxMinMedian(maxMinMedian.slice(0, 3));
 }
 
 function makeLeaders(exerciseData, userData){
-// currectly only displays the largest value at the top can be fixed with suggetion below
-// exerciseData[i] < exerciseData[i+1] then display in ascending or descending order
-// stores the data in leaders, used for the names, and leaderData, used for the values
+// nmight need to add a case for say fastest time where it checks
+// exerciseData[i] < exerciseData[i+1] then display in ascending descending order
+// to account for cases when smaller value is better 
 let n = userData.length;
 leaders = userData.slice(0, n);
 leaderData = exerciseData.slice(0, n);
@@ -55,31 +51,11 @@ for (let i = 1; i <= n; i++){
   leaders[i-1] = userData[n-i];
   leaderData[i-1] = exerciseData[n-i];
 }
-}
-
-function findMaxMinMedian(sortedData){
-  //gets the highest lowest and middle value (in that order) from the sorted data
-  // then stores them in the array maxMinMedian which will be in handle buttons
-  var lengthOfArray = sortedData.length;
-  if (sortedData[0] > sortedData[lengthOfArray-1]){
-    maxMinMedian[0] = sortedData[0];
-    maxMinMedian[1] = sortedData[lengthOfArray-1];
-  }
-  else {
-    maxMinMedian[0] = sortedData[lengthOfArray-1];
-    maxMinMedian[1] = sortedData[0];
-  }
-  if (lengthOfArray%2 == 0) {
-    maxMinMedian[2] = sortedData[lengthOfArray/2];
-  }
-  else {
-    maxMinMedian[2] = sortedData[(lengthOfArray/2)-.5];
-  }
+alert("leaders: " + leaders.join(", ") + " | numbers: " + leaderData.join(", "))
 }
 
 function sortData(exerciseData, userData){
 //bubble sort
-//calls makeLeaders and findMaxMinMedian so they can use the sorted data
 let n = exerciseData.length; 
 let swapped = true;
 let temp = exerciseData[0];
@@ -106,31 +82,25 @@ while(swapped){
   n = n - 1;
 }
 makeLeaders(sortedData, sortedUser);
-findMaxMinMedian(sortedData)
 }
 
 function LeaderBoard () {
-  // arrays that store the dayplay data from the javascript, There might be another way to do this but I can't html good
   const navigate = useNavigate();
+  // there has to be a better way to do this
   const [message, setMessage] = useState('Please Click a Button');
   const [placeNames, setPlaces] = useState(["1st", "2nd", "3rd", "4th", "5th"]);
   const [placeValues, setValues] = useState(["XX", "XX", "XX", "XX", "XX"]);
   const [unitsOfMeasure, setMeasure] = useState([""]);
-  const [maxMinMedian, setMMM] = useState(["__", "__", "__"])
 
-  // most of the is pretty easy to read, but just in case
-  // its starts with header of Leaderboard then the button which call handleButtons when clicked on
-  // in handleButtons we pass in the arrays that will be used to display data later
-  // after that we have the avaters of 1st 2nd and 3rd in that order, something to be expanded apon later
-  // after that we have the top 5 users with their exercise value and unit of measurement for said value
-  // lastly we have the button to return to the main page
+  // Eventually we might consider replacing these h2 and p elements with Typography elements from MUI
+  // They allow for more robust customization that doesn't rely on CSS classes, like pointer-hover
   return (
   <Stack direction="column" gap={2} marginBottom={3}>
     <h1>Leaderboard</h1>
     <ButtonGroup variant="contained" aria-label="Basic button group">
-        <Button onClick={() => handleButtons(1, setMessage, setPlaces, setValues, setMeasure, setMMM)}>Distance</Button>
-        <Button onClick={() => handleButtons(2, setMessage, setPlaces, setValues, setMeasure, setMMM)}>MaxHeartRate</Button>
-        <Button onClick={() => handleButtons(3, setMessage, setPlaces, setValues, setMeasure, setMMM)}>Duration</Button>
+        <Button onClick={() => handleButtons(1, setMessage, setPlaces, setValues, setMeasure)}>Distance</Button>
+        <Button onClick={() => handleButtons(2, setMessage, setPlaces, setValues, setMeasure)}>MaxHeartRate</Button>
+        <Button onClick={() => handleButtons(3, setMessage, setPlaces, setValues, setMeasure)}>Duration</Button>
       </ButtonGroup>
     <Stack direction="row" gap={2} paddingLeft={13.5}>
       <Avatar sx={{ bgcolor: amber[600] }} variant="square">{placeNames[0][0]}</Avatar>
@@ -145,8 +115,7 @@ function LeaderBoard () {
     <br></br>{placeNames[3]} -- {placeValues[3]} {unitsOfMeasure}
     <br></br>{placeNames[4]} -- {placeValues[4]} {unitsOfMeasure}
     </p>
-    <h3>Max:{maxMinMedian[0]}  Min:{maxMinMedian[1]}  Median:{maxMinMedian[2]}</h3>
-    <Link to="../" className="button-link">Back to Home</Link>
+      <Link to="../" className="button-link">Back to Home</Link>
   </Stack>
   );
 }

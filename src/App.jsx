@@ -13,11 +13,13 @@ import GoalsMetrics from './pages/GoalsMetrics';
 import CyclingMetrics from './pages/CyclingMetrics';
 import SwimmingMetrics from './pages/SwimmingMetrics';
 import LeaderBoard from './pages/LeaderBoard';
-import RewardAchievements from './pages/RewardAchievements';
 import ProfilePage from './pages/ProfilePage';
+import UserGoals from './pages/UserGoals';
+import NewGoal from './pages/NewGoal';
+
 
 function App() {
- return (
+  return (
 
     <>
       <Router>
@@ -34,14 +36,14 @@ function App() {
           <Route path="/fitnessTypes/SwimmingMetrics" element={<SwimmingMetrics/>}/>
           <Route path="/LeaderBoard" element={<LeaderBoard/>}/>
           <Route path="/profile" element={<ProfilePage/>} />
-          <Route path="/RewardAchievements" element={<RewardAchievements/>}/>
-
+          <Route path="/goals" element={<UserGoals/>} />
+          <Route path="/goals/newGoal" element={<NewGoal/>} />
         </Routes>
       </Router>
     </>
 
 
- );
+  );
 }
 
 export default App;

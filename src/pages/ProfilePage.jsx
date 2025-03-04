@@ -1,8 +1,6 @@
-import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid2';
-import { deepOrange, green } from '@mui/material/colors';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
