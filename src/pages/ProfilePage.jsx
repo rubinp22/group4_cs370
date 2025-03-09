@@ -89,7 +89,7 @@ function ProfilePage() {
         let newErrors = {
             name: (nameIn === undefined || nameIn.length > 30 || nameIn.length < 1),
             heightFt: (heightFtIn === undefined || heightFtIn > 7 || heightFtIn < 1),
-            heightInch: (heightInchIn === undefined || heightInchIn.length > 12),
+            heightInch: (heightInchIn === undefined || heightInchIn > 11 || heightInchIn < 0),
             weight: (weightIn === undefined || weightIn > 1000 || weightIn < 0),
             description: (description != undefined && description.length > 200)
         }
@@ -156,90 +156,94 @@ function ProfilePage() {
           </Item>
         </Grid>
             
-            </Grid>
-            <Stack>
-                {!editingData ? (
-                    <></>
-                ) : (
-                    <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
-                        <Typography marginBottom={5} fontSize={24}>Edit Profile</Typography>
-                        <Stack direction="column" spacing={textInputSpacing}>
+        </Grid>
+
+        {/*Editing Form*/}
+        <Stack>
+            {!editingData ? (
+                <></>
+            ) : (
+                <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
+                    <Typography marginBottom={5} fontSize={24}>Edit Profile</Typography>
+                    <Stack direction="column" spacing={textInputSpacing}>
+                        <TextField 
+                            required
+                            variant="filled" 
+                            label="Name"
+                            error={errors.name}
+                            value={nameIn}
+                            defaultValue={name}
+                            onChange={(e) => setnameIn(e.target.value)}
+                        />
+                        <Box>
                             <TextField 
                                 required
                                 variant="filled" 
-                                label="Name"
-                                error={errors.name}
-                                value={nameIn}
-                                defaultValue={name}
-                                onChange={(e) => setnameIn(e.target.value)}
-                            />
-                            <Box>
-                                <TextField 
-                                    required
-                                    variant="filled" 
-                                    label="Height"
-                                    error={errors.heightFt}
-                                    value={heightFtIn}
-                                    defaultValue={heightFt}
-                                    type="number"
-                                    onChange={(e) => setHeightFtIn(e.target.value)}
-                                    InputProps={{ 
-                                        endAdornment: <InputAdornment position='end'>Ft</InputAdornment>
-                                    }}
-                                />
-                                <TextField 
-                                    required
-                                    variant="filled" 
-                                    error={errors.heightInch}
-                                    value={heightInchIn}
-                                    defaultValue={heightInch}
-                                    type="number"
-                                    onChange={(e) => setHeightInchIn(e.target.value)}
-                                    InputProps={{ 
-                                        endAdornment: <InputAdornment position='end'>In</InputAdornment>
-                                    }}
-                                />
-                                </Box>
-                            <TextField 
-                                required
-                                variant="filled"
-                                label="Weight" 
-                                error={errors.weight}
-                                value={weightIn}
-                                defaultValue={weight}
+                                label="Height"
+                                error={errors.heightFt}
+                                value={heightFtIn}
+                                defaultValue={heightFt}
                                 type="number"
-                                onChange={(e) => setWeightIn(e.target.value)}
+                                onChange={(e) => setHeightFtIn(e.target.value)}
                                 InputProps={{ 
-                                    endAdornment: <InputAdornment position='end'>lbs</InputAdornment>
+                                    endAdornment: <InputAdornment position='end'>Ft</InputAdornment>
                                 }}
                             />
                             <TextField 
+                                required
                                 variant="filled" 
-                                label="Description"
-                                error={errors.description}
-                                value={descriptionIn}
-                                multiline
-                                maxRows={4}
-                                defaultValue={description}
-                                onChange={(e) => setDescriptionIn(e.target.value)}
+                                error={errors.heightInch}
+                                value={heightInchIn}
+                                defaultValue={heightInch}
+                                type="number"
+                                onChange={(e) => setHeightInchIn(e.target.value)}
+                                InputProps={{ 
+                                    endAdornment: <InputAdornment position='end'>In</InputAdornment>
+                                }}
                             />
-                        </Stack>
-                        <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
-                            <Button variant="contained" onClick={handleSubmit}>Submit</Button>
-                            <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
-                        </Stack>
-                    </Card>
-                )}
-            </Stack>
-            <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
-                <Button variant="contained" 
-                    onClick={handleEdit}
-                >
-                    {editingData ? "Stop Editing" : "Edit"}
-                </Button>
-                <Link to="/" className="button-link">Home</Link>
-            </Stack>
+                            </Box>
+                        <TextField 
+                            required
+                            variant="filled"
+                            label="Weight" 
+                            error={errors.weight}
+                            value={weightIn}
+                            defaultValue={weight}
+                            type="number"
+                            onChange={(e) => setWeightIn(e.target.value)}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>lbs</InputAdornment>
+                            }}
+                        />
+                        <TextField 
+                            variant="filled" 
+                            label="Description"
+                            error={errors.description}
+                            value={descriptionIn}
+                            multiline
+                            maxRows={4}
+                            defaultValue={description}
+                            onChange={(e) => setDescriptionIn(e.target.value)}
+                        />
+                    </Stack>
+                    <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
+                        <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                        <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
+                    </Stack>
+                </Card>
+            )}
         </Stack>
+
+        {/*Buttons*/}
+        <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
+            <Button variant="contained" 
+                onClick={handleEdit}
+            >
+                {editingData ? "Stop Editing" : "Edit"}
+            </Button>
+            <Link to="/" className="button-link">Home</Link>
+        </Stack>
+    </Stack>
 
     );
 }
