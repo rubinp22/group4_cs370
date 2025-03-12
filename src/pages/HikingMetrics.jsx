@@ -124,6 +124,7 @@ function HikingMetrics() {
 
 return (
     <Stack>
+        <img src="/images/fitness_app_hiker.jpg" alt="Hikers in a trail" />
         <Typography fontSize={32}>HIKING METRICS</Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>

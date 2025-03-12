@@ -134,6 +134,7 @@ function RunningMetrics() {
 
     return (
         <Stack>
+        <img src="/images/fitness_app_runner.jpg" alt="Runner in background" />
             <Typography fontSize={32}>
                 Running Metrics
             </Typography>

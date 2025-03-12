@@ -118,6 +118,7 @@ function CyclingMetrics() {
     
     return (
         <Stack>
+            <img src="/images/fitness_app_cycler.jpg" alt="caption of a cycler" />
             <Typography fontSize={32}>CYCLING METRICS</Typography>
             <Stack>
                 <Stack direction="row">

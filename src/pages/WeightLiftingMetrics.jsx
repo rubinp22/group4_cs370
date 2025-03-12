@@ -155,6 +155,7 @@ function WeightLiftingMetrics() {
 
     return (
         <Stack>
+            <img src="/images/fitness_app_weights.jpg" alt="Gym that contains some weights" />
             <Typography fontSize={32}>
                 Weight Lifting Metrics
             </Typography>
