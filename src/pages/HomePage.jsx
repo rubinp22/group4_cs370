@@ -8,6 +8,7 @@ function HomePage() {
       <h1>Fitness Tracker</h1>
       <h3>Take charge of your health:</h3>
 
+<<<<<<< HEAD
       <div style={styles.buttonContainer}>
         <Link to="./fitnessTypes" style={styles.link}>
           My Metrics
@@ -26,6 +27,14 @@ function HomePage() {
         </Link>
       </div>
     </div>
+=======
+      <MuiLink to="./fitnessTypes" component={RouterLink} >My Metrics</MuiLink>
+      <MuiLink to="./RewardAchievements" component={RouterLink} >Achievements</MuiLink>
+      <MuiLink to="./LeaderBoard" component={RouterLink} >Leaderboard</MuiLink>
+      <MuiLink to="./profile" component={RouterLink} >My Profile</MuiLink>
+    </>
+
+>>>>>>> ccdcbf4 (Small Changes to our home page and fitness types page)
   );
 }
 
