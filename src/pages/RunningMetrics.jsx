@@ -1,7 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 import { useState } from 'react';
+import MuiLink from '@mui/material/Link';
+import { useTheme } from '@emotion/react';
 
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50]
@@ -18,6 +20,9 @@ function RunningMetrics() {
     const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
     
     const [runningData, setRunningData] = useState([]);
+
+    const theme = useTheme();
+
 
     // This new state is accessed by the error attribute for each Textfield
     const [errors, setErrors] = useState({
@@ -134,62 +139,104 @@ function RunningMetrics() {
 
     return (
         <Stack>
-        <img src="/images/fitness_app_runner.jpg" alt="Runner in background" />
-            <Typography fontSize={32}>
+        {/* Commenting this top image out for now */}
+        {/* <img src="/images/fitness_app_runner.jpg" alt="Runner in background" /> */}
+            <Typography fontSize={36}>
                 Running Metrics
             </Typography>
             <Stack direction="row">
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
+                <Card sx={{ margin: graphMargin }}>
                     <BarChart
                         xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: distance, label: "Distance Ran (Miles)" }]}
+                        series={[
+                            { 
+                                data: distance, 
+                                label: "Distance Ran (Miles)",
+                                color: theme.palette.secondary.main,
+                            }
+                        ]}
                         width={500}
                         height={300}
                     />
                 </Card>
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
+                <Card sx={{ margin: graphMargin }}>
                     <BarChart
                         xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: speed, label: "Running Speed (MPH)" }]}
+                        series={[
+                            { 
+                                data: speed, 
+                                label: "Running Speed (MPH)",
+                                color: theme.palette.secondary.main 
+                            }
+                        ]}
                         width={500}
                         height={300}
                     />
                 </Card>
             </Stack>
             <Stack direction="row">
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
+                <Card sx={{ margin: graphMargin }}>
                     <BarChart
                         xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: pace, label: "Time per mile (in hours)" }]}
+                        series={[
+                            { 
+                                data: pace, 
+                                label: "Time per mile (in hours)",
+                                color: theme.palette.secondary.main 
+                            }
+                        ]}
                         width={500}
                         height={300}
                     />
                 </Card>
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
+                <Card sx={{ margin: graphMargin }}>
                     <BarChart
                         xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: cadence, label: "Cadence (Steps per minute)" }]}
+                        series={[
+                            { 
+                                data: cadence, 
+                                label: "Cadence (Steps per minute)", 
+                                color: theme.palette.secondary.main
+                            }
+                        ]}
                         width={500}
                         height={300}
                     />
                 </Card>
             </Stack>
                 <Stack direction="row">
-                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
+                    <Card sx={{ margin: graphMargin }}>
                         <BarChart
-                            xAxis={[{ scaleType: "band", data: labels }]}
+                            xAxis={[
+                                { scaleType: "band", data: labels }
+                            ]}
                             series={[
-                                {data: avgHeartRate, label: "Avg Heart Rate" },
-                                {data: maxHeartRate, label: "Max Heart Rate" }
+                                { 
+                                    data: avgHeartRate, 
+                                    label: "Avg Heart Rate", 
+                                    color: theme.palette.secondary.main 
+                                },
+                                { 
+                                    data: maxHeartRate, 
+                                    label: "Max Heart Rate",
+                                    color: theme.palette.secondary.dark,
+                                }
                             ]}
                             width={500}
                             height={300}
                         />
+                    
                     </Card>
-                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
+                    <Card sx={{ margin: graphMargin }}>
                         <BarChart
                             xAxis={[{ scaleType: "band", data: labels }]}
-                            series={[{ data: caloriesBurned, label: "Estimated Calories Burned" }]}
+                            series={[
+                                { 
+                                    data: caloriesBurned, 
+                                    label: "Estimated Calories Burned",
+                                    color: theme.palette.secondary.main 
+                                }
+                            ]}
                             width={500}
                             height={300}
                         />
@@ -199,8 +246,8 @@ function RunningMetrics() {
                 {!editingData ? (
                     <></>
                 ) : (
-                    <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
-                        <Typography marginBottom={5} fontSize={24}>Input Running Metrics</Typography>
+                    <Card sx={{ padding:"40px" }}>
+                        <Typography marginBottom={5} fontSize={36}>Input Running Metrics</Typography>
                         <Stack direction="column" spacing={textInputSpacing}>
                             <TextField 
                                 required
@@ -215,8 +262,8 @@ function RunningMetrics() {
                                 }}
                             />
                             <TextField 
-                                required 
-                                variant="filled" 
+                                required
+                                variant="filled"  
                                 label="Duration"
                                 type="number"
                                 error={errors.duration}
@@ -292,7 +339,7 @@ function RunningMetrics() {
                 >
                     {editingData ? "Stop Editing" : "Edit Data"}
                 </Button>
-                <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
+                <MuiLink to="../fitnessTypes" component={RouterLink} className="button-link">Back to Fitness Types</MuiLink>
             </Stack>
             
         </Stack>
