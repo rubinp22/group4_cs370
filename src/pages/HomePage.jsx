@@ -8,12 +8,24 @@ function HomePage() {
       <h1>Fitness Tracker</h1>
       <h3>Take charge of your health:</h3>
 
-      <MuiLink to="./fitnessTypes" component={RouterLink} >My Metrics</MuiLink>
-      <MuiLink to="./RewardAchievements" component={RouterLink} >Achievements</MuiLink>
-      <MuiLink to="./LeaderBoard" component={RouterLink} >Leaderboard</MuiLink>
-      <MuiLink to="./profile" component={RouterLink} >My Profile</MuiLink>
-    </>
-
+      <div style={styles.buttonContainer}>
+        <Link to="./fitnessTypes" style={styles.link}>
+          My Metrics
+        </Link>
+        <Link to="./RewardAchievements" style={styles.link}>
+          Achievements
+        </Link>
+        <Link to="./LeaderBoard" style={styles.link}>
+          Leaderboard
+        </Link>
+        <Link to="./profile" style={styles.link}>
+          My Profile
+        </Link>
+        <Link to="./TrainingVideoLibrary" style={styles.link}>
+          TrainingVideoLibrary
+        </Link>
+      </div>
+    </div>
   );
 }
 
