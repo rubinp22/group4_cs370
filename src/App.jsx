@@ -15,6 +15,7 @@ import SwimmingMetrics from './pages/SwimmingMetrics';
 import LeaderBoard from './pages/LeaderBoard';
 import RewardAchievements from './pages/RewardAchievements';
 import ProfilePage from './pages/ProfilePage';
+import TrainingVideoLibrary from './pages/TrainingVideoLibrary';
 
 function App() {
  return (
@@ -35,7 +36,7 @@ function App() {
           <Route path="/LeaderBoard" element={<LeaderBoard/>}/>
           <Route path="/profile" element={<ProfilePage/>} />
           <Route path="/RewardAchievements" element={<RewardAchievements/>}/>
-
+          <Route path="/TrainingVideoLibrary" element={<TrainingVideoLibrary/>}/>
         </Routes>
       </Router>
     </>
