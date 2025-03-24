@@ -139,10 +139,9 @@ function RunningMetrics() {
     
 
     return (
-        <Stack>
-        {/* Commenting this top image out for now */}
-        <img src="/images/fitness_app_runner.jpg" alt="Runner in background"/>
-            <Typography fontSize={36}>
+        <Stack alignItems={"center"}>
+            <img src="/images/fitness_app_runner.jpg" alt="Runner in background" width="85%"/>
+            <Typography fontSize={36} marginTop={"5%"}>
                 RUNNING METRICS
             </Typography>
             <Stack direction="row">
@@ -199,7 +198,7 @@ function RunningMetrics() {
                         />
                     </Card>
                 </Stack>
-            <Stack>
+            <Stack width="82%">
                 {!editingData ? (
                     <></>
                 ) : (

@@ -122,10 +122,9 @@ function CyclingMetrics() {
     }
     
     return (
-        <Stack>
-            <img src="/images/fitness_app_cycler.jpg" alt="caption of a cycler" />
-            <Typography fontSize={36}>CYCLING METRICS</Typography>
-            <Stack>
+        <Stack alignItems="center">
+            <img src="/images/fitness_app_cycler.jpg" alt="caption of a cycler" width="85%"/>
+            <Typography fontSize={36} marginTop={"5%"}>CYCLING METRICS</Typography>
                 <Stack direction="row">
                     <Card sx={{ margin: graphMargin }}>
                         <MyBarChart 
@@ -180,100 +179,101 @@ function CyclingMetrics() {
                         />                    
                     </Card>
                 </Stack>
-            </Stack>
             {!editingData ? (
                 <></>
             ) : (
-                <Card sx={{ padding:"40px" }}>
-                    <Typography marginBottom={5} fontSize={24}>Input Cycling Metrics</Typography>
-                    <Stack direction="column" spacing={textInputSpacing}>
-                        <TextField 
-                            required
-                            variant="filled" 
-                            label="Distance"
-                            type="number"
-                            error={errors.distance}
-                            value={distanceIn}
-                            onChange={(e) => setDistanceIn(e.target.value)}
-                            InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>Miles</InputAdornment>
-                                }}
-                        />
-                        <TextField 
-                            required
-                            variant="filled" 
-                            label="Elevation Gain"
-                            type="number"
-                            error={errors.elevationGain}
-                            value={elevationGainIn}
-                            onChange={(e) => setElevationGainIn(e.target.value)}
-                            InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>Feet</InputAdornment>
-                                }}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Duration"
-                            type="number"
-                            error={errors.duration}
-                            value={durationIn}
-                            onChange={(e) => setDurationIn(e.target.value)}
-                            InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>Hours</InputAdornment>
-                                }}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Average Heart Rate"
-                            type="number"
-                            error={errors.avgHeartRate}
-                            value={avgHeartRateIn}
-                            onChange={(e) => setAvgHeartRateIn(e.target.value)}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Maximum Heart Rate"
-                            type="number"
-                            error={errors.maxHeartRate}
-                            value={maxHeartRateIn}
-                            onChange={(e) => setMaxHeartRateIn(e.target.value)}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Bodyweight"
-                            type="number"
-                            error={errors.bodyWeight}
-                            value={bodyWeightIn}
-                            onChange={(e) => setBodyWeightIn(e.target.value)}
-                            InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
-                                }}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Fitness Level"
-                            type="number"
-                            error={errors.fitnessLevel}
-                            value={fitnessLevelIn}
-                            onChange={(e) => setFitnessLevelIn(e.target.value)}
-                            InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
-                                }}
-                        />
-                    </Stack>
+                <Stack width="85%">
+                    <Card sx={{ padding:"40px" }}>
+                        <Typography marginBottom={5} fontSize={24}>Input Cycling Metrics</Typography>
+                        <Stack direction="column" spacing={textInputSpacing}>
+                            <TextField 
+                                required
+                                variant="filled" 
+                                label="Distance"
+                                type="number"
+                                error={errors.distance}
+                                value={distanceIn}
+                                onChange={(e) => setDistanceIn(e.target.value)}
+                                InputProps={{ 
+                                    endAdornment: <InputAdornment position='end'>Miles</InputAdornment>
+                                    }}
+                            />
+                            <TextField 
+                                required
+                                variant="filled" 
+                                label="Elevation Gain"
+                                type="number"
+                                error={errors.elevationGain}
+                                value={elevationGainIn}
+                                onChange={(e) => setElevationGainIn(e.target.value)}
+                                InputProps={{ 
+                                    endAdornment: <InputAdornment position='end'>Feet</InputAdornment>
+                                    }}
+                            />
+                            <TextField 
+                                required 
+                                variant="filled" 
+                                label="Duration"
+                                type="number"
+                                error={errors.duration}
+                                value={durationIn}
+                                onChange={(e) => setDurationIn(e.target.value)}
+                                InputProps={{ 
+                                    endAdornment: <InputAdornment position='end'>Hours</InputAdornment>
+                                    }}
+                            />
+                            <TextField 
+                                required 
+                                variant="filled" 
+                                label="Average Heart Rate"
+                                type="number"
+                                error={errors.avgHeartRate}
+                                value={avgHeartRateIn}
+                                onChange={(e) => setAvgHeartRateIn(e.target.value)}
+                            />
+                            <TextField 
+                                required 
+                                variant="filled" 
+                                label="Maximum Heart Rate"
+                                type="number"
+                                error={errors.maxHeartRate}
+                                value={maxHeartRateIn}
+                                onChange={(e) => setMaxHeartRateIn(e.target.value)}
+                            />
+                            <TextField 
+                                required 
+                                variant="filled" 
+                                label="Bodyweight"
+                                type="number"
+                                error={errors.bodyWeight}
+                                value={bodyWeightIn}
+                                onChange={(e) => setBodyWeightIn(e.target.value)}
+                                InputProps={{ 
+                                    endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
+                                    }}
+                            />
+                            <TextField 
+                                required 
+                                variant="filled" 
+                                label="Fitness Level"
+                                type="number"
+                                error={errors.fitnessLevel}
+                                value={fitnessLevelIn}
+                                onChange={(e) => setFitnessLevelIn(e.target.value)}
+                                InputProps={{ 
+                                    endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
+                                    }}
+                            />
+                        </Stack>
 
-                    <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
-                        <Button variant="contained" onClick={handleSubmit}>Submit</Button>
-                        <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
-                        <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
-                    </Stack>
-                    
-                </Card>
+                        <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
+                            <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                            <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
+                            <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
+                        </Stack>
+                        
+                    </Card>
+                </Stack>
             )}
             <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
                 <Button variant="contained" 
