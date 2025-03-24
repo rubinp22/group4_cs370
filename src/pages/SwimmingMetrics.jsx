@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useTheme } from '@emotion/react';
 
 import MyBarChart from '../components/MyBarChart.jsx';
+// Not currently in use, will have to determine how to implement a color scale. More info below:
 import MyLapBarChart from '../components/MyLapBarChart.jsx';
 
 const maxMETs = [10, 14, 18];
