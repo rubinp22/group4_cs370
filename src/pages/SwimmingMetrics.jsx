@@ -2,6 +2,10 @@ import { Link } from 'react-router-dom';
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 import { useState } from 'react';
+import { useTheme } from '@emotion/react';
+
+import MyBarChart from '../components/MyBarChart.jsx';
+import MyLapBarChart from '../components/MyLapBarChart.jsx';
 
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50]
@@ -18,6 +22,8 @@ const [bodyWeightIn, setBodyWeightIn] = useState(undefined);
 const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
 
 const [swimmingData, setSwimmingData] = useState([]);
+
+const theme = useTheme();
 
 const [errors, setErrors] = useState({
     lapCount: false,
@@ -179,70 +185,73 @@ function handleLapCountChange(laps) {
 
     return (
         <Stack>
-            <img src="/images/fitness_app_swimmer.jpg" alt="A Person is swimming laps" />
+            {/* <img src="/images/fitness_app_swimmer.jpg" alt="A Person is swimming laps" /> */}
             <Typography fontSize={32}>SWIMMING METRICS</Typography>
             <Stack>
                 <Stack direction="row">
-                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                        <BarChart
-                            xAxis={[{ scaleType: "band", data: labels }]}
-                            series={[{ data: distance, label: "Distance Swam (meters)" }]}
-                            width={500}
-                            height={300}
-                        />
+                    <Card sx={{ margin: graphMargin }}>
+                        <MyBarChart 
+                            labels={ labels } 
+                            dataSets={[ distance ]} 
+                            seriesLabel={[ "Distance Swam (meters)" ]}
+                            colors={[ theme.palette.secondary.main ]}
+                        />    
                     </Card>
-                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                        <BarChart
-                            xAxis={[{ scaleType: "band", data: labels }]}
-                            series={[{ data: duration, label: "Time per Swim (minutes)" }]}
-                            width={500}
-                            height={300}
-                        />
+                    <Card sx={{ margin: graphMargin }}>
+                        <MyBarChart 
+                            labels={ labels } 
+                            dataSets={[ duration ]} 
+                            seriesLabel={[ "Time per Swim (minutes)" ]}
+                            colors={[ theme.palette.secondary.main ]}
+                        /> 
                     </Card>
                 </Stack>
                 <Stack direction="row">
-                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                        <BarChart
+                    <Card sx={{ margin: graphMargin }}>
+                        {/* <BarChart
                              xAxis={[{ scaleType: "band", data: labels }]}
                             series={result.map(item => ({...item, stack: 'total'}))}
                             width={500}
                             height={300}
-                        />
+                        /> */}
+                        <MyLapBarChart 
+                            labels={ labels } 
+                            dataSets={[ result ]} 
+                            seriesLabel={[ "Strokes per minutes" ]}
+                            colors={[ theme.palette.secondary.main ]}
+                        /> 
                     </Card>
-                        <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                            <BarChart
-                                xAxis={[{ scaleType: "band", data: labels }]}
-                                series={[{ data: strokeRate, label: "Strokes per minute" }]}
-                                width={500}
-                                height={300}
-                            />
-                        </Card>
+                    <Card sx={{ margin: graphMargin }}>
+                        <MyBarChart 
+                            labels={ labels } 
+                            dataSets={[ strokeRate ]} 
+                            seriesLabel={[ "Strokes per minutes" ]}
+                            colors={[ theme.palette.secondary.main ]}
+                        /> 
+                    </Card>
                 </Stack>
                 <Stack direction="row">
-                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                        <BarChart
-                            xAxis={[{ scaleType: "band", data: labels }]}
-                            series={[
-                                {data: avgHeartRate, label: "Avg Heart Rate" },
-                                {data: maxHeartRate, label: "Max Heart Rate" }
-                            ]}
-                            width={500}
-                            height={300}
+                    <Card sx={{ margin: graphMargin }}>
+                        <MyBarChart 
+                            labels={ labels } 
+                            dataSets={[ avgHeartRate, maxHeartRate ]} 
+                            seriesLabel={[ "Avg Heart Rate", "Max Heart Rate" ]}
+                            colors={[ theme.palette.secondary.main, theme.palette.secondary.dark ]}
                         />
                     </Card>
-                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                        <BarChart
-                            xAxis={[{ scaleType: "band", data: labels }]}
-                            series={[{ data: caloriesBurned, label: "Estimated Calories Burned" }]}
-                            width={500}
-                            height={300}
+                    <Card sx={{ margin: graphMargin }}>
+                        <MyBarChart 
+                            labels={ labels } 
+                            dataSets={[ caloriesBurned ]} 
+                            seriesLabel={[ "Estimated Calories Burned" ]}
+                            colors={[ theme.palette.secondary.main ]}
                         />
                     </Card>
                 </Stack>
                 {!editingData ? (
                     <></>
                 ) : (
-                    <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
+                    <Card sx={{ padding:"40px" }}>
                     <Typography marginBottom={5} fontSize={24}>Input Swimming Metrics</Typography>
                     <Stack direction="column" spacing={textInputSpacing}>
                         <TextField 

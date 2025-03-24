@@ -22,7 +22,7 @@ const theme = createTheme({
       // non-hover text
       light: grey[50],
       // hover 
-      mediumLight: grey[400],
+      mediumLight: grey[500],
       // non-hover
       main: grey[700],
       // hover text
@@ -81,8 +81,10 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: ({ theme }) => ({
-          backgroundColor: theme.palette.primary.main,
-          color: theme.palette.secondary.main,
+          backgroundColor: theme.palette.primary.mediumLight,
+          borderRadius: 10,
+          //backgroundColor: theme.palette.green.dark,
+          // color: theme.palette.secondary.main,
           // You will see this syntax a lot. We are targetting an element within all the nested
           // elements of a TextField that has a specific class name. This allows us to really
           // customize all MUI components on a granular level (unless they are MUI-X graphs 🙃)

@@ -1,9 +1,10 @@
 import { Link as RouterLink } from 'react-router-dom';
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
-import { BarChart } from '@mui/x-charts';
 import { useState } from 'react';
 import MuiLink from '@mui/material/Link';
 import { useTheme } from '@emotion/react';
+
+import MyBarChart from '../components/MyBarChart.jsx';
 
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50]
@@ -146,99 +147,55 @@ function RunningMetrics() {
             </Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[
-                            { 
-                                data: distance, 
-                                label: "Distance Ran (Miles)",
-                                color: theme.palette.secondary.main,
-                            }
-                        ]}
-                        width={500}
-                        height={300}
-                    />
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ distance ]} 
+                        seriesLabel={[ "Distance Ran (Miles)" ]}
+                        colors={[ theme.palette.secondary.main ]}
+                    />                    
                 </Card>
                 <Card sx={{ margin: graphMargin }}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[
-                            { 
-                                data: speed, 
-                                label: "Running Speed (MPH)",
-                                color: theme.palette.secondary.main 
-                            }
-                        ]}
-                        width={500}
-                        height={300}
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ speed ]} 
+                        seriesLabel={[ "Running Speed (MPH)" ]}
+                        colors={[ theme.palette.secondary.main ]}
                     />
                 </Card>
             </Stack>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[
-                            { 
-                                data: pace, 
-                                label: "Time per mile (in hours)",
-                                color: theme.palette.secondary.main 
-                            }
-                        ]}
-                        width={500}
-                        height={300}
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ pace ]}
+                        seriesLabel={[ "Time per mile (in hours)" ]}
+                        colors={[ theme.palette.secondary.main ]}
                     />
                 </Card>
                 <Card sx={{ margin: graphMargin }}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[
-                            { 
-                                data: cadence, 
-                                label: "Cadence (Steps per minute)", 
-                                color: theme.palette.secondary.main
-                            }
-                        ]}
-                        width={500}
-                        height={300}
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ cadence ]}
+                        seriesLabel={[ "Cadence (steps per minute)" ]}
+                        colors={[ theme.palette.secondary.main ]}
                     />
                 </Card>
             </Stack>
                 <Stack direction="row">
                     <Card sx={{ margin: graphMargin }}>
-                        <BarChart
-                            xAxis={[
-                                { scaleType: "band", data: labels }
-                            ]}
-                            series={[
-                                { 
-                                    data: avgHeartRate, 
-                                    label: "Avg Heart Rate", 
-                                    color: theme.palette.secondary.main 
-                                },
-                                { 
-                                    data: maxHeartRate, 
-                                    label: "Max Heart Rate",
-                                    color: theme.palette.secondary.dark,
-                                }
-                            ]}
-                            width={500}
-                            height={300}
+                        <MyBarChart 
+                            labels={ labels } 
+                            dataSets={[ avgHeartRate, maxHeartRate ]} 
+                            seriesLabel={[ "Avg Heart Rate", "Max Heart Rate" ]}
+                            colors={[ theme.palette.secondary.main, theme.palette.secondary.dark ]}
                         />
-                    
                     </Card>
                     <Card sx={{ margin: graphMargin }}>
-                        <BarChart
-                            xAxis={[{ scaleType: "band", data: labels }]}
-                            series={[
-                                { 
-                                    data: caloriesBurned, 
-                                    label: "Estimated Calories Burned",
-                                    color: theme.palette.secondary.main 
-                                }
-                            ]}
-                            width={500}
-                            height={300}
+                        <MyBarChart 
+                            labels={ labels } 
+                            dataSets={[ caloriesBurned ]} 
+                            seriesLabel={[ "Estimated Calories Burned" ]}
+                            colors={[ theme.palette.secondary.main ]}
                         />
                     </Card>
                 </Stack>
