@@ -141,7 +141,7 @@ function RunningMetrics() {
     return (
         <Stack>
         {/* Commenting this top image out for now */}
-        {/* <img src="/images/fitness_app_runner.jpg" alt="Runner in background" /> */}
+        <img src="/images/fitness_app_runner.jpg" alt="Runner in background"/>
             <Typography fontSize={36}>
                 RUNNING METRICS
             </Typography>

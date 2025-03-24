@@ -123,7 +123,7 @@ function CyclingMetrics() {
     
     return (
         <Stack>
-            {/* <img src="/images/fitness_app_cycler.jpg" alt="caption of a cycler" /> */}
+            <img src="/images/fitness_app_cycler.jpg" alt="caption of a cycler" />
             <Typography fontSize={36}>CYCLING METRICS</Typography>
             <Stack>
                 <Stack direction="row">
@@ -184,7 +184,7 @@ function CyclingMetrics() {
             {!editingData ? (
                 <></>
             ) : (
-                <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
+                <Card sx={{ padding:"40px" }}>
                     <Typography marginBottom={5} fontSize={24}>Input Cycling Metrics</Typography>
                     <Stack direction="column" spacing={textInputSpacing}>
                         <TextField 

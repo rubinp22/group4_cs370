@@ -163,7 +163,7 @@ function WeightLiftingMetrics() {
 
     return (
         <Stack>
-            {/* <img src="/images/fitness_app_weights.jpg" alt="Gym that contains some weights" /> */}
+            <img src="/images/fitness_app_weights.jpg" alt="Gym that contains some weights" />
             <Typography fontSize={36}>
                 WEIGHT LIFTING METRICS
             </Typography>
@@ -232,7 +232,7 @@ function WeightLiftingMetrics() {
             {!editingData ? (
                 <></>
             ) : (
-                <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
+                <Card sx={{ padding:"40px" }}>
                     <Typography marginBottom={5} fontSize={24}>Input Weightlifting Metrics</Typography>
                     <Stack direction="column" spacing={textInputSpacing}>
                         <TextField 

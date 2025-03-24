@@ -186,7 +186,7 @@ function handleLapCountChange(laps) {
 
     return (
         <Stack>
-            {/* <img src="/images/fitness_app_swimmer.jpg" alt="A Person is swimming laps" /> */}
+            <img src="/images/fitness_app_swimmer.jpg" alt="A Person is swimming laps" />
             <Typography fontSize={32}>SWIMMING METRICS</Typography>
             <Stack>
                 <Stack direction="row">

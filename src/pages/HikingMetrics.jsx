@@ -131,7 +131,7 @@ function HikingMetrics() {
 
 return (
     <Stack>
-        {/* <img src="/images/fitness_app_hiker.jpg" alt="Hikers in a trail" /> */}
+        <img src="/images/fitness_app_hiker.jpg" alt="Hikers in a trail" />
         <Typography fontSize={36}>HIKING METRICS</Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>
@@ -192,7 +192,7 @@ return (
             {!editingData ? (
                 <></>
             ) : (
-                <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
+                <Card sx={{ padding:"40px" }}>
                     <Typography marginBottom={5} fontSize={24}>Input Hiking Metrics</Typography>
                     <Stack direction="column" spacing={textInputSpacing}>
                         <TextField 
