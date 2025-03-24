@@ -7,7 +7,6 @@ import { createTheme } from '@mui/material/styles';
 
 import DarkTheme from '../theme/DarkTheme.jsx';
 
-
 createRoot(document.getElementById('root')).render(
     <StrictMode>
       <ThemeProvider theme={DarkTheme}>

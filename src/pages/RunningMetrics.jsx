@@ -143,7 +143,7 @@ function RunningMetrics() {
         {/* Commenting this top image out for now */}
         {/* <img src="/images/fitness_app_runner.jpg" alt="Runner in background" /> */}
             <Typography fontSize={36}>
-                Running Metrics
+                RUNNING METRICS
             </Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>

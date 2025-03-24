@@ -1,7 +1,13 @@
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
-import { BarChart } from '@mui/x-charts';
 import { useState } from 'react';
+import MuiLink from '@mui/material/Link';
+import { useTheme } from '@emotion/react';
+
+import MyBarChart from '../components/MyBarChart.jsx';
+
+import { BarChart } from '@mui/x-charts';
+
 
 // MET (Metabolic Equivalent of Task) is defined as the energy expenditure for a given task
 // An MET of 1 is measured as the energy expenditure at rest. 
@@ -33,6 +39,8 @@ function WeightLiftingMetrics() {
     const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
 
     const [weightLiftData, setWeightLiftData] = useState([]);
+
+    const theme = useTheme();
 
     const [errors, setErrors] = useState({
         reps: false,
@@ -155,65 +163,70 @@ function WeightLiftingMetrics() {
 
     return (
         <Stack>
-            <img src="/images/fitness_app_weights.jpg" alt="Gym that contains some weights" />
-            <Typography fontSize={32}>
-                Weight Lifting Metrics
+            {/* <img src="/images/fitness_app_weights.jpg" alt="Gym that contains some weights" /> */}
+            <Typography fontSize={36}>
+                WEIGHT LIFTING METRICS
             </Typography>
             <Stack direction="row">
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: totalReps, label: "Total Reps" }]}
-                        width={500}
-                        height={300}
-                    />
+                <Card sx={{ margin: graphMargin }}>
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ totalReps ]} 
+                        seriesLabel={[ "Total Reps" ]}
+                        colors={[ theme.palette.secondary.main ]}
+                    />                    
                 </Card>
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: totalVolume , label: "Total Volume (Kg)" }]}
-                        width={500}
-                        height={300}
-                    />
-                </Card>
-            </Stack>
-            <Stack direction="row">
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: maxRep, label: "1 Rep Max (Kg)" }]}
-                        width={500}
-                        height={300}
-                    />
-                </Card>
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: strengthRatio, label: "Strength to Weight Ratio" }]}
-                        width={500}
-                        height={300}
-                    />
+                <Card sx={{ margin: graphMargin }}>
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ totalVolume ]} 
+                        seriesLabel={[ "Total Volume (Kg)" ]}
+                        colors={[ theme.palette.secondary.main ]}
+                    />                    
                 </Card>
             </Stack>
             <Stack direction="row">
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[
-                            {data: avgHeartRate, label: "Avg Heart Rate" },
-                            {data: maxHeartRate, label: "Max Heart Rate" }
-                        ]}
-                        width={500}
-                        height={300}
-                    />
+                <Card sx={{ margin: graphMargin }}>
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ maxRep ]} 
+                        seriesLabel={[ "1 Rep Max (Kg)" ]}
+                        colors={[ theme.palette.secondary.main ]}
+                    />                    
                 </Card>
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
+                <Card sx={{ margin: graphMargin }}>
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ strengthRatio ]} 
+                        seriesLabel={[ "Strength to Weight Ratio" ]}
+                        colors={[ theme.palette.secondary.main ]}
+                    />                    
+                </Card>
+            </Stack>
+            <Stack direction="row">
+                <Card sx={{ margin: graphMargin }}>
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ avgHeartRate, maxHeartRate ]} 
+                        seriesLabel={[ "Avg Heart Rate", "Max Heart Rate" ]}
+                        colors={[ theme.palette.secondary.main, theme.palette.secondary.dark ]}
+                    />                    
+                </Card>
+                {/* <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
                     <BarChart
                         xAxis={[{ scaleType: "band", data: labels }]}
                         series={[{ data: caloriesBurned, label: "Estimated Calories Burned" }]}
                         width={500}
                         height={300}
                     />
+                </Card> */}
+                <Card sx={{ margin: graphMargin }}>
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ caloriesBurned ]} 
+                        seriesLabel={[ "Estimated Calories Burned" ]}
+                        colors={[ theme.palette.secondary.main ]}
+                    />                    
                 </Card>
             </Stack>
             {!editingData ? (
@@ -322,7 +335,7 @@ function WeightLiftingMetrics() {
                 >
                     {editingData ? "Stop Editing" : "Edit Data"}
                 </Button>
-                <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
+                <MuiLink to="../fitnessTypes" component={RouterLink} className="button-link">Back to Fitness Types</MuiLink>
             </Stack>
         </Stack>
 

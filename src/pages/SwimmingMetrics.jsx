@@ -208,18 +208,22 @@ function handleLapCountChange(laps) {
                 </Stack>
                 <Stack direction="row">
                     <Card sx={{ margin: graphMargin }}>
-                        {/* <BarChart
+                        {/* This chart I will have to revisit and figure out the behavior for how I want the coloring to 
+                        appear. Since each column has stacked data, the colors should stand out, and not just be a 
+                        solid color. I would need a way to go through multiple shades of amber (or a collection of 
+                        complementary colors to our theme) for each lap in each swim. */}
+                        <BarChart
                              xAxis={[{ scaleType: "band", data: labels }]}
                             series={result.map(item => ({...item, stack: 'total'}))}
                             width={500}
                             height={300}
-                        /> */}
-                        <MyLapBarChart 
+                        />
+                        {/* <MyLapBarChart 
                             labels={ labels } 
                             dataSets={[ result ]} 
                             seriesLabel={[ "Strokes per minutes" ]}
                             colors={[ theme.palette.secondary.main ]}
-                        /> 
+                        />  */}
                     </Card>
                     <Card sx={{ margin: graphMargin }}>
                         <MyBarChart 
