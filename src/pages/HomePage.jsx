@@ -88,8 +88,8 @@ function HomePage() {
         <Link to="./profile" style={styles.link}>
           My Profile
         </Link>
-        <Link to="./Training Video Library" style={styles.link}>
-          TrainingVideoLibrary
+        <Link to="./TrainingVideoLibrary" style={styles.link}>
+          Training Video Library
         </Link>
       </div>
     </div>
