@@ -7,6 +7,8 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -163,7 +165,7 @@ function ProfilePage() {
             {!editingData ? (
                 <></>
             ) : (
-                <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
+                <Card sx={{ padding:"40px" }}>
                     <Typography marginBottom={5} fontSize={24}>Edit Profile</Typography>
                     <Stack direction="column" spacing={textInputSpacing}>
                         <TextField 
@@ -244,6 +246,7 @@ function ProfilePage() {
             <Link to="/" className="button-link">Home</Link>
         </Stack>
     </Stack>
+
 
     );
 }

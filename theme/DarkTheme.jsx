@@ -114,6 +114,14 @@ const DarkTheme = createTheme({
         }),
       },
     },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.secondary.main,
+          backgroundColor: theme.palette.secondary.dark
+        })
+      }
+    }
   },
 });
 
