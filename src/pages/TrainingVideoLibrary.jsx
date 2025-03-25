@@ -1,6 +1,9 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { Stack, Typography, Button, ButtonGroup  } from '@mui/material';
 import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import MuiLink from '@mui/material/Link';
+
 
 // there is probably a better way to do this, but I just copied every video into "all"
 // as I couldn't find of a good way to do (thats within my skill set)
@@ -119,8 +122,7 @@ function TrainingVideoLibrary () {
           </div>
         ))}
       </Stack>
-
-        <Link to="../" className="button-link">Back to Home</Link>
+        <MuiLink to="../" component={RouterLink} className="button-link">Back to Home</MuiLink>
       </Stack>
     );
 }

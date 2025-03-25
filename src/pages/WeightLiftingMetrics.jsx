@@ -1,7 +1,13 @@
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
-import { BarChart } from '@mui/x-charts';
 import { useState } from 'react';
+import MuiLink from '@mui/material/Link';
+import { useTheme } from '@emotion/react';
+
+import MyBarChart from '../components/MyBarChart.jsx';
+
+import { BarChart } from '@mui/x-charts';
+
 
 // MET (Metabolic Equivalent of Task) is defined as the energy expenditure for a given task
 // An MET of 1 is measured as the energy expenditure at rest. 
@@ -33,6 +39,8 @@ function WeightLiftingMetrics() {
     const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
 
     const [weightLiftData, setWeightLiftData] = useState([]);
+
+    const theme = useTheme();
 
     const [errors, setErrors] = useState({
         reps: false,
@@ -154,167 +162,174 @@ function WeightLiftingMetrics() {
     }
 
     return (
-        <Stack>
-            <img src="/images/fitness_app_weights.jpg" alt="Gym that contains some weights" />
-            <Typography fontSize={32}>
-                Weight Lifting Metrics
+        <Stack alignItems={"center"}>
+            <img src="/images/fitness_app_weights.jpg" alt="Gym that contains some weights" width="85%"/>
+            <Typography fontSize={36} marginTop={"5%"}>
+                WEIGHT LIFTING METRICS
             </Typography>
             <Stack direction="row">
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: totalReps, label: "Total Reps" }]}
-                        width={500}
-                        height={300}
-                    />
+                <Card sx={{ margin: graphMargin }}>
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ totalReps ]} 
+                        seriesLabel={[ "Total Reps" ]}
+                        colors={[ theme.palette.secondary.main ]}
+                    />                    
                 </Card>
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: totalVolume , label: "Total Volume (Kg)" }]}
-                        width={500}
-                        height={300}
-                    />
-                </Card>
-            </Stack>
-            <Stack direction="row">
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: maxRep, label: "1 Rep Max (Kg)" }]}
-                        width={500}
-                        height={300}
-                    />
-                </Card>
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[{ data: strengthRatio, label: "Strength to Weight Ratio" }]}
-                        width={500}
-                        height={300}
-                    />
+                <Card sx={{ margin: graphMargin }}>
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ totalVolume ]} 
+                        seriesLabel={[ "Total Volume (Kg)" ]}
+                        colors={[ theme.palette.secondary.main ]}
+                    />                    
                 </Card>
             </Stack>
             <Stack direction="row">
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                    <BarChart
-                        xAxis={[{ scaleType: "band", data: labels }]}
-                        series={[
-                            {data: avgHeartRate, label: "Avg Heart Rate" },
-                            {data: maxHeartRate, label: "Max Heart Rate" }
-                        ]}
-                        width={500}
-                        height={300}
-                    />
+                <Card sx={{ margin: graphMargin }}>
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ maxRep ]} 
+                        seriesLabel={[ "1 Rep Max (Kg)" ]}
+                        colors={[ theme.palette.secondary.main ]}
+                    />                    
                 </Card>
-                <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
+                <Card sx={{ margin: graphMargin }}>
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ strengthRatio ]} 
+                        seriesLabel={[ "Strength to Weight Ratio" ]}
+                        colors={[ theme.palette.secondary.main ]}
+                    />                    
+                </Card>
+            </Stack>
+            <Stack direction="row">
+                <Card sx={{ margin: graphMargin }}>
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ avgHeartRate, maxHeartRate ]} 
+                        seriesLabel={[ "Avg Heart Rate", "Max Heart Rate" ]}
+                        colors={[ theme.palette.secondary.main, theme.palette.secondary.dark ]}
+                    />                    
+                </Card>
+                {/* <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
                     <BarChart
                         xAxis={[{ scaleType: "band", data: labels }]}
                         series={[{ data: caloriesBurned, label: "Estimated Calories Burned" }]}
                         width={500}
                         height={300}
                     />
+                </Card> */}
+                <Card sx={{ margin: graphMargin }}>
+                    <MyBarChart 
+                        labels={ labels } 
+                        dataSets={[ caloriesBurned ]} 
+                        seriesLabel={[ "Estimated Calories Burned" ]}
+                        colors={[ theme.palette.secondary.main ]}
+                    />                    
                 </Card>
             </Stack>
             {!editingData ? (
                 <></>
             ) : (
-                <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
-                    <Typography marginBottom={5} fontSize={24}>Input Weightlifting Metrics</Typography>
-                    <Stack direction="column" spacing={textInputSpacing}>
-                        <TextField 
-                            required
-                            variant="filled" 
-                            label="Reps"
-                            type="number"
-                            error={errors.reps}
-                            value={repsIn}
-                            onChange={(e) => setRepsIn(e.target.value)}
-                        />
-                        <TextField 
-                            required
-                            variant="filled" 
-                            label="Sets"
-                            type="number"
-                            error={errors.sets}
-                            value={setsIn}
-                            onChange={(e) => setSetsIn(e.target.value)}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Weight of Weights"
-                            type="number"
-                            error={errors.weightOfWeights}
-                            value={weightOfWeightsIn}
-                            onChange={(e) => setWeightOfWeightsIn(e.target.value)}
-                            InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
-                                }}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Duration"
-                            type="number"
-                            error={errors.duration}
-                            value={durationIn}
-                            onChange={(e) => setDurationIn(e.target.value)}
-                            InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>Hours</InputAdornment>
-                                }}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Average Heart Rate"
-                            type="number"
-                            error={errors.avgHeartRate}
-                            value={avgHeartRateIn}
-                            onChange={(e) => setAvgHeartRateIn(e.target.value)}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Maximum Heart Rate"
-                            type="number"
-                            error={errors.maxHeartRate}
-                            value={maxHeartRateIn}
-                            onChange={(e) => setMaxHeartRateIn(e.target.value)}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Bodyweight"
-                            type="number"
-                            error={errors.bodyWeight}
-                            value={bodyWeightIn}
-                            onChange={(e) => setBodyWeightIn(e.target.value)}
-                            InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
-                                }}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Fitness Level"
-                            type="number"
-                            error={errors.fitnessLevel}
-                            value={fitnessLevelIn}
-                            onChange={(e) => setFitnessLevelIn(e.target.value)}
-                            InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
-                                }}
-                        />
-                    </Stack>
+                <Stack width="85%">
+                    <Card sx={{ padding:"40px" }}>
+                        <Typography marginBottom={5} fontSize={24}>Input Weightlifting Metrics</Typography>
+                        <Stack direction="column" spacing={textInputSpacing}>
+                            <TextField 
+                                required
+                                variant="filled" 
+                                label="Reps"
+                                type="number"
+                                error={errors.reps}
+                                value={repsIn}
+                                onChange={(e) => setRepsIn(e.target.value)}
+                            />
+                            <TextField 
+                                required
+                                variant="filled" 
+                                label="Sets"
+                                type="number"
+                                error={errors.sets}
+                                value={setsIn}
+                                onChange={(e) => setSetsIn(e.target.value)}
+                            />
+                            <TextField 
+                                required 
+                                variant="filled" 
+                                label="Weight of Weights"
+                                type="number"
+                                error={errors.weightOfWeights}
+                                value={weightOfWeightsIn}
+                                onChange={(e) => setWeightOfWeightsIn(e.target.value)}
+                                InputProps={{ 
+                                    endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
+                                    }}
+                            />
+                            <TextField 
+                                required 
+                                variant="filled" 
+                                label="Duration"
+                                type="number"
+                                error={errors.duration}
+                                value={durationIn}
+                                onChange={(e) => setDurationIn(e.target.value)}
+                                InputProps={{ 
+                                    endAdornment: <InputAdornment position='end'>Hours</InputAdornment>
+                                    }}
+                            />
+                            <TextField 
+                                required 
+                                variant="filled" 
+                                label="Average Heart Rate"
+                                type="number"
+                                error={errors.avgHeartRate}
+                                value={avgHeartRateIn}
+                                onChange={(e) => setAvgHeartRateIn(e.target.value)}
+                            />
+                            <TextField 
+                                required 
+                                variant="filled" 
+                                label="Maximum Heart Rate"
+                                type="number"
+                                error={errors.maxHeartRate}
+                                value={maxHeartRateIn}
+                                onChange={(e) => setMaxHeartRateIn(e.target.value)}
+                            />
+                            <TextField 
+                                required 
+                                variant="filled" 
+                                label="Bodyweight"
+                                type="number"
+                                error={errors.bodyWeight}
+                                value={bodyWeightIn}
+                                onChange={(e) => setBodyWeightIn(e.target.value)}
+                                InputProps={{ 
+                                    endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
+                                    }}
+                            />
+                            <TextField 
+                                required 
+                                variant="filled" 
+                                label="Fitness Level"
+                                type="number"
+                                error={errors.fitnessLevel}
+                                value={fitnessLevelIn}
+                                onChange={(e) => setFitnessLevelIn(e.target.value)}
+                                InputProps={{ 
+                                    endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
+                                    }}
+                            />
+                        </Stack>
 
-                    <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
-                        <Button variant="contained" onClick={handleSubmit}>Submit</Button>
-                        <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
-                        <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
-                    </Stack>
-                    
-                </Card>
+                        <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
+                            <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                            <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
+                            <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
+                        </Stack>
+                        
+                    </Card>
+                </Stack>
             )}
             <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
                 <Button variant="contained" 
@@ -322,7 +337,7 @@ function WeightLiftingMetrics() {
                 >
                     {editingData ? "Stop Editing" : "Edit Data"}
                 </Button>
-                <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
+                <MuiLink to="../fitnessTypes" component={RouterLink} className="button-link">Back to Fitness Types</MuiLink>
             </Stack>
         </Stack>
 

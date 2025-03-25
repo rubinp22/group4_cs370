@@ -89,7 +89,7 @@ function HomePage() {
           My Profile
         </Link>
         <Link to="./TrainingVideoLibrary" style={styles.link}>
-          TrainingVideoLibrary
+          Video Library
         </Link>
       </div>
     </div>

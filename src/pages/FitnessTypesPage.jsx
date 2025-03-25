@@ -1,22 +1,22 @@
-import { useNavigate, Link } from 'react-router-dom';
 import { Stack } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { Button, Typography } from '@mui/material';
+import MuiLink from '@mui/material/Link';
+
 
 function FitnessTypesPage () {
-    const navigate = useNavigate();
 
-    // Eventually we might consider replacing these h2 and p elements with Typography elements from MUI
-    // They allow for more robust customization that doesn't rely on CSS classes, like pointer-hover
     return (
       <Stack direction="column" gap={3} marginBottom={3}>
-        <h2>Fitness Type</h2>
-        <Link to="./RunningMetrics" className="link">RUNNING</Link>
-        <Link to="./HikingMetrics" className="link">HIKING</Link>
-        <Link to="./CyclingMetrics" className="link">CYCLING</Link>
-        <Link to="./SwimmingMetrics" className="link">SWIMMING</Link>
-        <Link to="./WeightLiftingMetrics" className="link">WEIGHT LIFTING</Link>
-        <Link to="./SportsSelection" className="link">SPORTS</Link>
+        <Typography fontSize={36}>Fitness Type</Typography>
+        <MuiLink to="./RunningMetrics" component={RouterLink} className="link">RUNNING</MuiLink>
+        <MuiLink to="./HikingMetrics" component={RouterLink} className="link">HIKING</MuiLink>
+        <MuiLink to="./CyclingMetrics" component={RouterLink} className="link">CYCLING</MuiLink>
+        <MuiLink to="./SwimmingMetrics" component={RouterLink} className="link">SWIMMING</MuiLink>
+        <MuiLink to="./WeightLiftingMetrics" component={RouterLink} className="link">WEIGHT LIFTING</MuiLink>
+        <MuiLink to="./SportsSelection" component={RouterLink} className="link">SPORTS</MuiLink>
 
-        <Link to="../" className="button-link">Back to Home</Link>
+        <Button to="../" component={RouterLink}>Back to Home</Button>
       </Stack>
     );
 }

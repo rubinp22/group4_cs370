@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Stack, Button, Chip, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import MuiLink from '@mui/material/Link';
 
 const RewardAchievements = () => {
 const [metrics, setMetrics] = useState({});
@@ -77,7 +78,7 @@ return (
         <p>No badges earned yet.</p>
       )}
     </Box>
-    <Link to="../" className="button-link">Back to Home</Link>
+    <MuiLink to="../" component={RouterLink} className="button-link">Back to Home</MuiLink>
   </Stack>
 );
 };

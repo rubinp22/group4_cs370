@@ -1,7 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import MuiLink from '@mui/material/Link';
+
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 import { useState } from 'react';
+import { useTheme } from '@emotion/react';
+
+import MyBarChart from '../components/MyBarChart.jsx';
+// Not currently in use, will have to determine how to implement a color scale. More info below:
+import MyLapBarChart from '../components/MyLapBarChart.jsx';
 
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50]
@@ -18,6 +25,8 @@ const [bodyWeightIn, setBodyWeightIn] = useState(undefined);
 const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
 
 const [swimmingData, setSwimmingData] = useState([]);
+
+const theme = useTheme();
 
 const [errors, setErrors] = useState({
     lapCount: false,
@@ -177,182 +186,202 @@ function handleLapCountChange(laps) {
     setStrokeCountIn(new Array(count).fill(""));
 }
 
-    return (
-        <Stack>
-            <img src="/images/fitness_app_swimmer.jpg" alt="A Person is swimming laps" />
-            <Typography fontSize={32}>SWIMMING METRICS</Typography>
-            <Stack>
-                <Stack direction="row">
-                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                        <BarChart
-                            xAxis={[{ scaleType: "band", data: labels }]}
-                            series={[{ data: distance, label: "Distance Swam (meters)" }]}
-                            width={500}
-                            height={300}
-                        />
-                    </Card>
-                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                        <BarChart
-                            xAxis={[{ scaleType: "band", data: labels }]}
-                            series={[{ data: duration, label: "Time per Swim (minutes)" }]}
-                            width={500}
-                            height={300}
-                        />
-                    </Card>
-                </Stack>
-                <Stack direction="row">
-                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                        <BarChart
-                             xAxis={[{ scaleType: "band", data: labels }]}
-                            series={result.map(item => ({...item, stack: 'total'}))}
-                            width={500}
-                            height={300}
-                        />
-                    </Card>
-                        <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                            <BarChart
-                                xAxis={[{ scaleType: "band", data: labels }]}
-                                series={[{ data: strokeRate, label: "Strokes per minute" }]}
-                                width={500}
-                                height={300}
-                            />
-                        </Card>
-                </Stack>
-                <Stack direction="row">
-                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                        <BarChart
-                            xAxis={[{ scaleType: "band", data: labels }]}
-                            series={[
-                                {data: avgHeartRate, label: "Avg Heart Rate" },
-                                {data: maxHeartRate, label: "Max Heart Rate" }
-                            ]}
-                            width={500}
-                            height={300}
-                        />
-                    </Card>
-                    <Card sx={{ margin: graphMargin, backgroundColor: "#828c85",}}>
-                        <BarChart
-                            xAxis={[{ scaleType: "band", data: labels }]}
-                            series={[{ data: caloriesBurned, label: "Estimated Calories Burned" }]}
-                            width={500}
-                            height={300}
-                        />
-                    </Card>
-                </Stack>
-                {!editingData ? (
-                    <></>
-                ) : (
-                    <Card sx={{ padding:"40px", backgroundColor:"#828c85"}}>
-                    <Typography marginBottom={5} fontSize={24}>Input Swimming Metrics</Typography>
-                    <Stack direction="column" spacing={textInputSpacing}>
-                        <TextField 
-                            required
-                            variant="filled" 
-                            label="Lap Count"
-                            type="number"
-                            error={errors.lapCount}
-                            value={lapCountIn}
-                            onChange={(e) => handleLapCountChange(e.target.value)}
-                        />
-                        {/* Create N number of these text fields depending on the value of lapCount */}
-                        {lapTimesIn.map((_, index) => (
-                            <TextField 
-                                key={index}
-                                required
-                                variant="filled" 
-                                label={`Lap Time ${index + 1}`} 
-                                type="number"
-                                error={errors.lapTime}
-                                value={lapTimesIn[index]}
-                                onChange={(e) => {
-                                    const updatedLapTimes = [...lapTimesIn];
-                                    updatedLapTimes[index] = parseInt(e.target.value);
-                                    setLapTimesIn(updatedLapTimes);
-                                }}
-                                InputProps={{ 
-                                    endAdornment: <InputAdornment position='end'>Seconds</InputAdornment>
-                                }}
-                            />
-                        ))}
-                        {strokeCountIn.map((_, index) => (
-                            <TextField 
-                                key={index}
-                                required
-                                variant="filled" 
-                                label={`Lap ${index + 1} Stroke Count`} 
-                                type="number"
-                                error={errors.strokeCount}
-                                value={strokeCountIn[index]}
-                                onChange={(e) => {
-                                    const updatedStrokeCounts = [...strokeCountIn];
-                                    updatedStrokeCounts[index] = parseInt(e.target.value);
-                                    setStrokeCountIn(updatedStrokeCounts);
-                                }}
-                            />
-                        ))}
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Average Heart Rate"
-                            type="number"
-                            error={errors.avgHeartRate}
-                            value={avgHeartRateIn}
-                            onChange={(e) => setAvgHeartRateIn(e.target.value)}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Maximum Heart Rate"
-                            type="number"
-                            error={errors.maxHeartRate}
-                            value={maxHeartRateIn}
-                            onChange={(e) => setMaxHeartRateIn(e.target.value)}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Bodyweight"
-                            type="number"
-                            error={errors.bodyWeight}
-                            value={bodyWeightIn}
-                            onChange={(e) => setBodyWeightIn(e.target.value)}
-                            InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
-                                }}
-                        />
-                        <TextField 
-                            required 
-                            variant="filled" 
-                            label="Fitness Level"
-                            type="number"
-                            error={errors.fitnessLevel}
-                            value={fitnessLevelIn}
-                            onChange={(e) => setFitnessLevelIn(e.target.value)}
-                            InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
-                                }}
-                        />
-                    </Stack>
-
-                    <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
-                        <Button variant="contained" onClick={handleSubmit}>Submit</Button>
-                        <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
-                        <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
-                    </Stack>
-                    
-                </Card>
-                )}
-            </Stack>
-            <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
-                <Button variant="contained" 
-                    onClick={handleEdit}
-                >
-                    {editingData ? "Stop Editing" : "Edit Data"}
-                </Button>
-                <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
-            </Stack>
+return (
+    <Stack alignItems="center">
+      <img
+        src="/images/fitness_app_swimmer.jpg"
+        alt="A Person is swimming laps"
+        width="85%"
+      />
+      <Typography fontSize={32} marginTop={"5%"}>SWIMMING METRICS</Typography>
+      <Stack alignItems="center">
+        <Stack direction="row">
+          <Card sx={{ margin: graphMargin }}>
+            <MyBarChart
+              labels={labels}
+              dataSets={[distance]}
+              seriesLabel={["Distance Swam (meters)"]}
+              colors={[theme.palette.secondary.main]}
+            />
+          </Card>
+          <Card sx={{ margin: graphMargin }}>
+            <MyBarChart
+              labels={labels}
+              dataSets={[duration]}
+              seriesLabel={["Time per Swim (minutes)"]}
+              colors={[theme.palette.secondary.main]}
+            />
+          </Card>
         </Stack>
-    );
+        <Stack direction="row">
+          <Card sx={{ margin: graphMargin }}>
+            <BarChart
+              xAxis={[{ scaleType: "band", data: labels }]}
+              series={result.map(item => ({ ...item, stack: "total" }))}
+              width={500}
+              height={300}
+            />
+          </Card>
+          <Card sx={{ margin: graphMargin }}>
+            <MyBarChart
+              labels={labels}
+              dataSets={[strokeRate]}
+              seriesLabel={["Strokes per minutes"]}
+              colors={[theme.palette.secondary.main]}
+            />
+          </Card>
+        </Stack>
+        <Stack direction="row">
+          <Card sx={{ margin: graphMargin }}>
+            <MyBarChart
+              labels={labels}
+              dataSets={[avgHeartRate, maxHeartRate]}
+              seriesLabel={["Avg Heart Rate", "Max Heart Rate"]}
+              colors={[
+                theme.palette.secondary.main,
+                theme.palette.secondary.dark,
+              ]}
+            />
+          </Card>
+          <Card sx={{ margin: graphMargin }}>
+            <MyBarChart
+              labels={labels}
+              dataSets={[caloriesBurned]}
+              seriesLabel={["Estimated Calories Burned"]}
+              colors={[theme.palette.secondary.main]}
+            />
+          </Card>
+        </Stack>
+        {editingData && (
+          <Stack width="96%">
+            <Card sx={{ padding: "40px" }}>
+              <Typography marginBottom={5} fontSize={24}>
+                Input Swimming Metrics
+              </Typography>
+              <Stack direction="column" spacing={textInputSpacing}>
+                <TextField
+                  required
+                  variant="filled"
+                  label="Lap Count"
+                  type="number"
+                  error={errors.lapCount}
+                  value={lapCountIn}
+                  onChange={(e) => handleLapCountChange(e.target.value)}
+                />
+                {lapTimesIn.map((_, index) => (
+                  <TextField
+                    key={index}
+                    required
+                    variant="filled"
+                    label={`Lap Time ${index + 1}`}
+                    type="number"
+                    error={errors.lapTime}
+                    value={lapTimesIn[index]}
+                    onChange={(e) => {
+                      const updatedLapTimes = [...lapTimesIn];
+                      updatedLapTimes[index] = parseInt(e.target.value);
+                      setLapTimesIn(updatedLapTimes);
+                    }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">Seconds</InputAdornment>
+                      ),
+                    }}
+                  />
+                ))}
+                {strokeCountIn.map((_, index) => (
+                  <TextField
+                    key={index}
+                    required
+                    variant="filled"
+                    label={`Lap ${index + 1} Stroke Count`}
+                    type="number"
+                    error={errors.strokeCount}
+                    value={strokeCountIn[index]}
+                    onChange={(e) => {
+                      const updatedStrokeCounts = [...strokeCountIn];
+                      updatedStrokeCounts[index] = parseInt(e.target.value);
+                      setStrokeCountIn(updatedStrokeCounts);
+                    }}
+                  />
+                ))}
+                <TextField
+                  required
+                  variant="filled"
+                  label="Average Heart Rate"
+                  type="number"
+                  error={errors.avgHeartRate}
+                  value={avgHeartRateIn}
+                  onChange={(e) => setAvgHeartRateIn(e.target.value)}
+                />
+                <TextField
+                  required
+                  variant="filled"
+                  label="Maximum Heart Rate"
+                  type="number"
+                  error={errors.maxHeartRate}
+                  value={maxHeartRateIn}
+                  onChange={(e) => setMaxHeartRateIn(e.target.value)}
+                />
+                <TextField
+                  required
+                  variant="filled"
+                  label="Bodyweight"
+                  type="number"
+                  error={errors.bodyWeight}
+                  value={bodyWeightIn}
+                  onChange={(e) => setBodyWeightIn(e.target.value)}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">Kg</InputAdornment>
+                    ),
+                  }}
+                />
+                <TextField
+                  required
+                  variant="filled"
+                  label="Fitness Level"
+                  type="number"
+                  error={errors.fitnessLevel}
+                  value={fitnessLevelIn}
+                  onChange={(e) => setFitnessLevelIn(e.target.value)}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">(0 - 2)</InputAdornment>
+                    ),
+                  }}
+                />
+              </Stack>
+              <Stack
+                direction="row"
+                justifyContent="center"
+                spacing={5}
+                marginTop={5}
+              >
+                <Button variant="contained" onClick={handleSubmit}>
+                  Submit
+                </Button>
+                <Button variant="contained" color="secondary" onClick={handleClear}>
+                  Clear
+                </Button>
+                <Button variant="contained" color="error" onClick={handleReset}>
+                  Reset Data
+                </Button>
+              </Stack>
+            </Card>
+          </Stack>
+        )}
+      </Stack>
+      <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
+        <Button variant="contained" onClick={handleEdit}>
+          {editingData ? "Stop Editing" : "Edit Data"}
+        </Button>
+        <MuiLink to="../fitnessTypes" className="button-link" component={RouterLink}>
+          Back to Fitness Types
+        </MuiLink>
+      </Stack>
+    </Stack>
+  );
 
 }
 
