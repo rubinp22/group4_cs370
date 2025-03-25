@@ -1,5 +1,4 @@
-import { Link } from 'react-router-dom';
-import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
+import { Stack, Card, Typography, Button, TextField, InputAdornment, CardActionArea } from '@mui/material';
 import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid2';
@@ -7,7 +6,8 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Menu from '@mui/material/Menu';
+import { Link as RouterLink } from 'react-router-dom';
+import MuiLink from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
 
 
@@ -22,6 +22,69 @@ const Item = styled(Paper)(({ theme }) => ({
     }),
   }));
 
+  const profilePictures = [
+    {
+        value: '/images/profileImages/profile1.png',
+        label: 'Red and Yellow Rectangles',
+    },
+    {
+        value: '/images/profileImages/profile4.png',
+        label: 'Red and Yellow Semicircles',
+    },
+    {
+        value: '/images/profileImages/profile5.png',
+        label: 'Red and Yellow Grid',
+    },
+    {
+        value: '/images/profileImages/profile6.png',
+        label: 'Red and Yellow Quarter Circles',
+    },
+    {
+        value: '/images/profileImages/profile9.png',
+        label: 'Red and Yellow Diamonds',
+    },
+    {
+        value: '/images/profileImages/profile2.png',
+        label: 'Purple and Black Waves',
+    },
+    {
+        value: '/images/profileImages/profile3.png',
+        label: 'Pink and Cyan Waves',
+    },
+    {
+        value: '/images/profileImages/profile8.png',
+        label: 'Pink and Cyan Squiggles',
+    },
+    {
+        value: '/images/profileImages/profile14.png',
+        label: 'Pink and Cyan Stars',
+    },
+    {
+        value: '/images/profileImages/profile7.png',
+        label: 'Purple and Green Stars',
+    },
+    {
+        value: '/images/profileImages/profile10.png',
+        label: 'Purple and Green Squiggles',
+    },
+    {
+        value: '/images/profileImages/profile12.png',
+        label: 'Purple and Green Trapezoids',
+    },
+    {
+        value: '/images/profileImages/profile13.png',
+        label: 'Cyan and Green Circles',
+    },
+    {
+        value: '/images/profileImages/profile11.png',
+        label: 'Yellow and Pink Circles',
+    },
+    {
+        value: '/images/profileImages/profile15.png',
+        label: 'Yellow and Cyan Grid',
+    },
+  ];
+
 function ProfilePage() {
     const [editingData, setEditingData] = useState(false);
 
@@ -30,6 +93,7 @@ function ProfilePage() {
     const [heightInchIn, setHeightInchIn] = useState(undefined);
     const [weightIn, setWeightIn] = useState(undefined);
     const [descriptionIn, setDescriptionIn] = useState(undefined); 
+    const [pfpIn, setPfpIn] = useState(undefined);
     
     const [ProfileData, setProfileData] = useState([]);
 
@@ -39,14 +103,16 @@ function ProfilePage() {
         heightFt: false,
         heightInch: false,
         weight: false,
-        description: false
+        description: false,
+        pfp: false
     })
 
     const name = ProfileData.map(data => data.name);
     const heightFt = ProfileData.map(data => data.heightFt);
     const heightInch = ProfileData.map(data => data.heightInch);
     const weight = ProfileData.map(data => data.weight);
-    const description = ProfileData.map(data => data.description)
+    const description = ProfileData.map(data => data.description);
+    const pfp = ProfileData.map(data => data.pfp);
 
     const textInputSpacing = 3;
 
@@ -64,6 +130,7 @@ function ProfilePage() {
         setHeightInchIn("");
         setWeightIn("");
         setDescriptionIn("");
+        setPfpIn("");
     }
 
     function handleSubmit() {
@@ -76,7 +143,8 @@ function ProfilePage() {
                     heightFt: heightFtIn,
                     heightInch: heightInchIn,
                     weight: weightIn,
-                    description: descriptionIn
+                    description: descriptionIn,
+                    pfp: pfpIn
                 }
             ])
         }
@@ -93,7 +161,8 @@ function ProfilePage() {
             heightFt: (heightFtIn === undefined || heightFtIn > 7 || heightFtIn < 1),
             heightInch: (heightInchIn === undefined || heightInchIn > 11 || heightInchIn < 0),
             weight: (weightIn === undefined || weightIn > 1000 || weightIn < 0),
-            description: (description != undefined && description.length > 200)
+            description: (description != undefined && description.length > 200),
+            pfp: (pfp === undefined && pfp > 0 && pfp < 16)
         }
 
         // Since we now have state for errors, we set it equal to the the values found within the object newErrors
@@ -125,7 +194,7 @@ function ProfilePage() {
                 <Avatar
                 sx={{ width: 100, height: 100}}
                 alt={name}
-                src=""
+                src={pfp}
                 ></Avatar>
             </Grid>
 
@@ -138,24 +207,24 @@ function ProfilePage() {
 
         {/*Stats*/}
         <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="flex-start" size={8} spacing={0}>  
-          <Item>
-            <p>Height: {heightFt}'{heightInch}" | Weight: {weight}</p>
+          <Card sx={{p: 1}}>
+            <p>Height: {heightFt}'{heightInch}" | Weight: {weight} kg</p>
             <p>{description}</p>
-          </Item>
+          </Card>
         </Grid>
         
         {/*Friends*/}
         <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={4} spacing={0}>
-          <Item>
+        <Card sx={{p: 1}}>
           <h3>Friends</h3>
           <AvatarGroup max={4}>
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-          <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-          <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-          <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
-          <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
+          <Avatar alt="Remy Sharp" src="/images/profileImages/profile10.png"/>
+          <Avatar alt="Travis Howard" src="/images/profileImages/profile2.png" />
+          <Avatar alt="Cindy Baker" src="/images/profileImages/profile3.png" />
+          <Avatar alt="Agnes Walker" src="/images/profileImages/profile4.png" />
+          <Avatar alt="Trevor Henderson" src="/images/profileImages/profile5.png" />
           </AvatarGroup>
-          </Item>
+          </Card>
         </Grid>
             
         </Grid>
@@ -165,7 +234,7 @@ function ProfilePage() {
             {!editingData ? (
                 <></>
             ) : (
-                <Card sx={{ padding:"40px" }}>
+                <Card sx={{ padding:"40px"}}>
                     <Typography marginBottom={5} fontSize={24}>Edit Profile</Typography>
                     <Stack direction="column" spacing={textInputSpacing}>
                         <TextField 
@@ -177,6 +246,21 @@ function ProfilePage() {
                             defaultValue={name}
                             onChange={(e) => setnameIn(e.target.value)}
                         />
+                        <TextField 
+                            required
+                            label="Profile"
+                            defaultValue={pfp}
+                            select
+                            onChange={(e) => setPfpIn(e.target.value)}
+                        >
+                            {profilePictures.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              
+                        </TextField>
+
                         <Box>
                             <TextField 
                                 required
@@ -214,7 +298,7 @@ function ProfilePage() {
                             type="number"
                             onChange={(e) => setWeightIn(e.target.value)}
                             InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>lbs</InputAdornment>
+                                endAdornment: <InputAdornment position='end'>kg</InputAdornment>
                             }}
                         />
                         <TextField 
@@ -243,10 +327,9 @@ function ProfilePage() {
             >
                 {editingData ? "Stop Editing" : "Edit"}
             </Button>
-            <Link to="/" className="button-link">Home</Link>
+            <MuiLink to="/" component={RouterLink} className="button-link">Home</MuiLink>
         </Stack>
     </Stack>
-
 
     );
 }
