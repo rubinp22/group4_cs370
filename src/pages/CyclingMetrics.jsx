@@ -184,7 +184,7 @@ function CyclingMetrics() {
             ) : (
                 <Stack width="85%">
                     <Card sx={{ padding:"40px" }}>
-                        <Typography marginBottom={5} fontSize={24}>Input Cycling Metrics</Typography>
+                        <Typography marginBottom={5} fontSize={36}>Input Cycling Metrics</Typography>
                         <Stack direction="column" spacing={textInputSpacing}>
                             <TextField 
                                 required

@@ -194,7 +194,7 @@ return (
             ) : (
                 <Stack width="82%">
                     <Card sx={{ padding:"40px" }}>
-                        <Typography marginBottom={5} fontSize={24}>Input Hiking Metrics</Typography>
+                        <Typography marginBottom={5} fontSize={36}>Input Hiking Metrics</Typography>
                         <Stack direction="column" spacing={textInputSpacing}>
                             <TextField 
                                 required
