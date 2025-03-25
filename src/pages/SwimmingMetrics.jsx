@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import MuiLink from '@mui/material/Link';
+
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { BarChart } from '@mui/x-charts';
 import { useState } from 'react';
@@ -374,9 +376,9 @@ return (
         <Button variant="contained" onClick={handleEdit}>
           {editingData ? "Stop Editing" : "Edit Data"}
         </Button>
-        <Link to="../fitnessTypes" className="button-link">
+        <MuiLink to="../fitnessTypes" className="button-link" component={RouterLink}>
           Back to Fitness Types
-        </Link>
+        </MuiLink>
       </Stack>
     </Stack>
   );

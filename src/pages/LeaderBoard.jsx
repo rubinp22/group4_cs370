@@ -3,6 +3,9 @@ import { useNavigate, Link  } from 'react-router-dom';
 import { Stack, Avatar, Button, ButtonGroup, AvatarGroup} from '@mui/material';
 import { amber, blueGrey, orange } from '@mui/material/colors';
 
+import { Link as RouterLink } from 'react-router-dom';
+import MuiLink from '@mui/material/Link';
+
 // The arrays for testing that will be replaced when we get user data proper
 var userName = ["Abel", "Bender", "Chirst", "Don", "Eve"];
 var userDistance = [1.5, 2, 2.5, 4, 1];
@@ -146,7 +149,7 @@ function LeaderBoard () {
     <br></br>{placeNames[4]} -- {placeValues[4]} {unitsOfMeasure}
     </p>
     <h3>Max:{maxMinMedian[0]}  Min:{maxMinMedian[1]}  Median:{maxMinMedian[2]}</h3>
-    <Link to="../" className="button-link">Back to Home</Link>
+    <MuiLink to="../" component={RouterLink}>Back to Home</MuiLink>
   </Stack>
   );
 }

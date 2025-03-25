@@ -3,6 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
 import MuiLink from '@mui/material/Link';
 
+
 function FitnessTypesPage () {
 
     return (
@@ -15,7 +16,7 @@ function FitnessTypesPage () {
         <MuiLink to="./WeightLiftingMetrics" component={RouterLink} className="link">WEIGHT LIFTING</MuiLink>
         <MuiLink to="./SportsSelection" component={RouterLink} className="link">SPORTS</MuiLink>
 
-        <Button to="../" component={RouterLink} className="button-link">Back to Home</Button>
+        <Button to="../" component={RouterLink}>Back to Home</Button>
       </Stack>
     );
 }
