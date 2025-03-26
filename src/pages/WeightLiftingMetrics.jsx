@@ -165,7 +165,7 @@ function WeightLiftingMetrics() {
         <Stack alignItems={"center"}>
             <img src="/images/fitness_app_weights.jpg" alt="Gym that contains some weights" width="85%"/>
             <Typography fontSize={36} marginTop={"5%"}>
-                WEIGHT LIFTING METRICS
+                WEIGHTLIFTING METRICS
             </Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>
@@ -234,7 +234,7 @@ function WeightLiftingMetrics() {
             ) : (
                 <Stack width="85%">
                     <Card sx={{ padding:"40px" }}>
-                        <Typography marginBottom={5} fontSize={24}>Input Weightlifting Metrics</Typography>
+                        <Typography marginBottom={5} fontSize={36}>Input Weightlifting Metrics</Typography>
                         <Stack direction="column" spacing={textInputSpacing}>
                             <TextField 
                                 required
