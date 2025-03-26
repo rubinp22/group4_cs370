@@ -1,5 +1,5 @@
 import { useNavigate, Link } from 'react-router-dom';
-import { Stack, Typography, Button, ButtonGroup  } from '@mui/material';
+import { Stack, Typography, Button, ButtonGroup, Box  } from '@mui/material';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
@@ -111,14 +111,26 @@ function TrainingVideoLibrary () {
         {videoLibrary[videoType].map((video) => (
           <div key={video.id} style={{ textAlign: "center" }}>
             <Typography variant = "h6">{video.title}</Typography>
-            <iframe 
-              width="640" 
-              height="480" 
-              src={convertToEmbedUrl(video.url)} 
-              title={video.title} 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowFullScreen
-            ></iframe>
+            {/* Added a ternary here to conditionally control whether an embedded video is rendered. If the user
+            hasn't selected a video type, then it makes sense to not show them a video. Otherwise, we render
+            an embedded video with a null url, causing errors. */}
+            {videoType === "none" ? (
+              <>
+                {/* Minor spacing */}
+                <Box margin="20%" />
+              </>
+            ) : (
+              <iframe 
+                width="640" 
+                height="480" 
+                src={convertToEmbedUrl(video.url)} 
+                title={video.title} 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+              />
+            )
+          }
+            
           </div>
         ))}
       </Stack>

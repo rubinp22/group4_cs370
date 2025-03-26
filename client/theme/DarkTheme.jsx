@@ -118,7 +118,15 @@ const DarkTheme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           color: theme.palette.secondary.main,
-          backgroundColor: theme.palette.secondary.dark
+          backgroundColor: theme.palette.primary.dark
+        })
+      }
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.secondary.main,
+          backgroundColor: theme.palette.primary.dark
         })
       }
     }

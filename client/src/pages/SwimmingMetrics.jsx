@@ -255,7 +255,7 @@ return (
         {editingData && (
           <Stack width="96%">
             <Card sx={{ padding: "40px" }}>
-              <Typography marginBottom={5} fontSize={24}>
+              <Typography marginBottom={5} fontSize={36}>
                 Input Swimming Metrics
               </Typography>
               <Stack direction="column" spacing={textInputSpacing}>
