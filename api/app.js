@@ -20,8 +20,6 @@ mongoose.connect(MONGO_URI, {
 .then(() => { console.log('Connected to MongoDB'); })
 .catch(err => {console.error('Mongo connection error', err); });
 
-console.log("Mongo Uri: ", MONGO_URI)
-
 // CORS middleware
 // This is some piping we have to do to allow our client to be able to talk to our API without CORS issues.
 // You can pretty much ignore this and have this sit at the top of your app.js, just know it is setting some

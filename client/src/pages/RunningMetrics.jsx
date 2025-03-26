@@ -58,7 +58,6 @@ function RunningMetrics() {
         getRunningExercises();
 
         async function getRunningExercises() {
-            console.log("running fetch")
             const res = await axios.get('http://localhost:3000/exercises/running-entry', {
                 headers: {
                     'Content-Type': 'application/json'
@@ -68,7 +67,6 @@ function RunningMetrics() {
                 }
             });
             setRunningData(res.data);
-            console.log("Running Data set to: ", res.data);
         }
     
     }, [fetchCount])
