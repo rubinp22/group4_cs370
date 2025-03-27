@@ -1,19 +1,13 @@
 
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
-import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
-import { BarChart } from '@mui/x-charts';
-import { useState, useEffect } from 'react';
-import { useTheme } from '@emotion/react';
-import MyBarChart from '../components/MyBarChart.jsx';
-import axios from 'axios';
+import { Stack, Button } from '@mui/material';
+import { useState } from 'react';
 import ViewRunningMetrics from '../components/ViewMetrics/ViewRunningMetrics.jsx';
 import InputRunningExercise from '../components/InputMetrics/InputRunningExercise.jsx';
 
 function RunningMetrics() {
     const [editingData, setEditingData] = useState(false);
-
-    const theme = useTheme();
 
     function handleEdit() {
         editingData ? setEditingData(false) : setEditingData(true)
