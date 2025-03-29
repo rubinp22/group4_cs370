@@ -191,13 +191,12 @@ function InputHikingExercise() {
                     />
                 </Stack>
                 
-
                 <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
                     <Button variant="contained" onClick={handleSubmit}>Submit</Button>
                     <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
                     <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
                 </Stack>
-                
+            
             </Card>
     );
 }
