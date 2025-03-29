@@ -1,13 +1,11 @@
-import { Link as RouterLink } from 'react-router-dom';
-import MuiLink from '@mui/material/Link';
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
-import { BarChart } from '@mui/x-charts';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTheme } from '@emotion/react';
-import MyBarChart from '../MyBarChart.jsx';
 import axios from 'axios';
 
 function InputRunningExercise() {
+    const theme = useTheme();
+
     const [distanceIn, setDistanceIn] = useState(undefined);
     const [durationIn, setDurationIn] = useState(undefined);
     const [stepsIn, setStepsIn] = useState(undefined);
@@ -27,20 +25,13 @@ function InputRunningExercise() {
         fitnessLevel: false
     })
 
-    const [fetchCount, setFetchCount] = useState(0);
-
-
-    const theme = useTheme();
-
-        // Metric Input
         const textInputSpacing = 3;
     
-        // Metric Input, won't be a part of the database integration. Don't want users to clear their data with one click
+        // Won't be a part of the database integration. Don't want users to clear their data with one click
         function handleReset() {
             //setRunningData([])
         }
     
-        // Metric Input
         function handleClear() {
             setDistanceIn("");
             setDurationIn("");
@@ -51,7 +42,6 @@ function InputRunningExercise() {
             setFitnessLevelIn("");
         }
     
-        // Metric Input
         async function handleSubmit() {
             if (!isError()) {
     
@@ -82,7 +72,6 @@ function InputRunningExercise() {
         // Checking if text field input is either undefined, less than 1, or greater than the specified range
         // If an error is found, this function returns true, preventing handleSubmit from storing the erroneous data
         // in state.
-        // Metric Input
         function isError() {
             // Making a new object with values equal to whether or not the input state meets certain conditions
             // Will result in an object that holds Boolean values

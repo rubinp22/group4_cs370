@@ -1,7 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom';
-import MuiLink from '@mui/material/Link';
-import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
-import { BarChart } from '@mui/x-charts';
+import { Stack, Card, Typography } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 import MyBarChart from '../MyBarChart.jsx';

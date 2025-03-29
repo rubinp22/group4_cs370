@@ -1,8 +1,8 @@
-
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import { Stack, Button } from '@mui/material';
 import { useState } from 'react';
+
 import ViewRunningMetrics from '../components/ViewMetrics/ViewRunningMetrics.jsx';
 import InputRunningExercise from '../components/InputMetrics/InputRunningExercise.jsx';
 
@@ -16,13 +16,14 @@ function RunningMetrics() {
     return (
         <Stack alignItems={"center"}>
             <ViewRunningMetrics/>
-            <Stack width="82%">
-                {!editingData ? (
-                    <></>
-                ) : (
-                <InputRunningExercise/>
-                )}
-            </Stack>
+            {!editingData ? (
+                <></>
+            ) : (
+                <Stack width="82%">
+                    <InputRunningExercise/>
+                </Stack>
+            )}
+
             <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
                 <Button variant="contained" 
                     onClick={handleEdit}
