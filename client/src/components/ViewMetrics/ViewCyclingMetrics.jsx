@@ -7,17 +7,16 @@ import axios from 'axios';
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50];
 
-function ViewHikingMetrics() {
-    const [hikingData, setHikingData] = useState([]);
+function ViewCyclingMetrics() {
+    const [cyclingData, setCyclingData] = useState([]);
 
-    const distance = hikingData.map(data => data.distance);
-    const elevationGain = hikingData.map(data => data.elevationGain);
-    const elevationLoss = hikingData.map(data => data.elevationLoss);
-    const duration = hikingData.map(data => data.duration);
-    const avgHeartRate = hikingData.map(data => data.avgHeartRate);
-    const maxHeartRate = hikingData.map(data => data.maxHeartRate);
-    const bodyWeight = hikingData.map(data => data.bodyWeight);
-    const fitnessLevel = hikingData.map(data => data.fitnessLevel);
+    const distance = cyclingData.map(data => data.distance);
+    const duration = cyclingData.map(data => data.duration);
+    const elevationGain = cyclingData.map(data => data.elevationGain);
+    const avgHeartRate = cyclingData.map(data => data.avgHeartRate);
+    const maxHeartRate = cyclingData.map(data => data.maxHeartRate);
+    const bodyWeight = cyclingData.map(data => data.bodyWeight);
+    const fitnessLevel = cyclingData.map(data => data.fitnessLevel);
 
     // API Not yet implemented
     const [fetchCount, setFetchCount] = useState(0);
@@ -32,36 +31,36 @@ function ViewHikingMetrics() {
     const pace = duration.map((data, index) => data / distance[index]);
 
     const heartRateReserve = avgHeartRate.map((data, index) => 
-      Math.abs((data - restingHeartRates[fitnessLevel[index]]) / (maxHeartRate[index] - restingHeartRates[fitnessLevel[index]])));
-  
+        Math.abs((data - restingHeartRates[fitnessLevel[index]]) / (maxHeartRate[index] - restingHeartRates[fitnessLevel[index]])));
+
     const MET = heartRateReserve.map((data, index) => (data * (maxMETs[fitnessLevel[index]] - 1) + 1))
-  
+
     const caloriesBurned = MET.map((data, index) => parseInt(data * duration[index] * bodyWeight[index]));
 
-    const labels = hikingData.map((data, index) => `hike ${index + 1}`)
+    const labels = cyclingData.map((data, index) => `ride ${index + 1}`)
     const graphMargin = 3;
 
-    // Put DB fetching here:
+    // Put DB fetching here
 
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_hiker.jpg" alt="Hikers in a trail" width="85%"/>
-            <Typography fontSize={36} marginTop={"5%"}>HIKING METRICS</Typography>
+            <img src="/images/fitness_app_cycler.jpg" alt="caption of a cycler" width="85%"/>
+            <Typography fontSize={36} marginTop={"5%"}>CYCLING METRICS</Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>
                     <MyBarChart 
                         labels={ labels } 
                         dataSets={[ distance ]} 
-                        seriesLabel={[ "Distance Hiked (Miles)" ]}
+                        seriesLabel={[ "Distance Cycled (Miles)" ]}
                         colors={[ theme.palette.secondary.main ]}
                     />                    
                 </Card>
                 <Card sx={{ margin: graphMargin }}>
                     <MyBarChart 
                         labels={ labels } 
-                        dataSets={[ elevationLoss, elevationGain ]} 
-                        seriesLabel={[ "Elevation Loss", "Elevation Gain" ]}
-                        colors={[ theme.palette.secondary.main, theme.palette.secondary.dark ]}
+                        dataSets={[ elevationGain ]} 
+                        seriesLabel={[ "Elevation Gain" ]}
+                        colors={[ theme.palette.secondary.main ]}
                     />                    
                 </Card>
             </Stack>
@@ -105,4 +104,4 @@ function ViewHikingMetrics() {
     );
 }
 
-export default ViewHikingMetrics;
+export default ViewCyclingMetrics;

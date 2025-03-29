@@ -4,6 +4,12 @@ import { useTheme } from '@emotion/react';
 import axios from 'axios';
 
 function InputHikingExercise() {
+    // Will be replaced once DB/API is integrated
+    // Currently we can't enter any data this way. hikingData is state that is used by all the view components.
+    // therefore, it cannot be referenced in that other component and our charts won't be updated. This feature
+    // won't work until DB/API integration,
+    const [hikingData, setHikingData] = useState([]);
+
     const theme = useTheme();
 
     const [distanceIn, setDistanceIn] = useState(undefined);
