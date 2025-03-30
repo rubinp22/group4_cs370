@@ -2,6 +2,8 @@ import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import mongoose from 'mongoose'
 import RunningEntries from './models/RunningExercise.js'
+// This schema represents all data recorded in an exercise
+import Exercise from './models/Exercise.js'
 
 import 'dotenv/config';
 
@@ -56,6 +58,33 @@ app.get('/exercises/running-entry', async (c) => {
     const runningExercises = await RunningEntries.find();
     return c.json(runningExercises);
 })
+
+app.post('exercises/', async (c) => {
+    console.log("posting to exercises")
+
+    // Get the posted content
+    const body = await c.req.json();
+
+    console.log("making a new entry with: ", body);
+
+    // Create a new exercise with the posted content
+    // In other words, this creates a new record in MongoDB
+    Exercise.create(body);
+
+    return c.text('Exercise Added');
+})
+
+app.get('/exercises', async (c) => {
+    console.log("get exercise: ", c )
+
+    const params = c.req.query();
+    console.log(params);
+
+    const Exercises = await Exercise.find(params);
+    return c.json(Exercises);
+})
+
+
 
 
 serve({
