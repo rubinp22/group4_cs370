@@ -18,6 +18,7 @@ function ViewRunningMetrics() {
     const bodyWeight = runningData.map(data => data.bodyWeight);
     const fitnessLevel = runningData.map(data => data.fitnessLevel);
 
+    // Might not be necessary anymore since we won't be updating new DB inputs on the same page we input them
     const [fetchCount, setFetchCount] = useState(0);
 
     const theme = useTheme();
@@ -48,12 +49,12 @@ function ViewRunningMetrics() {
         getRunningExercises();
 
         async function getRunningExercises() {
-            const res = await axios.get('http://localhost:3000/exercises/running-entry', {
+            const res = await axios.get('http://localhost:3000/exercises', {
                 headers: {
                     'Content-Type': 'application/json'
                 }, 
                 params: {
-                    
+                    type: "run"
                 }
             });
             setRunningData(res.data);
