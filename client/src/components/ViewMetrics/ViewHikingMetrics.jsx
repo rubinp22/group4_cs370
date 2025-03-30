@@ -1,5 +1,5 @@
 import { Stack, Card, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 import MyBarChart from '../MyBarChart.jsx';
 import axios from 'axios';
@@ -19,7 +19,7 @@ function ViewHikingMetrics() {
     const bodyWeight = hikingData.map(data => data.bodyWeight);
     const fitnessLevel = hikingData.map(data => data.fitnessLevel);
 
-    // API Not yet implemented
+    // Might not be necessary anymore since we won't be updating new DB inputs on the same page we input them
     const [fetchCount, setFetchCount] = useState(0);
 
     const theme = useTheme();
@@ -42,6 +42,22 @@ function ViewHikingMetrics() {
     const graphMargin = 3;
 
     // Put DB fetching here:
+    useEffect(() => {
+        getHikingExercises();
+
+        async function getHikingExercises() {
+            const res = await axios.get('http://localhost:3000/exercises', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                params: {
+                    type: "hike"
+                }
+            });
+            setHikingData(res.data);
+        }
+    
+    }, [fetchCount])
 
     return (
         <Stack alignItems={"center"}>

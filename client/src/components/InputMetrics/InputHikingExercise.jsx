@@ -50,21 +50,32 @@ function InputHikingExercise() {
         setFitnessLevelIn("");
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         if (!isError()) {
-            setHikingData(prevData => [
-                ...prevData,
-                {
-                    distance: distanceIn,
-                    elevationGain: elevationGainIn,
-                    elevationLoss: elevationLossIn,
-                    duration: durationIn,
-                    avgHeartRate: avgHeartRateIn,
-                    maxHeartRate: maxHeartRateIn,
-                    bodyWeight: bodyWeightIn,
-                    fitnessLevel: fitnessLevelIn
+
+            const newExercise = {
+                type: "hike",
+                distance: distanceIn,
+                elevationGain: elevationGainIn,
+                elevationLoss: elevationLossIn,
+                duration: durationIn,
+                avgHeartRate: avgHeartRateIn,
+                maxHeartRate: maxHeartRateIn,
+                bodyWeight: bodyWeightIn,
+                fitnessLevel: fitnessLevelIn
+            }
+
+            console.log("about to add new exercise: ", newExercise);
+    
+            // Incrementing fetchCount to cause the useEffect hook that fetches data with Hono to run again
+            //setFetchCount(prev => prev + 1);
+
+            // Add the game via the POST route on the api
+            await axios.post('http://localhost:3000/exercises/', newExercise, {
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            ])
+            });
         }
     }
 

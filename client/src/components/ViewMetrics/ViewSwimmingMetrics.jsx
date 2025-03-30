@@ -1,5 +1,5 @@
 import { Stack, Card, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 import { BarChart } from '@mui/x-charts';
 import MyBarChart from '../MyBarChart.jsx';
@@ -85,6 +85,22 @@ function ViewSwimmingMetrics() {
     const graphMargin = 3;
 
     // Put DB fetching here:
+    useEffect(() => {
+        getSwimmingExercises();
+
+        async function getSwimmingExercises() {
+            const res = await axios.get('http://localhost:3000/exercises', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                params: {
+                    type: "swim"
+                }
+            });
+            setSwimmingData(res.data);
+        }
+    
+    }, [fetchCount])
 
     return (
         <Stack alignItems={"center"}>

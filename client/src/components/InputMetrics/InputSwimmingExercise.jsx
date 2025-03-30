@@ -44,20 +44,39 @@ function InputSwimmingExercise() {
         setFitnessLevelIn("");
     }
     
-    function handleSubmit() {
+    async function handleSubmit() {
         if (!isError()) {
-            setSwimmingData(prevData => [
-                ...prevData,
-                {
-                    lapCount: lapCountIn,
-                    lapTimes: lapTimesIn,
-                    strokeCount: strokeCountIn,
-                    avgHeartRate: avgHeartRateIn,
-                    maxHeartRate: maxHeartRateIn,
-                    bodyWeight: bodyWeightIn,
-                    fitnessLevel: fitnessLevelIn
+            // setSwimmingData(prevData => [
+            //     ...prevData,
+            //     {
+            //         lapCount: lapCountIn,
+            //         lapTimes: lapTimesIn,
+            //         strokeCount: strokeCountIn,
+            //         avgHeartRate: avgHeartRateIn,
+            //         maxHeartRate: maxHeartRateIn,
+            //         bodyWeight: bodyWeightIn,
+            //         fitnessLevel: fitnessLevelIn
+            //     }
+            // ])
+
+            const newExercise = {
+                type: "swim",
+                lapCount: lapCountIn,
+                lapTimes: lapTimesIn,
+                strokeCount: strokeCountIn,
+                avgHeartRate: avgHeartRateIn,
+                maxHeartRate: maxHeartRateIn,
+                bodyWeight: bodyWeightIn,
+                fitnessLevel: fitnessLevelIn
+            }
+
+            console.log("about to add new exercise: ", newExercise);
+
+            await axios.post('http://localhost:3000/exercises/', newExercise, {
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            ])
+            });
         }
     }
     

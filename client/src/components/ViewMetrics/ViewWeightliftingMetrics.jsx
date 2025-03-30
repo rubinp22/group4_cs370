@@ -1,5 +1,5 @@
 import { Stack, Card, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 import MyBarChart from '../MyBarChart.jsx';
 import axios from 'axios';
@@ -72,6 +72,22 @@ function ViewWeightliftingMetrics() {
     const graphMargin = 3;
 
     // Put DB fetching here:
+    useEffect(() => {
+        getWeightliftingExercises();
+
+        async function getWeightliftingExercises() {
+            const res = await axios.get('http://localhost:3000/exercises', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                params: {
+                    type: "weights"
+                }
+            });
+            setWeightLiftData(res.data);
+        }
+    
+    }, [fetchCount])
 
     return (
         <Stack alignItems={"center"}>

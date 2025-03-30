@@ -47,21 +47,28 @@ function InputWeightliftingExercise() {
         setFitnessLevelIn("");
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         if (!isError()) {
-            setWeightLiftData(prevData => [
-                ...prevData,
-                {
-                    reps: repsIn,
-                    sets: setsIn,
-                    weightOfWeights: weightOfWeightsIn,
-                    duration: durationIn,
-                    avgHeartRate: avgHeartRateIn,
-                    maxHeartRate: maxHeartRateIn,
-                    bodyWeight: bodyWeightIn,
-                    fitnessLevel: fitnessLevelIn
+
+            const newExercise = {
+                type: "weights",
+                reps: repsIn,
+                sets: setsIn,
+                weightOfWeights: weightOfWeightsIn,
+                duration: durationIn,
+                avgHeartRate: avgHeartRateIn,
+                maxHeartRate: maxHeartRateIn,
+                bodyWeight: bodyWeightIn,
+                fitnessLevel: fitnessLevelIn           
+            }
+
+            console.log("about to add new exercise: ", newExercise);
+
+            await axios.post('http://localhost:3000/exercises/', newExercise, {
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            ])
+            });
         }
     }
 
@@ -70,7 +77,7 @@ function InputWeightliftingExercise() {
             reps: (repsIn === undefined || repsIn < 1),
             sets: (setsIn === undefined || setsIn < 1),
             weightOfWeights: (weightOfWeightsIn === undefined || weightOfWeightsIn < 1),
-            duration: (durationIn === undefined || durationIn < 1),
+            duration: (durationIn === undefined || durationIn < 0),
             avgHeartRate: (avgHeartRateIn === undefined || avgHeartRateIn < 1),
             maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),
             bodyWeight: (bodyWeightIn === undefined || bodyWeightIn < 1),
