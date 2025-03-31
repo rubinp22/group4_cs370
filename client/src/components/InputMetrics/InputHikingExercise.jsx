@@ -1,17 +1,8 @@
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { useState } from 'react';
-import { useTheme } from '@emotion/react';
 import axios from 'axios';
 
 function InputHikingExercise() {
-    // Will be replaced once DB/API is integrated
-    // Currently we can't enter any data this way. hikingData is state that is used by all the view components.
-    // therefore, it cannot be referenced in that other component and our charts won't be updated. This feature
-    // won't work until DB/API integration,
-    const [hikingData, setHikingData] = useState([]);
-
-    const theme = useTheme();
-
     const [distanceIn, setDistanceIn] = useState(undefined);
     const [elevationGainIn, setElevationGainIn] = useState(undefined);
     const [elevationLossIn, setElevationLossIn] = useState(undefined);
@@ -34,11 +25,6 @@ function InputHikingExercise() {
 
     const textInputSpacing = 3;
 
-    // Won't be a part of the database integration. Don't want users to clear their data with one click
-    function handleReset() {
-        //setHikingData([])
-    }
-
     function handleClear() {
         setDistanceIn("");
         setElevationGainIn("");
@@ -54,6 +40,7 @@ function InputHikingExercise() {
         if (!isError()) {
 
             const newExercise = {
+                // Types: run, hike, cycle, swim, weights
                 type: "hike",
                 distance: distanceIn,
                 elevationGain: elevationGainIn,
@@ -65,12 +52,6 @@ function InputHikingExercise() {
                 fitnessLevel: fitnessLevelIn
             }
 
-            console.log("about to add new exercise: ", newExercise);
-    
-            // Incrementing fetchCount to cause the useEffect hook that fetches data with Hono to run again
-            //setFetchCount(prev => prev + 1);
-
-            // Add the game via the POST route on the api
             await axios.post('http://localhost:3000/exercises/', newExercise, {
                 headers: {
                     'Content-Type': 'application/json'
@@ -205,7 +186,6 @@ function InputHikingExercise() {
                 <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
                     <Button variant="contained" onClick={handleSubmit}>Submit</Button>
                     <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
-                    <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
                 </Stack>
             
             </Card>

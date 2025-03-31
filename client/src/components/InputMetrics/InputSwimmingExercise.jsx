@@ -1,14 +1,8 @@
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { useState } from 'react';
-import { useTheme } from '@emotion/react';
 import axios from 'axios';
 
 function InputSwimmingExercise() {
-    // Will be replaced once DB/API is integrated
-    const [swimmingData, setSwimmingData] = useState([]);
-
-    const theme = useTheme();
-
     const [lapCountIn, setLapCountIn] = useState(undefined);
     const [lapTimesIn, setLapTimesIn] = useState([]);
     const [strokeCountIn, setStrokeCountIn] = useState([]);
@@ -29,11 +23,6 @@ function InputSwimmingExercise() {
 
     const textInputSpacing = 3;
 
-    // Won't be a part of the database integration. Don't want users to clear their data with one click
-    function handleReset() {
-        //setSwimmingData([])
-    }
-
     function handleClear() {
         setLapCountIn("");
         setLapTimesIn([]);
@@ -46,20 +35,9 @@ function InputSwimmingExercise() {
     
     async function handleSubmit() {
         if (!isError()) {
-            // setSwimmingData(prevData => [
-            //     ...prevData,
-            //     {
-            //         lapCount: lapCountIn,
-            //         lapTimes: lapTimesIn,
-            //         strokeCount: strokeCountIn,
-            //         avgHeartRate: avgHeartRateIn,
-            //         maxHeartRate: maxHeartRateIn,
-            //         bodyWeight: bodyWeightIn,
-            //         fitnessLevel: fitnessLevelIn
-            //     }
-            // ])
 
             const newExercise = {
+                // Types: run, hike, cycle, swim, weights
                 type: "swim",
                 lapCount: lapCountIn,
                 lapTimes: lapTimesIn,
@@ -69,8 +47,6 @@ function InputSwimmingExercise() {
                 bodyWeight: bodyWeightIn,
                 fitnessLevel: fitnessLevelIn
             }
-
-            console.log("about to add new exercise: ", newExercise);
 
             await axios.post('http://localhost:3000/exercises/', newExercise, {
                 headers: {
@@ -225,7 +201,6 @@ function InputSwimmingExercise() {
             <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
                 <Button variant="contained" onClick={handleSubmit}>Submit</Button>
                 <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
-                <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
             </Stack>
 
         </Card>

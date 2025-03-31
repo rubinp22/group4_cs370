@@ -33,9 +33,6 @@ function ViewWeightliftingMetrics() {
     const bodyWeight = weightLiftData.map(data => data.bodyWeight);
     const fitnessLevel = weightLiftData.map(data => data.fitnessLevel);
 
-    // API Not yet implemented
-    const [fetchCount, setFetchCount] = useState(0);
-
     const theme = useTheme();
 
     // totalReps = reps * sets
@@ -87,7 +84,7 @@ function ViewWeightliftingMetrics() {
             setWeightLiftData(res.data);
         }
     
-    }, [fetchCount])
+    }, [])
 
     return (
         <Stack alignItems={"center"}>

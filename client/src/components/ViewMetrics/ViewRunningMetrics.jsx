@@ -18,9 +18,6 @@ function ViewRunningMetrics() {
     const bodyWeight = runningData.map(data => data.bodyWeight);
     const fitnessLevel = runningData.map(data => data.fitnessLevel);
 
-    // Might not be necessary anymore since we won't be updating new DB inputs on the same page we input them
-    const [fetchCount, setFetchCount] = useState(0);
-
     const theme = useTheme();
 
     // speed = distance / duration
@@ -60,7 +57,7 @@ function ViewRunningMetrics() {
             setRunningData(res.data);
         }
     
-    }, [fetchCount])
+    }, [])
 
     return (
         <Stack alignItems={"center"}>

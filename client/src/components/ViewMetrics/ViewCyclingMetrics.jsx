@@ -18,9 +18,6 @@ function ViewCyclingMetrics() {
     const bodyWeight = cyclingData.map(data => data.bodyWeight);
     const fitnessLevel = cyclingData.map(data => data.fitnessLevel);
 
-    // API Not yet implemented
-    const [fetchCount, setFetchCount] = useState(0);
-
     const theme = useTheme();
 
     // grade represents the average slope steepness, it doesn't account for downhill slope
@@ -40,7 +37,7 @@ function ViewCyclingMetrics() {
     const labels = cyclingData.map((data, index) => `ride ${index + 1}`)
     const graphMargin = 3;
 
-    // Put DB fetching here
+    
     useEffect(() => {
         getCyclingExercises();
 
@@ -56,7 +53,7 @@ function ViewCyclingMetrics() {
             setCyclingData(res.data);
         }
     
-    }, [fetchCount])
+    }, [])
 
     return (
         <Stack alignItems={"center"}>

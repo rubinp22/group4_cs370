@@ -22,9 +22,6 @@ function ViewSwimmingMetrics() {
     const bodyWeight = swimmingData.map(data => data.bodyWeight);
     const fitnessLevel = swimmingData.map(data => data.fitnessLevel);
 
-    // API Not yet implemented
-    const [fetchCount, setFetchCount] = useState(0);
-
     const theme = useTheme();
 
     // Finding the duration (in minutes) of each swim by totaling each lap for each swim
@@ -100,7 +97,7 @@ function ViewSwimmingMetrics() {
             setSwimmingData(res.data);
         }
     
-    }, [fetchCount])
+    }, [])
 
     return (
         <Stack alignItems={"center"}>
