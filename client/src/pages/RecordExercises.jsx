@@ -51,7 +51,7 @@ function RecordExercises() {
                 </Stack>
 
                 <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
-                    <MuiLink to="../" component={RouterLink} className="button-link">Back to Fitness Types</MuiLink>
+                    <MuiLink to="../" component={RouterLink} className="button-link">Back to Home</MuiLink>
                 </Stack>
             </Stack>
 

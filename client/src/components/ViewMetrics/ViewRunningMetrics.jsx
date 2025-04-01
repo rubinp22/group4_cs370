@@ -61,7 +61,6 @@ function ViewRunningMetrics() {
 
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_runner.jpg" alt="Runner in background" width="85%"/>
             <Typography fontSize={36} marginTop={"5%"}>
                 RUNNING METRICS
             </Typography>

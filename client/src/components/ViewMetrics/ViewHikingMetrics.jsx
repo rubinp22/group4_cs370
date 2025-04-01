@@ -58,7 +58,6 @@ function ViewHikingMetrics() {
 
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_hiker.jpg" alt="Hikers in a trail" width="85%"/>
             <Typography fontSize={36} marginTop={"5%"}>HIKING METRICS</Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>

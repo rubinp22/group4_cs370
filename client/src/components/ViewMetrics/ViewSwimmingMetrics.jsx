@@ -101,7 +101,6 @@ function ViewSwimmingMetrics() {
 
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_swimmer.jpg" alt="A Person is swimming laps" width="85%"/>
             <Typography fontSize={32} marginTop={"5%"}>SWIMMING METRICS</Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>

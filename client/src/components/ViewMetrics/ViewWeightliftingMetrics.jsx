@@ -88,7 +88,6 @@ function ViewWeightliftingMetrics() {
 
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_weights.jpg" alt="Gym that contains some weights" width="85%"/>
             <Typography fontSize={36} marginTop={"5%"}>WEIGHTLIFTING METRICS</Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>

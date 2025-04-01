@@ -57,7 +57,6 @@ function ViewCyclingMetrics() {
 
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_cycler.jpg" alt="caption of a cycler" width="85%"/>
             <Typography fontSize={36} marginTop={"5%"}>CYCLING METRICS</Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>
