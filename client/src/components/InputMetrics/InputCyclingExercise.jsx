@@ -1,17 +1,8 @@
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { useState } from 'react';
-import { useTheme } from '@emotion/react';
 import axios from 'axios';
 
 function InputCyclingExercise() {
-    // Will be replaced once DB/API is integrated
-    // Currently we can't enter any data this way. cyclingData is state that is used by all the view components.
-    // therefore, it cannot be referenced in that other component and our charts won't be updated. This feature
-    // won't work until DB/API integration,
-    const [cyclingData, setCyclingData] = useState([]);
-
-    const theme = useTheme();
-
     const [distanceIn, setDistanceIn] = useState(undefined);
     const [elevationGainIn, setElevationGainIn] = useState(undefined);
     const [durationIn, setDurationIn] = useState(undefined);
@@ -32,11 +23,6 @@ function InputCyclingExercise() {
 
     const textInputSpacing = 3;
 
-    // Won't be a part of the database integration. Don't want users to clear their data with one click
-    function handleReset() {
-        //setCyclingData([])
-    }
-
     function handleClear() {
         setDistanceIn("");
         setElevationGainIn("");
@@ -47,20 +33,26 @@ function InputCyclingExercise() {
         setFitnessLevelIn("");
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         if (!isError()) {
-            setCyclingData(prevData => [
-                ...prevData,
-                {
-                    distance: distanceIn,
-                    elevationGain: elevationGainIn,
-                    duration: durationIn,
-                    avgHeartRate: avgHeartRateIn,
-                    maxHeartRate: maxHeartRateIn,
-                    bodyWeight: bodyWeightIn,
-                    fitnessLevel: fitnessLevelIn
+
+            const newExercise = {
+                // Types: run, hike, cycle, swim, weights
+                type: "cycle",
+                distance: distanceIn,
+                elevationGain: elevationGainIn,
+                duration: durationIn,
+                avgHeartRate: avgHeartRateIn,
+                maxHeartRate: maxHeartRateIn,
+                bodyWeight: bodyWeightIn,
+                fitnessLevel: fitnessLevelIn
+            }
+
+            await axios.post('http://localhost:3000/exercises/', newExercise, {
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            ])
+            });
         }
     }
 
@@ -177,7 +169,6 @@ function InputCyclingExercise() {
             <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
                 <Button variant="contained" onClick={handleSubmit}>Submit</Button>
                 <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
-                <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
             </Stack>
             
         </Card>

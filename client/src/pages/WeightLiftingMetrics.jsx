@@ -1,38 +1,18 @@
 import { Link as RouterLink } from 'react-router-dom';
-import { Stack, Button } from '@mui/material';
-import { useState } from 'react';
 import MuiLink from '@mui/material/Link';
+import { Stack } from '@mui/material';
 
-import InputWeightliftingExercise from '../components/InputMetrics/InputWeightliftingExercise.jsx';
 import ViewWeightliftingMetrics from '../components/ViewMetrics/ViewWeightliftingMetrics.jsx';
 
 function WeightLiftingMetrics() {
-    const [editingData, setEditingData] = useState(false);
-
-    function handleEdit() {
-        editingData ? setEditingData(false) : setEditingData(true)
-    }
-
     return (
         <Stack alignItems={"center"}>
+            <img src="/images/fitness_app_weights.jpg" alt="Gym that contains some weights" width="85%"/>
             <ViewWeightliftingMetrics/>
-            {!editingData ? (
-                <></>
-            ) : (
-                <Stack width="82%">
-                    <InputWeightliftingExercise/>
-                </Stack>
-            )}
 
-            <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
-                <Button variant="contained" 
-                    onClick={handleEdit}
-                >
-                    {editingData ? "Stop Editing" : "Edit Data"}
-                </Button>
-                <MuiLink to="../fitnessTypes" component={RouterLink} className="button-link">Back to Fitness Types</MuiLink>
+            <Stack marginTop={5}>
+                <MuiLink to="../fitnessTypes" component={RouterLink}>Back to Fitness Types</MuiLink>
             </Stack>
-
         </Stack>
     
     );

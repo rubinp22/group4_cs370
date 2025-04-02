@@ -1,14 +1,8 @@
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { useState } from 'react';
-import { useTheme } from '@emotion/react';
 import axios from 'axios';
 
 function InputWeightliftingExercise() {
-    // Will be replaced once DB/API is integrated
-    const [weightLiftData, setWeightLiftData ] = useState([]);
-
-    const theme = useTheme();
-
     const [repsIn, setRepsIn] = useState(undefined);
     const [setsIn, setSetsIn] = useState(undefined);
     const [weightOfWeightsIn, setWeightOfWeightsIn] = useState(undefined);
@@ -31,11 +25,6 @@ function InputWeightliftingExercise() {
 
     const textInputSpacing = 3;
 
-    // Won't be a part of the database integration. Don't want users to clear their data with one click
-    function handleReset() {
-        //setWeightLiftData([])
-    }
-
     function handleClear() {
         setRepsIn("");
         setSetsIn("");
@@ -47,21 +36,27 @@ function InputWeightliftingExercise() {
         setFitnessLevelIn("");
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         if (!isError()) {
-            setWeightLiftData(prevData => [
-                ...prevData,
-                {
-                    reps: repsIn,
-                    sets: setsIn,
-                    weightOfWeights: weightOfWeightsIn,
-                    duration: durationIn,
-                    avgHeartRate: avgHeartRateIn,
-                    maxHeartRate: maxHeartRateIn,
-                    bodyWeight: bodyWeightIn,
-                    fitnessLevel: fitnessLevelIn
+
+            const newExercise = {
+                // Types: run, hike, cycle, swim, weights
+                type: "weights",
+                reps: repsIn,
+                sets: setsIn,
+                weightOfWeights: weightOfWeightsIn,
+                duration: durationIn,
+                avgHeartRate: avgHeartRateIn,
+                maxHeartRate: maxHeartRateIn,
+                bodyWeight: bodyWeightIn,
+                fitnessLevel: fitnessLevelIn           
+            }
+
+            await axios.post('http://localhost:3000/exercises/', newExercise, {
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            ])
+            });
         }
     }
 
@@ -70,7 +65,7 @@ function InputWeightliftingExercise() {
             reps: (repsIn === undefined || repsIn < 1),
             sets: (setsIn === undefined || setsIn < 1),
             weightOfWeights: (weightOfWeightsIn === undefined || weightOfWeightsIn < 1),
-            duration: (durationIn === undefined || durationIn < 1),
+            duration: (durationIn === undefined || durationIn < 0),
             avgHeartRate: (avgHeartRateIn === undefined || avgHeartRateIn < 1),
             maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),
             bodyWeight: (bodyWeightIn === undefined || bodyWeightIn < 1),
@@ -185,7 +180,6 @@ function InputWeightliftingExercise() {
             <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
                 <Button variant="contained" onClick={handleSubmit}>Submit</Button>
                 <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
-                <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
             </Stack>
             
         </Card>

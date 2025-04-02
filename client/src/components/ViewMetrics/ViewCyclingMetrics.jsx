@@ -1,5 +1,5 @@
 import { Stack, Card, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 import MyBarChart from '../MyBarChart.jsx';
 import axios from 'axios';
@@ -17,9 +17,6 @@ function ViewCyclingMetrics() {
     const maxHeartRate = cyclingData.map(data => data.maxHeartRate);
     const bodyWeight = cyclingData.map(data => data.bodyWeight);
     const fitnessLevel = cyclingData.map(data => data.fitnessLevel);
-
-    // API Not yet implemented
-    const [fetchCount, setFetchCount] = useState(0);
 
     const theme = useTheme();
 
@@ -40,11 +37,26 @@ function ViewCyclingMetrics() {
     const labels = cyclingData.map((data, index) => `ride ${index + 1}`)
     const graphMargin = 3;
 
-    // Put DB fetching here
+    
+    useEffect(() => {
+        getCyclingExercises();
+
+        async function getCyclingExercises() {
+            const res = await axios.get('http://localhost:3000/exercises', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                params: {
+                    type: "cycle"
+                }
+            });
+            setCyclingData(res.data);
+        }
+    
+    }, [])
 
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_cycler.jpg" alt="caption of a cycler" width="85%"/>
             <Typography fontSize={36} marginTop={"5%"}>CYCLING METRICS</Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>
