@@ -5,6 +5,8 @@ import 'dotenv/config';
 
 // This schema represents all data recorded in an exercise
 import Exercise from './models/Exercise.js'
+// This schema represents user profile data
+import Profile from './models/Profile.js'
 
 // Instantiate the API
 const app = new Hono();
@@ -60,6 +62,24 @@ app.get('/exercises', async (c) => {
 
     const Exercises = await Exercise.find(params);
     return c.json(Exercises);
+})
+
+app.post('users/', async (c) => {
+    // Get the posted content
+    const body = await c.req.json();
+
+    // Create a new exercise with the posted content
+    // In other words, this creates a new record in MongoDB
+    Profile.create(body);
+
+    return c.text('Profile Added');
+})
+
+app.get('/users', async (c) => {
+    const params = c.req.query();
+
+    const Profiles = await Profile.find(params);
+    return c.json(Profiles);
 })
 
 serve({
