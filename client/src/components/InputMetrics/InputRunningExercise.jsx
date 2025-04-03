@@ -1,11 +1,8 @@
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { useState } from 'react';
-import { useTheme } from '@emotion/react';
 import axios from 'axios';
 
 function InputRunningExercise() {
-    const theme = useTheme();
-
     const [distanceIn, setDistanceIn] = useState(undefined);
     const [durationIn, setDurationIn] = useState(undefined);
     const [stepsIn, setStepsIn] = useState(undefined);
@@ -27,11 +24,6 @@ function InputRunningExercise() {
 
         const textInputSpacing = 3;
     
-        // Won't be a part of the database integration. Don't want users to clear their data with one click
-        function handleReset() {
-            //setRunningData([])
-        }
-    
         function handleClear() {
             setDistanceIn("");
             setDurationIn("");
@@ -46,6 +38,8 @@ function InputRunningExercise() {
             if (!isError()) {
     
                 const newExercise = {
+                    // Types: run, hike, cycle, swim, weights
+                    type: "run",
                     distance: distanceIn,
                     duration: durationIn,
                     steps: stepsIn,
@@ -55,13 +49,7 @@ function InputRunningExercise() {
                     fitnessLevel: fitnessLevelIn
                 }
     
-                console.log("about to add new exercise: ", newExercise);
-    
-                // Incrementing fetchCount to cause the useEffect hook that fetches data with Hono to run again
-                setFetchCount(prev => prev + 1);
-    
-                // Add the game via the POST route on the api
-                await axios.post('http://localhost:3000/exercises/running-entry', newExercise, {
+                await axios.post('http://localhost:3000/exercises/', newExercise, {
                     headers: {
                         'Content-Type': 'application/json'
                     }
@@ -192,7 +180,6 @@ function InputRunningExercise() {
             <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
                 <Button variant="contained" onClick={handleSubmit}>Submit</Button>
                 <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
-                <Button variant="contained" color="error" onClick={handleReset}>Reset Data</Button>
             </Stack>
         </Card>
     );

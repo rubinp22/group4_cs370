@@ -1,5 +1,5 @@
 import { Stack, Card, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 import { BarChart } from '@mui/x-charts';
 import MyBarChart from '../MyBarChart.jsx';
@@ -21,9 +21,6 @@ function ViewSwimmingMetrics() {
     const maxHeartRate = swimmingData.map(data => data.maxHeartRate);
     const bodyWeight = swimmingData.map(data => data.bodyWeight);
     const fitnessLevel = swimmingData.map(data => data.fitnessLevel);
-
-    // API Not yet implemented
-    const [fetchCount, setFetchCount] = useState(0);
 
     const theme = useTheme();
 
@@ -85,10 +82,25 @@ function ViewSwimmingMetrics() {
     const graphMargin = 3;
 
     // Put DB fetching here:
+    useEffect(() => {
+        getSwimmingExercises();
+
+        async function getSwimmingExercises() {
+            const res = await axios.get('http://localhost:3000/exercises', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                params: {
+                    type: "swim"
+                }
+            });
+            setSwimmingData(res.data);
+        }
+    
+    }, [])
 
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_swimmer.jpg" alt="A Person is swimming laps" width="85%"/>
             <Typography fontSize={32} marginTop={"5%"}>SWIMMING METRICS</Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>

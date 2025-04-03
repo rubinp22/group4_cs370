@@ -79,6 +79,9 @@ function HomePage() {
         <Link to="./fitnessTypes" style={styles.link}>
           My Metrics
         </Link>
+        <Link to="./RecordExercises" style={styles.link}>
+          Record Exercise
+        </Link>
         <Link to="./RewardAchievements" style={styles.link}>
           Achievements
         </Link>

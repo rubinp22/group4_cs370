@@ -18,8 +18,6 @@ function ViewRunningMetrics() {
     const bodyWeight = runningData.map(data => data.bodyWeight);
     const fitnessLevel = runningData.map(data => data.fitnessLevel);
 
-    const [fetchCount, setFetchCount] = useState(0);
-
     const theme = useTheme();
 
     // speed = distance / duration
@@ -48,22 +46,21 @@ function ViewRunningMetrics() {
         getRunningExercises();
 
         async function getRunningExercises() {
-            const res = await axios.get('http://localhost:3000/exercises/running-entry', {
+            const res = await axios.get('http://localhost:3000/exercises', {
                 headers: {
                     'Content-Type': 'application/json'
                 }, 
                 params: {
-                    
+                    type: "run"
                 }
             });
             setRunningData(res.data);
         }
     
-    }, [fetchCount])
+    }, [])
 
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_runner.jpg" alt="Runner in background" width="85%"/>
             <Typography fontSize={36} marginTop={"5%"}>
                 RUNNING METRICS
             </Typography>
