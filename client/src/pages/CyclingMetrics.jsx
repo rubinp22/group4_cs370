@@ -11,7 +11,7 @@ function CyclingMetrics() {
             <ViewCyclingMetrics/>
 
             <Stack marginTop={5}>
-                <MuiLink to="../fitnessTypes" component={RouterLink}>Back to Fitness Types</MuiLink>
+                <MuiLink to="../HomePage/fitnessTypes" component={RouterLink}>Back to Fitness Types</MuiLink>
             </Stack>
         </Stack>
     );

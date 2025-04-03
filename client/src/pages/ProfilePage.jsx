@@ -327,7 +327,7 @@ function ProfilePage() {
             >
                 {editingData ? "Stop Editing" : "Edit"}
             </Button>
-            <MuiLink to="/" component={RouterLink} className="button-link">Home</MuiLink>
+            <MuiLink to="../HomePage" component={RouterLink} className="button-link">Home</MuiLink>
         </Stack>
     </Stack>
 
