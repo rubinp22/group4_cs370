@@ -1,5 +1,5 @@
 import { Stack, Card, Typography, Button, TextField, InputAdornment, CardActionArea } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid2';
 import AvatarGroup from '@mui/material/AvatarGroup';
@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
+import axios from 'axios';
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -89,7 +90,7 @@ function ProfilePage() {
     const [editingData, setEditingData] = useState(false);
 
     const [nameIn, setnameIn] = useState(undefined);
-    const [heightFtIn, setHeightFtIn] = useState(undefined);
+    const [heightFeetIn, setHeightFeetIn] = useState(undefined);
     const [heightInchIn, setHeightInchIn] = useState(undefined);
     const [weightIn, setWeightIn] = useState(undefined);
     const [descriptionIn, setDescriptionIn] = useState(undefined); 
@@ -100,7 +101,7 @@ function ProfilePage() {
     // This new state is accessed by the error attribute for each Textfield
     const [errors, setErrors] = useState({
         name: false,
-        heightFt: false,
+        heightFeet: false,
         heightInch: false,
         weight: false,
         description: false,
@@ -108,7 +109,7 @@ function ProfilePage() {
     })
 
     const name = ProfileData.map(data => data.name);
-    const heightFt = ProfileData.map(data => data.heightFt);
+    const heightFeet = ProfileData.map(data => data.heightFeet);
     const heightInch = ProfileData.map(data => data.heightInch);
     const weight = ProfileData.map(data => data.weight);
     const description = ProfileData.map(data => data.description);
@@ -120,35 +121,72 @@ function ProfilePage() {
         editingData ? setEditingData(false) : setEditingData(true)
     }
 
-    function handleReset() {
-        setProfileData([])
-    }
-
     function handleClear() {
         setnameIn("");
-        setHeightFtIn("");
+        setHeightFeetIn("");
         setHeightInchIn("");
         setWeightIn("");
         setDescriptionIn("");
         setPfpIn("");
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         if (!isError()) {
             setProfileData([])
             setProfileData(prevData => [
                 ...prevData,
                 {
                     name: nameIn,
-                    heightFt: heightFtIn,
+                    heightFeet: heightFeetIn,
                     heightInch: heightInchIn,
                     weight: weightIn,
                     description: descriptionIn,
                     pfp: pfpIn
                 }
             ])
+
+            {/*const newProfile = {
+                // Types: run, hike, cycle, swim, weights
+                name: nameIn,
+                exercises: [],
+                friends: [],
+                goals: [],
+                achievements: [],
+                bmi: 20,
+                username: 'username',
+                password: 'password',
+                fitnessLevel: 0,
+                heightFeet: heightFeetIn,
+                heightInch: heightInchIn,
+                weight: []
+            }
+
+            await axios.post('http://localhost:3000/users/', newProfile, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });*/}
+
         }
     }
+
+    useEffect(() => {
+        getProfileData();
+
+        async function getProfileData() {
+            const res = await axios.get('http://localhost:3000/users', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                params: {
+                    name: "Bob"
+                }
+            });
+            setProfileData([])
+            setProfileData(res.data);
+        }
+    
+    }, [])
 
     // Checking if text field input is either undefined, less than 1, or greater than the specified range
     // If an error is found, this function returns true, preventing handleSubmit from storing the erroneous data
@@ -158,7 +196,7 @@ function ProfilePage() {
         // Will result in an object that holds Boolean values
         let newErrors = {
             name: (nameIn === undefined || nameIn.length > 30 || nameIn.length < 1),
-            heightFt: (heightFtIn === undefined || heightFtIn > 7 || heightFtIn < 1),
+            heightFeet: (heightFeetIn === undefined || heightFeetIn > 7 || heightFeetIn < 1),
             heightInch: (heightInchIn === undefined || heightInchIn > 11 || heightInchIn < 0),
             weight: (weightIn === undefined || weightIn > 1000 || weightIn < 0),
             description: (description != undefined && description.length > 200),
@@ -208,7 +246,7 @@ function ProfilePage() {
         {/*Stats*/}
         <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="flex-start" size={8} spacing={0}>  
           <Card sx={{p: 1}}>
-            <p>Height: {heightFt}'{heightInch}" | Weight: {weight} kg</p>
+            <p>Height: {heightFeet}'{heightInch}" | Weight: {weight} kg</p>
             <p>{description}</p>
           </Card>
         </Grid>
@@ -266,11 +304,11 @@ function ProfilePage() {
                                 required
                                 variant="filled" 
                                 label="Height"
-                                error={errors.heightFt}
-                                value={heightFtIn}
-                                defaultValue={heightFt}
+                                error={errors.heightFeet}
+                                value={heightFeetIn}
+                                defaultValue={heightFeet}
                                 type="number"
-                                onChange={(e) => setHeightFtIn(e.target.value)}
+                                onChange={(e) => setHeightFeetIn(e.target.value)}
                                 InputProps={{ 
                                     endAdornment: <InputAdornment position='end'>Ft</InputAdornment>
                                 }}
