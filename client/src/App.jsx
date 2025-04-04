@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 
+import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage"
 import FitnessTypesPage from './pages/FitnessTypesPage';
 import WeightLiftingMetrics from './pages/WeightLiftingMetrics';
@@ -24,21 +25,22 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/fitnessTypes" element={<FitnessTypesPage />} />
-          <Route path="/fitnessTypes/WeightLiftingMetrics" element={<WeightLiftingMetrics />} />
-          <Route path="/fitnessTypes/RunningMetrics" element={<RunningMetrics/>} />
-          <Route path="/fitnessTypes/SportsSelection" element={<SportsSelection/>} />
-          <Route path="/fitnessTypes/StretchMetrics" element={<StretchMetrics/>} />
-          <Route path="/fitnessTypes/HikingMetrics" element={<HikingMetrics/>} />
-          <Route path="/fitnessTypes/GoalsMetrics" element={<GoalsMetrics/>} />
-          <Route path="/fitnessTypes/CyclingMetrics" element={<CyclingMetrics/>}/>
-          <Route path="/fitnessTypes/SwimmingMetrics" element={<SwimmingMetrics/>}/>
-          <Route path="/LeaderBoard" element={<LeaderBoard/>}/>
-          <Route path="/profile" element={<ProfilePage/>} />
-          <Route path="/RewardAchievements" element={<RewardAchievements/>}/>
-          <Route path="/TrainingVideoLibrary" element={<TrainingVideoLibrary/>}/>
-          <Route path="/RecordExercises" element={<RecordExercises/>}/>
+          <Route path="/" element={<LoginPage/>} />
+          <Route path="/HomePage" element={<HomePage/>} />
+          <Route path="/HomePage/fitnessTypes" element={<FitnessTypesPage />} />
+          <Route path="/HomePage/fitnessTypes/WeightLiftingMetrics" element={<WeightLiftingMetrics />} />
+          <Route path="/HomePage/fitnessTypes/RunningMetrics" element={<RunningMetrics/>} />
+          <Route path="/HomePage/fitnessTypes/SportsSelection" element={<SportsSelection/>} />
+          <Route path="/HomePage/fitnessTypes/StretchMetrics" element={<StretchMetrics/>} />
+          <Route path="/HomePage/fitnessTypes/HikingMetrics" element={<HikingMetrics/>} />
+          <Route path="/HomePage/fitnessTypes/GoalsMetrics" element={<GoalsMetrics/>} />
+          <Route path="/HomePage/fitnessTypes/CyclingMetrics" element={<CyclingMetrics/>}/>
+          <Route path="/HomePage/fitnessTypes/SwimmingMetrics" element={<SwimmingMetrics/>}/>
+          <Route path="/HomePage/LeaderBoard" element={<LeaderBoard/>}/>
+          <Route path="/HomePage/profile" element={<ProfilePage/>} />
+          <Route path="/HomePage/RewardAchievements" element={<RewardAchievements/>}/>
+          <Route path="/HomePage/TrainingVideoLibrary" element={<TrainingVideoLibrary/>}/>
+          <Route path="/HomePage/RecordExercises" element={<RecordExercises/>}/>
         </Routes>
       </Router>
     </>
