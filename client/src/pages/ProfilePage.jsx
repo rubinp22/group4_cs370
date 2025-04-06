@@ -1,29 +1,15 @@
-import { Stack, Card, Typography, Button, TextField, InputAdornment, CardActionArea } from '@mui/material';
+import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
-import Grid from '@mui/material/Grid2';
 import AvatarGroup from '@mui/material/AvatarGroup';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
+import Grid from '@mui/material/Grid2';
 import Box from '@mui/material/Box';
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
 
-
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'left',
-    color: theme.palette.text.primary,
-    ...theme.applyStyles('dark', {
-      backgroundColor: '#1A2027',
-    }),
-  }));
-
-  const profilePictures = [
+const profilePictures = [
     {
         value: '/images/profileImages/profile1.png',
         label: 'Red and Yellow Rectangles',
@@ -86,6 +72,8 @@ const Item = styled(Paper)(({ theme }) => ({
     },
   ];
 
+const userID = '67f1a53185ffddaa0be300ca';
+
 function ProfilePage() {
     const [editingData, setEditingData] = useState(false);
 
@@ -101,24 +89,30 @@ function ProfilePage() {
     // This new state is accessed by the error attribute for each Textfield
     const [errors, setErrors] = useState({
         name: false,
+        pfp: false,
         heightFeet: false,
         heightInch: false,
         weight: false,
-        description: false,
-        pfp: false
+        description: false
     })
 
     const name = ProfileData.map(data => data.name);
+    const pfp = ProfileData.map(data => data.pfp);
     const heightFeet = ProfileData.map(data => data.heightFeet);
     const heightInch = ProfileData.map(data => data.heightInch);
     const weight = ProfileData.map(data => data.weight);
     const description = ProfileData.map(data => data.description);
-    const pfp = ProfileData.map(data => data.pfp);
 
     const textInputSpacing = 3;
 
     function handleEdit() {
         editingData ? setEditingData(false) : setEditingData(true)
+        setnameIn(name);
+        setPfpIn(pfp);
+        setHeightFeetIn(heightFeet);
+        setHeightInchIn(heightInch);
+        setWeightIn(weight.at(-1));
+        setDescriptionIn(description);
     }
 
     function handleClear() {
@@ -132,6 +126,7 @@ function ProfilePage() {
 
     async function handleSubmit() {
         if (!isError()) {
+            // update the local data
             setProfileData([])
             setProfileData(prevData => [
                 ...prevData,
@@ -145,28 +140,17 @@ function ProfilePage() {
                 }
             ])
 
-            {/*const newProfile = {
-                // Types: run, hike, cycle, swim, weights
+            const updatedData = {
+                _id: userID,
                 name: nameIn,
-                exercises: [],
-                friends: [],
-                goals: [],
-                achievements: [],
-                bmi: 20,
-                username: 'username',
-                password: 'password',
-                fitnessLevel: 0,
                 heightFeet: heightFeetIn,
                 heightInch: heightInchIn,
-                weight: []
+                description: descriptionIn,
+                pfp: pfpIn
             }
 
-            await axios.post('http://localhost:3000/users/', newProfile, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });*/}
-
+            // update the database
+            await axios.put('http://localhost:3000/users/', updatedData)
         }
     }
 
@@ -179,7 +163,7 @@ function ProfilePage() {
                     'Content-Type': 'application/json'
                 }, 
                 params: {
-                    name: "Bob"
+                    _id: userID
                 }
             });
             setProfileData([])
@@ -246,7 +230,7 @@ function ProfilePage() {
         {/*Stats*/}
         <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="flex-start" size={8} spacing={0}>  
           <Card sx={{p: 1}}>
-            <p>Height: {heightFeet}'{heightInch}" | Weight: {weight} kg</p>
+            <p>Height: {heightFeet}'{heightInch}" | Weight: {weight.at(-1)} lbs</p>
             <p>{description}</p>
           </Card>
         </Grid>
@@ -336,7 +320,7 @@ function ProfilePage() {
                             type="number"
                             onChange={(e) => setWeightIn(e.target.value)}
                             InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>kg</InputAdornment>
+                                endAdornment: <InputAdornment position='end'>lbs</InputAdornment>
                             }}
                         />
                         <TextField 
