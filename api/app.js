@@ -68,7 +68,7 @@ app.post('users/', async (c) => {
     // Get the posted content
     const body = await c.req.json();
 
-    // Create a new exercise with the posted content
+    // Create a new profile with the posted content
     // In other words, this creates a new record in MongoDB
     Profile.create(body);
 
@@ -80,6 +80,21 @@ app.get('/users', async (c) => {
 
     const Profiles = await Profile.find(params);
     return c.json(Profiles);
+})
+
+app.put('users/', async (c) => {
+    // get the updated info
+    const body = await c.req.json();
+
+    // debug logging to check what is being updated
+    console.log('Profile Changes:', body);
+
+    await Profile.updateOne(
+        {_id: body._id},
+        { $set: body}
+    );
+    
+    return c.text('Profile Updated');
 })
 
 serve({
