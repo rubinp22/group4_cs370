@@ -15,7 +15,7 @@ function LoginPage() {
 
 
   const handleSubmit = () => {
-    if (username === 'user' && password === 'admin') {
+    if (username === 'user' && password === 'password') {
       navigate('/HomePage');
     } else {
       alert('Incorrect username or password');
@@ -23,37 +23,30 @@ function LoginPage() {
   };
 
   return (
-    <Stack spacing={2} alignItems="flex-start" sx={{ width: 300, margin: 'auto', mt: 10 }}>
-      <Typography
-  variant="h3"
-  sx={{
-    color: amber[500],
-    fontWeight: 800,
-    fontFamily: '"Open Sans", serif',
-    letterSpacing: 1.5,
-    textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
-  }}
->
-  Login Page
-</Typography>
-      <Typography>Username:</Typography>
-      <TextField
-        variant="outlined"
-        fullWidth
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <Typography>Password:</Typography>
-      <TextField
-        variant="outlined"
-        type="password"
-        fullWidth
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <Button variant="contained" onClick={handleSubmit}>
-        Submit
-      </Button>
+    <Stack>
+      <Typography fontSize={36}>Log in to your account</Typography>
+      <Stack spacing={2} alignItems="flex-start" sx={{ width: 300, margin: 'auto', mt: 5 }}>
+        <Typography>Username:</Typography>
+        <TextField
+          variant="outlined"
+          fullWidth
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <Typography>Password:</Typography>
+        <TextField
+          variant="outlined"
+          type="password"
+          fullWidth
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+      </Stack>
+      <Stack alignItems={"center"}>
+        <Button variant="contained" onClick={handleSubmit} sx={{mt: 5, width: "40%"}}>
+          Submit
+        </Button>
+      </Stack>
     </Stack>
   );
 }
