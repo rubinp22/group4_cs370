@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import React, { useContext } from 'react';
+import GlobalStateContext from "../contexts/GlobalStateContext";
+import { Button } from "@mui/material";
 
 function HomePage() {
+
   //Load theme from localStorage to light mode
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
@@ -64,6 +68,13 @@ function HomePage() {
       transition: "background-color 0.3s ease, color 0.3s ease",
     },
   };
+
+  // Testing Global State
+  const { state, dispatch } = useContext(GlobalStateContext)
+  // const { userData, dispatch2 } = useContext(GlobalStateContext);
+
+  console.log("state: ", state)
+  // console.log("userData: ", userData);
 
   return (
     <div style={styles.container}>

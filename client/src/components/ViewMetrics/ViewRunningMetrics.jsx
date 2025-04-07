@@ -4,6 +4,10 @@ import { useTheme } from '@emotion/react';
 import MyBarChart from '../MyBarChart.jsx';
 import axios from 'axios';
 
+import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
+import React, { useContext } from 'react';
+
+
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50]
 
@@ -19,6 +23,10 @@ function ViewRunningMetrics() {
     const fitnessLevel = runningData.map(data => data.fitnessLevel);
 
     const theme = useTheme();
+
+    // Testing Global State
+    const { state, dispatch } = useContext(GlobalStateContext)
+    console.log("state: ", state)
 
     // speed = distance / duration
     const speed = distance.map((data, index) => data / duration[index]);
@@ -51,7 +59,8 @@ function ViewRunningMetrics() {
                     'Content-Type': 'application/json'
                 }, 
                 params: {
-                    type: "run"
+                    type: "run",
+                    userID: state.user
                 }
             });
             setRunningData(res.data);
