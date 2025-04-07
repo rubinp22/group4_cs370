@@ -134,7 +134,7 @@ function TrainingVideoLibrary () {
           </div>
         ))}
       </Stack>
-        <MuiLink to="../" component={RouterLink} className="button-link">Back to Home</MuiLink>
+        <MuiLink to="../HomePage" component={RouterLink} className="button-link">Back to Home</MuiLink>
       </Stack>
     );
 }

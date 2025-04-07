@@ -78,7 +78,7 @@ return (
         <p>No badges earned yet.</p>
       )}
     </Box>
-    <MuiLink to="../" component={RouterLink} className="button-link">Back to Home</MuiLink>
+    <MuiLink to="../HomePage" component={RouterLink} className="button-link">Back to Home</MuiLink>
   </Stack>
 );
 };

@@ -16,7 +16,7 @@ function FitnessTypesPage () {
         <MuiLink to="./WeightLiftingMetrics" component={RouterLink} className="link">WEIGHT LIFTING</MuiLink>
         <MuiLink to="./SportsSelection" component={RouterLink} className="link">SPORTS</MuiLink>
 
-        <Button to="../" component={RouterLink}>Back to Home</Button>
+        <Button to="../HomePage" component={RouterLink}>Back to Home</Button>
       </Stack>
     );
 }

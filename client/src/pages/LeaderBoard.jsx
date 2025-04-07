@@ -149,7 +149,7 @@ function LeaderBoard () {
     <br></br>{placeNames[4]} -- {placeValues[4]} {unitsOfMeasure}
     </p>
     <h3>Max:{maxMinMedian[0]}  Min:{maxMinMedian[1]}  Median:{maxMinMedian[2]}</h3>
-    <MuiLink to="../" component={RouterLink}>Back to Home</MuiLink>
+    <MuiLink to="../HomePage" component={RouterLink}>Back to Home</MuiLink>
   </Stack>
   );
 }
