@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import React, { useContext } from 'react';
 import GlobalStateContext from "../contexts/GlobalStateContext";
-import { Button } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 
 function HomePage() {
 
@@ -106,6 +106,12 @@ function HomePage() {
           Diet Plan
         </Link>
       </div>
+        <Stack marginTop="150px">
+          <Link to="../" style={styles.link}>
+            Log Out
+          </Link>
+        </Stack>
+
     </div>
   );
 }
