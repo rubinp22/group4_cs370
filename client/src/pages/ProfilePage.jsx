@@ -94,23 +94,22 @@ function ProfilePage() {
 
     const textInputSpacing = 3;
 
+    async function getProfileData() {
+        const res = await axios.get('http://localhost:3000/users', {
+            headers: {
+                'Content-Type': 'application/json'
+            }, 
+            params: {
+                _id: userID
+            }
+        });
+        //setProfileData([])
+        setProfileData(res.data);
+    }
+    
     // getting profile data from the database
     useEffect(() => {
         getProfileData();
-
-        async function getProfileData() {
-            const res = await axios.get('http://localhost:3000/users', {
-                headers: {
-                    'Content-Type': 'application/json'
-                }, 
-                params: {
-                    _id: userID
-                }
-            });
-            setProfileData([])
-            setProfileData(res.data);
-        }
-    
     }, [])
 
     // input field errors, all set to false by default
@@ -151,20 +150,6 @@ function ProfilePage() {
 
     async function handleSubmit() {
         if (!isError()) {
-            // update the local data
-            setProfileData([])
-            setProfileData(prevData => [
-                ...prevData,
-                {
-                    name: nameIn,
-                    heightFeet: heightFeetIn,
-                    heightInch: heightInchIn,
-                    weight: weightIn,
-                    description: descriptionIn,
-                    pfp: pfpIn
-                }
-            ])
-
             const updatedData = {
                 _id: userID,
                 name: nameIn,
@@ -176,6 +161,7 @@ function ProfilePage() {
 
             // update the database
             await axios.put('http://localhost:3000/users/', updatedData)
+            getProfileData();
         }
     }
 
