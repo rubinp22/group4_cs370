@@ -1,28 +1,15 @@
-import { Stack, Card, Typography, Button, TextField, InputAdornment, CardActionArea } from '@mui/material';
-import { useState } from 'react';
+import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
+import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid2';
 import AvatarGroup from '@mui/material/AvatarGroup';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
+import axios from 'axios';
 
-
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'left',
-    color: theme.palette.text.primary,
-    ...theme.applyStyles('dark', {
-      backgroundColor: '#1A2027',
-    }),
-  }));
-
-  const profilePictures = [
+const profilePictures = [
     {
         value: '/images/profileImages/profile1.png',
         label: 'Red and Yellow Rectangles',
@@ -85,30 +72,21 @@ const Item = styled(Paper)(({ theme }) => ({
     },
   ];
 
+const userID = '67f1a53185ffddaa0be300ca';
+
 function ProfilePage() {
     const [editingData, setEditingData] = useState(false);
+    const [ProfileData, setProfileData] = useState([]);
 
     const [nameIn, setnameIn] = useState(undefined);
-    const [heightFtIn, setHeightFtIn] = useState(undefined);
+    const [heightFeetIn, setHeightFeetIn] = useState(undefined);
     const [heightInchIn, setHeightInchIn] = useState(undefined);
     const [weightIn, setWeightIn] = useState(undefined);
     const [descriptionIn, setDescriptionIn] = useState(undefined); 
     const [pfpIn, setPfpIn] = useState(undefined);
-    
-    const [ProfileData, setProfileData] = useState([]);
-
-    // This new state is accessed by the error attribute for each Textfield
-    const [errors, setErrors] = useState({
-        name: false,
-        heightFt: false,
-        heightInch: false,
-        weight: false,
-        description: false,
-        pfp: false
-    })
 
     const name = ProfileData.map(data => data.name);
-    const heightFt = ProfileData.map(data => data.heightFt);
+    const heightFeet = ProfileData.map(data => data.heightFeet);
     const heightInch = ProfileData.map(data => data.heightInch);
     const weight = ProfileData.map(data => data.weight);
     const description = ProfileData.map(data => data.description);
@@ -116,58 +94,89 @@ function ProfilePage() {
 
     const textInputSpacing = 3;
 
-    function handleEdit() {
-        editingData ? setEditingData(false) : setEditingData(true)
+    async function getProfileData() {
+        const res = await axios.get('http://localhost:3000/users', {
+            headers: {
+                'Content-Type': 'application/json'
+            }, 
+            params: {
+                _id: userID
+            }
+        });
+        //setProfileData([])
+        setProfileData(res.data);
     }
+    
+    // getting profile data from the database
+    useEffect(() => {
+        getProfileData();
+    }, [])
 
-    function handleReset() {
-        setProfileData([])
+    // input field errors, all set to false by default
+    const [errors, setErrors] = useState({
+        name: false,
+        heightFeet: false,
+        heightInch: false,
+        weight: false,
+        description: false,
+        pfp: false
+    })
+
+    function handleEdit() {
+        if (editingData === false) {
+            // reset input values
+            {/*if (nameIn === undefined) {
+                setnameIn(name);
+                setHeightFeetIn(heightFeet);
+                setHeightInchIn(heightInch);
+                setWeightIn(weight.at(-1));
+                setDescriptionIn(description);
+                setPfpIn(pfp);
+            }*/}
+            setEditingData(true);
+        } else {
+            setEditingData(false);
+        }
     }
 
     function handleClear() {
         setnameIn("");
-        setHeightFtIn("");
+        setHeightFeetIn("");
         setHeightInchIn("");
         setWeightIn("");
         setDescriptionIn("");
         setPfpIn("");
     }
 
-    function handleSubmit() {
+    async function handleSubmit() {
         if (!isError()) {
-            setProfileData([])
-            setProfileData(prevData => [
-                ...prevData,
-                {
-                    name: nameIn,
-                    heightFt: heightFtIn,
-                    heightInch: heightInchIn,
-                    weight: weightIn,
-                    description: descriptionIn,
-                    pfp: pfpIn
-                }
-            ])
+            const updatedData = {
+                _id: userID,
+                name: nameIn,
+                heightFeet: heightFeetIn,
+                heightInch: heightInchIn,
+                description: descriptionIn,
+                pfp: pfpIn
+            }
+
+            // update the database
+            await axios.put('http://localhost:3000/users/', updatedData)
+            getProfileData();
         }
     }
 
-    // Checking if text field input is either undefined, less than 1, or greater than the specified range
-    // If an error is found, this function returns true, preventing handleSubmit from storing the erroneous data
-    // in state.
+    // check for errors
     function isError() {
-        // Making a new object with values equal to whether or not the input state meets certain conditions
-        // Will result in an object that holds Boolean values
+
         let newErrors = {
             name: (nameIn === undefined || nameIn.length > 30 || nameIn.length < 1),
-            heightFt: (heightFtIn === undefined || heightFtIn > 7 || heightFtIn < 1),
+            heightFeet: (heightFeetIn === undefined || heightFeetIn > 7 || heightFeetIn < 1),
             heightInch: (heightInchIn === undefined || heightInchIn > 11 || heightInchIn < 0),
             weight: (weightIn === undefined || weightIn > 1000 || weightIn < 0),
             description: (description != undefined && description.length > 200),
-            pfp: (pfp === undefined && pfp > 0 && pfp < 16)
+            pfp: (pfp === undefined)
         }
 
-        // Since we now have state for errors, we set it equal to the the values found within the object newErrors
-        // If any of the above conditions are true, the corresponding text field will enter an error state, indicating
-        // to the user that they entered erroneous input
         setErrors(newErrors);
 
         // Converting the newErrors object to a Boolean array of just the values from the newErrors object
@@ -205,10 +214,10 @@ function ProfilePage() {
 
             <br/>
 
-        {/*Stats*/}
+        {/*Description + Stats*/}
         <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="flex-start" size={8} spacing={0}>  
           <Card sx={{p: 1}}>
-            <p>Height: {heightFt}'{heightInch}" | Weight: {weight} kg</p>
+            <p>Height: {heightFeet}'{heightInch}" | Weight: {weight.at(-1)} lbs</p>
             <p>{description}</p>
           </Card>
         </Grid>
@@ -243,13 +252,13 @@ function ProfilePage() {
                             label="Name"
                             error={errors.name}
                             value={nameIn}
-                            defaultValue={name}
                             onChange={(e) => setnameIn(e.target.value)}
                         />
                         <TextField 
                             required
+                            variant="filled"
                             label="Profile"
-                            defaultValue={pfp}
+                            value={pfpIn}
                             select
                             onChange={(e) => setPfpIn(e.target.value)}
                         >
@@ -266,11 +275,10 @@ function ProfilePage() {
                                 required
                                 variant="filled" 
                                 label="Height"
-                                error={errors.heightFt}
-                                value={heightFtIn}
-                                defaultValue={heightFt}
+                                error={errors.heightFeet}
+                                value={heightFeetIn}
                                 type="number"
-                                onChange={(e) => setHeightFtIn(e.target.value)}
+                                onChange={(e) => setHeightFeetIn(e.target.value)}
                                 InputProps={{ 
                                     endAdornment: <InputAdornment position='end'>Ft</InputAdornment>
                                 }}
@@ -280,7 +288,6 @@ function ProfilePage() {
                                 variant="filled" 
                                 error={errors.heightInch}
                                 value={heightInchIn}
-                                defaultValue={heightInch}
                                 type="number"
                                 onChange={(e) => setHeightInchIn(e.target.value)}
                                 InputProps={{ 
@@ -294,11 +301,10 @@ function ProfilePage() {
                             label="Weight" 
                             error={errors.weight}
                             value={weightIn}
-                            defaultValue={weight}
                             type="number"
                             onChange={(e) => setWeightIn(e.target.value)}
                             InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>kg</InputAdornment>
+                                endAdornment: <InputAdornment position='end'>lbs</InputAdornment>
                             }}
                         />
                         <TextField 
@@ -308,7 +314,6 @@ function ProfilePage() {
                             value={descriptionIn}
                             multiline
                             maxRows={4}
-                            defaultValue={description}
                             onChange={(e) => setDescriptionIn(e.target.value)}
                         />
                     </Stack>
