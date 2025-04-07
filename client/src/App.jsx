@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 
+import DietPlan from './pages/DietPlan'; 
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage"
 import FitnessTypesPage from './pages/FitnessTypesPage';
@@ -41,6 +42,7 @@ function App() {
           <Route path="/HomePage/RewardAchievements" element={<RewardAchievements/>}/>
           <Route path="/HomePage/TrainingVideoLibrary" element={<TrainingVideoLibrary/>}/>
           <Route path="/HomePage/RecordExercises" element={<RecordExercises/>}/>
+          <Route path="/HomePage/DietPlan" element={<DietPlan/>} />
         </Routes>
       </Router>
     </>
