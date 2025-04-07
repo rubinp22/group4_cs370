@@ -1,8 +1,8 @@
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
-import AvatarGroup from '@mui/material/AvatarGroup';
 import Grid from '@mui/material/Grid2';
+import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
@@ -76,6 +76,7 @@ const userID = '67f1a53185ffddaa0be300ca';
 
 function ProfilePage() {
     const [editingData, setEditingData] = useState(false);
+    const [ProfileData, setProfileData] = useState([]);
 
     const [nameIn, setnameIn] = useState(undefined);
     const [heightFeetIn, setHeightFeetIn] = useState(undefined);
@@ -83,36 +84,60 @@ function ProfilePage() {
     const [weightIn, setWeightIn] = useState(undefined);
     const [descriptionIn, setDescriptionIn] = useState(undefined); 
     const [pfpIn, setPfpIn] = useState(undefined);
-    
-    const [ProfileData, setProfileData] = useState([]);
-
-    // This new state is accessed by the error attribute for each Textfield
-    const [errors, setErrors] = useState({
-        name: false,
-        pfp: false,
-        heightFeet: false,
-        heightInch: false,
-        weight: false,
-        description: false
-    })
 
     const name = ProfileData.map(data => data.name);
-    const pfp = ProfileData.map(data => data.pfp);
     const heightFeet = ProfileData.map(data => data.heightFeet);
     const heightInch = ProfileData.map(data => data.heightInch);
     const weight = ProfileData.map(data => data.weight);
     const description = ProfileData.map(data => data.description);
+    const pfp = ProfileData.map(data => data.pfp);
 
     const textInputSpacing = 3;
 
+    // getting profile data from the database
+    useEffect(() => {
+        getProfileData();
+
+        async function getProfileData() {
+            const res = await axios.get('http://localhost:3000/users', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                params: {
+                    _id: userID
+                }
+            });
+            setProfileData([])
+            setProfileData(res.data);
+        }
+    
+    }, [])
+
+    // input field errors, all set to false by default
+    const [errors, setErrors] = useState({
+        name: false,
+        heightFeet: false,
+        heightInch: false,
+        weight: false,
+        description: false,
+        pfp: false
+    })
+
     function handleEdit() {
-        editingData ? setEditingData(false) : setEditingData(true)
-        setnameIn(name);
-        setPfpIn(pfp);
-        setHeightFeetIn(heightFeet);
-        setHeightInchIn(heightInch);
-        setWeightIn(weight.at(-1));
-        setDescriptionIn(description);
+        if (editingData === false) {
+            // reset input values
+            {/*if (nameIn === undefined) {
+                setnameIn(name);
+                setHeightFeetIn(heightFeet);
+                setHeightInchIn(heightInch);
+                setWeightIn(weight.at(-1));
+                setDescriptionIn(description);
+                setPfpIn(pfp);
+            }*/}
+            setEditingData(true);
+        } else {
+            setEditingData(false);
+        }
     }
 
     function handleClear() {
@@ -154,42 +179,18 @@ function ProfilePage() {
         }
     }
 
-    useEffect(() => {
-        getProfileData();
-
-        async function getProfileData() {
-            const res = await axios.get('http://localhost:3000/users', {
-                headers: {
-                    'Content-Type': 'application/json'
-                }, 
-                params: {
-                    _id: userID
-                }
-            });
-            setProfileData([])
-            setProfileData(res.data);
-        }
-    
-    }, [])
-
-    // Checking if text field input is either undefined, less than 1, or greater than the specified range
-    // If an error is found, this function returns true, preventing handleSubmit from storing the erroneous data
-    // in state.
+    // check for errors
     function isError() {
-        // Making a new object with values equal to whether or not the input state meets certain conditions
-        // Will result in an object that holds Boolean values
+
         let newErrors = {
             name: (nameIn === undefined || nameIn.length > 30 || nameIn.length < 1),
             heightFeet: (heightFeetIn === undefined || heightFeetIn > 7 || heightFeetIn < 1),
             heightInch: (heightInchIn === undefined || heightInchIn > 11 || heightInchIn < 0),
             weight: (weightIn === undefined || weightIn > 1000 || weightIn < 0),
             description: (description != undefined && description.length > 200),
-            pfp: (pfp === undefined && pfp > 0 && pfp < 16)
+            pfp: (pfp === undefined)
         }
 
-        // Since we now have state for errors, we set it equal to the the values found within the object newErrors
-        // If any of the above conditions are true, the corresponding text field will enter an error state, indicating
-        // to the user that they entered erroneous input
         setErrors(newErrors);
 
         // Converting the newErrors object to a Boolean array of just the values from the newErrors object
@@ -227,7 +228,7 @@ function ProfilePage() {
 
             <br/>
 
-        {/*Stats*/}
+        {/*Description + Stats*/}
         <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="flex-start" size={8} spacing={0}>  
           <Card sx={{p: 1}}>
             <p>Height: {heightFeet}'{heightInch}" | Weight: {weight.at(-1)} lbs</p>
@@ -265,13 +266,13 @@ function ProfilePage() {
                             label="Name"
                             error={errors.name}
                             value={nameIn}
-                            defaultValue={name}
                             onChange={(e) => setnameIn(e.target.value)}
                         />
                         <TextField 
                             required
+                            variant="filled"
                             label="Profile"
-                            defaultValue={pfp}
+                            value={pfpIn}
                             select
                             onChange={(e) => setPfpIn(e.target.value)}
                         >
@@ -290,7 +291,6 @@ function ProfilePage() {
                                 label="Height"
                                 error={errors.heightFeet}
                                 value={heightFeetIn}
-                                defaultValue={heightFeet}
                                 type="number"
                                 onChange={(e) => setHeightFeetIn(e.target.value)}
                                 InputProps={{ 
@@ -302,7 +302,6 @@ function ProfilePage() {
                                 variant="filled" 
                                 error={errors.heightInch}
                                 value={heightInchIn}
-                                defaultValue={heightInch}
                                 type="number"
                                 onChange={(e) => setHeightInchIn(e.target.value)}
                                 InputProps={{ 
@@ -316,7 +315,6 @@ function ProfilePage() {
                             label="Weight" 
                             error={errors.weight}
                             value={weightIn}
-                            defaultValue={weight}
                             type="number"
                             onChange={(e) => setWeightIn(e.target.value)}
                             InputProps={{ 
@@ -330,7 +328,6 @@ function ProfilePage() {
                             value={descriptionIn}
                             multiline
                             maxRows={4}
-                            defaultValue={description}
                             onChange={(e) => setDescriptionIn(e.target.value)}
                         />
                     </Stack>
