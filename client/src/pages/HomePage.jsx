@@ -94,6 +94,9 @@ function HomePage() {
         <Link to="./TrainingVideoLibrary" style={styles.link}>
           Video Library
         </Link>
+        <Link to="./DietPlan" style={styles.link}>
+          Diet Plan
+        </Link>
       </div>
     </div>
   );
