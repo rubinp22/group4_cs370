@@ -7,7 +7,7 @@ return (
     <div>
       <h2>SPORTS METRICS</h2>
       <p>Sports metrics coming soon!</p>
-      <Link to="../fitnessTypes" className="button-link">Back to Fitness Types</Link>
+      <Link to="../HomePage/fitnessTypes" className="button-link">Back to Fitness Types</Link>
     </div>
   );
 
