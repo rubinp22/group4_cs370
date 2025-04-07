@@ -48,6 +48,14 @@ useEffect(() => {
     dispatch({ type: 'SETTHEME', payload: value });
   }
 
+  const setWeight = (value) => {
+    dispatch({ type: 'SETWEIGHT', payload: value });
+  }
+
+  const setFitness = (value) => {
+    dispatch({ type: 'SETFITNESS', payload: value });
+  }
+
   const handleSubmitTest = () => {
     // The find method looks through an array until the find condition is fulfilled, then one element
     // gets assigned to the element in which that condition was true
@@ -56,6 +64,8 @@ useEffect(() => {
       console.log("logging in as user: ", matchingUser);
       selectUser(matchingUser._id);
       setTheme(matchingUser.lightmodeToggle);
+      setWeight(matchingUser.weight.at(-1));
+      setFitness(matchingUser.fitnessLevel);
       navigate('/HomePage');
     } else {
       setIsError(true);

@@ -7,7 +7,6 @@ import axios from 'axios';
 import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
 
-
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50]
 

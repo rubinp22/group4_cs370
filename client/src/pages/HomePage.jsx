@@ -71,10 +71,7 @@ function HomePage() {
 
   // Testing Global State
   const { state, dispatch } = useContext(GlobalStateContext)
-  // const { userData, dispatch2 } = useContext(GlobalStateContext);
-
   console.log("state: ", state)
-  // console.log("userData: ", userData);
 
   return (
     <div style={styles.container}>

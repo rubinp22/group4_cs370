@@ -12,8 +12,11 @@ function reducer(state, action) {
     case 'SETUSER':
       return { ...state, user: action.payload };
     case 'SETTHEME':
-      console.log("SETTHEME: setting theme to: ", action.payload);
       return { ...state, theme: action.payload };
+    case 'SETWEIGHT':
+      return { ...state, bodyWeight: action.payload };
+    case 'SETFITNESS':
+      return { ...state, fitnessLevel: action.payload };
     default:
       return state;
   }
@@ -23,7 +26,9 @@ function reducer(state, action) {
 // more data for our global state in the future, so we would start here.
 const initialState = {
   user: "",
-  theme: ""
+  theme: "",
+  bodyWeight: "",
+  fitnessLevel: ""
 }
 
 export const GlobalStateProvider = ({ children }) => {
