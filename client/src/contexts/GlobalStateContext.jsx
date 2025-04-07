@@ -1,5 +1,4 @@
 import React, { createContext, useReducer, useState, useEffect } from 'react';
-import axios from 'axios';
 
 const GlobalStateContext = createContext();
 
@@ -8,8 +7,6 @@ const GlobalStateContext = createContext();
 // There is an action object that will be passed with two data members
 // action.type triggers the switch case below
 // action.payload is the data we are passing 
-// Note: For now I have SETTHEME as an action, but since that will all be handled through
-// the DB, it is temporary
 function reducer(state, action) {
   switch (action.type) {
     case 'SETUSER':
@@ -22,6 +19,8 @@ function reducer(state, action) {
   }
 }
 
+// Think of this as the "schema" for our state. We may find that we want to store
+// more data for our global state in the future, so we would start here.
 const initialState = {
   user: "",
   theme: ""
@@ -29,35 +28,15 @@ const initialState = {
 
 export const GlobalStateProvider = ({ children }) => {
 
-    const [state, dispatch] = useReducer(reducer, initialState);
-
-    const [userData, setUserData] = useState(undefined);
-    const userID = "67f1a53185ffddaa0be300ca";
-
-    console.log("state.user: ", state.user);
-
-  useEffect(() => {
-    async function getProfileData() {
-      try {
-        const res = await axios.get('http://localhost:3000/users', {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          params: { _id: userID }
-        });
-        setUserData(res.data[0]);
-      } catch (error) {
-        console.error('Error fetching profile data:', error);
-      }
-    }
-    getProfileData();
-  }, [userID]);
-
-  // console.log("userData = ", userData);
-
+  // Here, useReducer returns the current state and a dispatch function.
+  // dispatch is used to send actions to the reducer to update the state.
+  // Example: dispatch({ type: 'SETUSER', payload: 'someUserID' });
+  // So this state is effectively passed to the rest of our app!
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <GlobalStateContext.Provider value={{ state, dispatch, userData }}>
+    // Passing our state to the root of the app and all its children (sub components)
+    <GlobalStateContext.Provider value={{ state, dispatch }}>
       {children}
     </GlobalStateContext.Provider>
   );

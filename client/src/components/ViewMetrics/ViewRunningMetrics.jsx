@@ -24,9 +24,8 @@ function ViewRunningMetrics() {
 
     const theme = useTheme();
 
-    // Testing Global State
+    // Global State
     const { state, dispatch } = useContext(GlobalStateContext)
-    console.log("state: ", state)
 
     // speed = distance / duration
     const speed = distance.map((data, index) => data / duration[index]);

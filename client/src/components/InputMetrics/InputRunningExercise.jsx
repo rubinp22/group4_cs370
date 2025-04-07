@@ -1,7 +1,6 @@
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
-
 import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
 
@@ -14,9 +13,8 @@ function InputRunningExercise() {
     const [bodyWeightIn, setBodyWeightIn] = useState(undefined);
     const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
 
-    // Testing Global State
+    // Global State
     const { state, dispatch } = useContext(GlobalStateContext)
-    console.log("state: ", state)
 
     // This new state is accessed by the error attribute for each Textfield
     const [errors, setErrors] = useState({
@@ -45,8 +43,9 @@ function InputRunningExercise() {
             if (!isError()) {
     
                 const newExercise = {
-                    // Types: run, hike, cycle, swim, weights
+                    // Now we are passing the userID found in global state (state.user)
                     userID: state.user,
+                    // Types: run, hike, cycle, swim, weights
                     type: "run",
                     distance: distanceIn,
                     duration: durationIn,

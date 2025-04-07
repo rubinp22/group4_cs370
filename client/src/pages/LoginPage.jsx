@@ -2,9 +2,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Stack, Typography } from '@mui/material';
-import { amber } from '@mui/material/colors';
 import axios from 'axios';
-
 import GlobalStateContext from "../contexts/GlobalStateContext";
 
 function LoginPage() {
@@ -13,13 +11,7 @@ function LoginPage() {
   const navigate = useNavigate();
 
   const [allUsers, setAllUsers] = useState([]);
-  let userID = "";
-
   const [isError, setIsError] = useState(false);
-
-// input default credentials with admin and user values
-// uses an onclick method for using the correct input
-// its should allow you to save credentials
 
 useEffect(() => {
   async function getProfileData() {
@@ -28,29 +20,26 @@ useEffect(() => {
         headers: {
           'Content-Type': 'application/json'
         },
+        // Calling with no parameters will give us all users
         params: { }
       });
+      // The API respose is stored in state
       setAllUsers(res.data);
     } catch (error) {
       console.error('Error fetching profile data:', error);
     }
 
   }
+  // Calling the function above
   getProfileData();
 }, []);
 
-// console.log("allUsers: ", allUsers);
-
-  const handleSubmit = () => {
-    if (username === 'user' && password === 'password') {
-      navigate('/HomePage');
-    } else {
-      alert('Incorrect username or password');
-    }
-  };
-
+  // This holds all state defined in GlobalStateContext.jsx (user and theme)
+  // However, we are only defining this here to use the dispatch function
   const { state, dispatch } = useContext(GlobalStateContext);
 
+  // These two functions are tied into the reducer function in GlobalStateContext.jsx
+  // Based on the type, certain data is editted
   const selectUser = (value) => {
     dispatch({ type: 'SETUSER', payload: value });
   }
@@ -60,6 +49,8 @@ useEffect(() => {
   }
 
   const handleSubmitTest = () => {
+    // The find method looks through an array until the find condition is fulfilled, then one element
+    // gets assigned to the element in which that condition was true
     const matchingUser = allUsers.find(user => username === user.name && password === user.password);
     if (matchingUser) {
       console.log("logging in as user: ", matchingUser);
@@ -70,6 +61,7 @@ useEffect(() => {
       setIsError(true);
     }
   }
+
 
   return (
     <Stack>
@@ -94,11 +86,8 @@ useEffect(() => {
         />
       </Stack>
       <Stack alignItems={"center"}>
-        <Button variant="contained" onClick={handleSubmit} sx={{mt: 5, width: "40%"}}>
-          Submit
-        </Button>
         <Button variant="contained" onClick={handleSubmitTest} sx={{mt: 5, width: "40%"}}>
-          Submit Test
+          Submit
         </Button>
       </Stack>
     </Stack>
