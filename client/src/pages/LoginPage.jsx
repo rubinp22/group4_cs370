@@ -56,7 +56,7 @@ useEffect(() => {
     dispatch({ type: 'SETFITNESS', payload: value });
   }
 
-  const handleSubmitTest = () => {
+  const handleSubmit = () => {
     // The find method looks through an array until the find condition is fulfilled, then one element
     // gets assigned to the element in which that condition was true
     const matchingUser = allUsers.find(user => username === user.username && password === user.password);
@@ -96,7 +96,7 @@ useEffect(() => {
         />
       </Stack>
       <Stack alignItems={"center"}>
-        <Button variant="contained" onClick={handleSubmitTest} sx={{mt: 5, width: "40%"}}>
+        <Button variant="contained" onClick={handleSubmit} sx={{mt: 5, width: "40%"}}>
           Submit
         </Button>
       </Stack>
