@@ -25,12 +25,15 @@ const DarkTheme = createTheme({
       // card background
       light: amber[100]
     },
+    black: {
+      main: "#121212"
+    }
   },
   components: {
     MuiCssBaseline: {
-      styleOverrides: ({ theme }) => ({
+      styleOverrides: ( theme ) => ({
         body: {
-          backgroundColor: theme.palette.secondary.dark,
+          backgroundColor: theme.palette.black.main,
         },
       }),
     },
@@ -127,6 +130,13 @@ const DarkTheme = createTheme({
         root: ({ theme }) => ({
           color: theme.palette.secondary.main,
           backgroundColor: theme.palette.primary.dark
+        })
+      }
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.primary.light
         })
       }
     }
