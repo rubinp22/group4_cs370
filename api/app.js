@@ -11,7 +11,7 @@ import Profile from './models/Profile.js'
 // Instantiate the API
 const app = new Hono();
 
-const database = "test";
+const database = "Fitness-Tracker";
 
 // Connect to mongo
 // Here I've added the database variable to the URI. Without specifying this, Mongo defaults to the "test" database

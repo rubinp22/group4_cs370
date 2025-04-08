@@ -34,6 +34,8 @@ useEffect(() => {
   getProfileData();
 }, []);
 
+  console.log("all user data: ", allUsers)
+
   // This holds all state defined in GlobalStateContext.jsx (user and theme)
   // However, we are only defining this here to use the dispatch function
   const { state, dispatch } = useContext(GlobalStateContext);
@@ -59,7 +61,8 @@ useEffect(() => {
   const handleSubmitTest = () => {
     // The find method looks through an array until the find condition is fulfilled, then one element
     // gets assigned to the element in which that condition was true
-    const matchingUser = allUsers.find(user => username === user.name && password === user.password);
+    const matchingUser = allUsers.find(user => username === user.username && password === user.password);
+    console.log("matchingUser: ", matchingUser);
     if (matchingUser) {
       console.log("logging in as user: ", matchingUser);
       selectUser(matchingUser._id);
