@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Stack, Typography, Grid2 } from "@mui/material";
+import { Link as RouterLink } from 'react-router-dom';
+import MuiLink from '@mui/material/Link';
 
 function HomePage() {
   //Load theme from localStorage to light mode
@@ -66,39 +69,44 @@ function HomePage() {
   };
 
   return (
-    <div style={styles.container}>
-      {/* Dark Mode Toggle Button */}
-      <button style={styles.button} onClick={() => setDarkMode(!darkMode)}>
-        {darkMode ? "☀ Light Mode" : "🌙 Dark Mode"}
-      </button>
+    <Stack width={"500px"}>
+      <Typography fontSize="36px">Fitness Tracker</Typography>
+      <Typography>Take charge of your health:</Typography>
 
-      <h1>Fitness Tracker</h1>
-      <h3>Take charge of your health:</h3>
+      <Stack width={"100%"} marginTop={5}>
+        <Stack direction="row" spacing={2} padding={1}>
+          <MuiLink width={"50%"} to="./fitnessTypes" component={RouterLink}>
+            My Metrics
+          </MuiLink>
+          <MuiLink width={"50%"} to="./RecordExercises" component={RouterLink}>
+            Record Exercise
+          </MuiLink>
+        </Stack>
+        <Stack direction="row" spacing={2} padding={1}>
+          <MuiLink width={"50%"} to="./RewardAchievements" component={RouterLink}>
+            Achievements
+          </MuiLink>
+          <MuiLink width={"50%"} to="./LeaderBoard" component={RouterLink}>
+            Leaderboard
+          </MuiLink>
+        </Stack>
+        <Stack direction="row" spacing={2} padding={1}>
+          <MuiLink width={"50%"} to="./profile" component={RouterLink}>
+            My Profile
+          </MuiLink>
+          <MuiLink width={"50%"} to="./TrainingVideoLibrary" component={RouterLink}>
+            Video Library
+          </MuiLink>
+        </Stack>
+        <Stack direction="row" spacing={2} padding={1} justifyContent={"center"}>
+          <MuiLink width={"48%"} to="./DietPlan" component={RouterLink}>
+            Diet Plan
+          </MuiLink>
+          
+        </Stack>
 
-      <div style={styles.buttonContainer}>
-        <Link to="./fitnessTypes" style={styles.link}>
-          My Metrics
-        </Link>
-        <Link to="./RecordExercises" style={styles.link}>
-          Record Exercise
-        </Link>
-        <Link to="./RewardAchievements" style={styles.link}>
-          Achievements
-        </Link>
-        <Link to="./LeaderBoard" style={styles.link}>
-          Leaderboard
-        </Link>
-        <Link to="./profile" style={styles.link}>
-          My Profile
-        </Link>
-        <Link to="./TrainingVideoLibrary" style={styles.link}>
-          Video Library
-        </Link>
-        <Link to="./DietPlan" style={styles.link}>
-          Diet Plan
-        </Link>
-      </div>
-    </div>
+      </Stack>
+    </Stack>
   );
 }
 
