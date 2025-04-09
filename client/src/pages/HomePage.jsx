@@ -96,7 +96,7 @@ function HomePage() {
         <Link to="./LeaderBoard" style={styles.link}>
           Leaderboard
         </Link>
-        <Link to="./profile" style={styles.link}>
+        <Link to={`./profile/${state.user}`} style={styles.link}>
           My Profile
         </Link>
         <Link to="./TrainingVideoLibrary" style={styles.link}>
