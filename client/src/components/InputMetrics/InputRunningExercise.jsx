@@ -1,6 +1,8 @@
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
+import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
+import React, { useContext } from 'react';
 
 function InputRunningExercise() {
     const [distanceIn, setDistanceIn] = useState(undefined);
@@ -8,8 +10,9 @@ function InputRunningExercise() {
     const [stepsIn, setStepsIn] = useState(undefined);
     const [avgHeartRateIn, setAvgHeartRateIn] = useState(undefined);
     const [maxHeartRateIn, setMaxHeartRateIn] = useState(undefined);
-    const [bodyWeightIn, setBodyWeightIn] = useState(undefined);
-    const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
+
+    // Global State
+    const { state, dispatch } = useContext(GlobalStateContext)
 
     // This new state is accessed by the error attribute for each Textfield
     const [errors, setErrors] = useState({
@@ -18,8 +21,6 @@ function InputRunningExercise() {
         steps: false,
         avgHeartRate: false,
         maxHeartRate: false,
-        bodyWeight: false,
-        fitnessLevel: false
     })
 
         const textInputSpacing = 3;
@@ -30,14 +31,14 @@ function InputRunningExercise() {
             setStepsIn("");
             setAvgHeartRateIn("");
             setMaxHeartRateIn("");
-            setBodyWeightIn("");
-            setFitnessLevelIn("");
         }
     
         async function handleSubmit() {
             if (!isError()) {
     
                 const newExercise = {
+                    // Now we are passing the userID found in global state (state.user)
+                    userID: state.user,
                     // Types: run, hike, cycle, swim, weights
                     type: "run",
                     distance: distanceIn,
@@ -45,8 +46,8 @@ function InputRunningExercise() {
                     steps: stepsIn,
                     avgHeartRate: avgHeartRateIn,
                     maxHeartRate: maxHeartRateIn,
-                    bodyWeight: bodyWeightIn,
-                    fitnessLevel: fitnessLevelIn
+                    bodyWeight: state.bodyWeight,
+                    fitnessLevel: state.fitnessLevel
                 }
     
                 await axios.post('http://localhost:3000/exercises/', newExercise, {
@@ -69,10 +70,7 @@ function InputRunningExercise() {
                 duration: (durationIn === undefined || durationIn < 0),
                 steps: (stepsIn === undefined || stepsIn < 1),
                 avgHeartRate: (avgHeartRateIn === undefined || avgHeartRateIn < 1),
-                maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),
-                bodyWeight: (bodyWeightIn === undefined || bodyWeightIn < 1),
-                fitnessLevel: (fitnessLevelIn === undefined || fitnessLevelIn < 0 || fitnessLevelIn > 2),
-    
+                maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),    
             }
     
             // Since we now have state for errors, we set it equal to the the values found within the object newErrors
@@ -151,30 +149,6 @@ function InputRunningExercise() {
                     value={maxHeartRateIn}
                     error={errors.maxHeartRate}
                     onChange={(e) => setMaxHeartRateIn(e.target.value)}
-                />
-                <TextField 
-                    required 
-                    variant="filled" 
-                    label="Bodyweight"
-                    type="number"
-                    value={bodyWeightIn}
-                    error={errors.bodyWeight}
-                    onChange={(e) => setBodyWeightIn(e.target.value)}
-                    InputProps={{ 
-                        endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
-                    }}
-                />
-                <TextField 
-                    required 
-                    variant="filled" 
-                    label="Fitness Level"
-                    type="number"
-                    value={fitnessLevelIn}
-                    error={errors.fitnessLevel}
-                    onChange={(e) => setFitnessLevelIn(e.target.value)}
-                    InputProps={{ 
-                        endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
-                    }}
                 />
             </Stack>
             <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>

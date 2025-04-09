@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import React, { useContext } from 'react';
+import GlobalStateContext from "../contexts/GlobalStateContext";
+import { Button, Stack } from "@mui/material";
 
 function HomePage() {
+
   //Load theme from localStorage to light mode
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
@@ -65,6 +69,10 @@ function HomePage() {
     },
   };
 
+  // Testing Global State
+  const { state, dispatch } = useContext(GlobalStateContext)
+  console.log("state: ", state)
+
   return (
     <div style={styles.container}>
       {/* Dark Mode Toggle Button */}
@@ -98,6 +106,12 @@ function HomePage() {
           Diet Plan
         </Link>
       </div>
+        <Stack marginTop="150px">
+          <Link to="../" style={styles.link}>
+            Log Out
+          </Link>
+        </Stack>
+
     </div>
   );
 }

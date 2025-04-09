@@ -8,6 +8,9 @@ import axios from 'axios';
 // Not currently in use, will have to determine how to implement a color scale. More info below:
 import MyLapBarChart from '../MyLapBarChart.jsx';
 
+import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
+import React, { useContext } from 'react';
+
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50];
 
@@ -23,6 +26,9 @@ function ViewSwimmingMetrics() {
     const fitnessLevel = swimmingData.map(data => data.fitnessLevel);
 
     const theme = useTheme();
+
+    // Global State
+    const { state, dispatch } = useContext(GlobalStateContext)
 
     // Finding the duration (in minutes) of each swim by totaling each lap for each swim
     // Dividing my 60 because lap times are stored in seconds
@@ -91,7 +97,8 @@ function ViewSwimmingMetrics() {
                     'Content-Type': 'application/json'
                 }, 
                 params: {
-                    type: "swim"
+                    type: "swim",
+                    userID: state.user
                 }
             });
             setSwimmingData(res.data);
