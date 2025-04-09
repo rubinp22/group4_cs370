@@ -198,45 +198,45 @@ function ProfilePage() {
         
         <Stack>
             <Grid container spacing={2}>
-            {/*Profile picture*/}
-            <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
-                <Avatar
-                sx={{ width: 100, height: 100}}
-                alt={name}
-                src={pfp}
-                ></Avatar>
-            </Grid>
+                {/*Profile picture*/}
+                <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
+                    <Avatar
+                    sx={{ width: 100, height: 100}}
+                    alt={name}
+                    src={pfp}
+                    ></Avatar>
+                </Grid>
 
-            {/*Name*/}
-            <Grid display="flex" justifyContent="flex-start" alignItems="left" size={8}>
-                <h2>{name}</h2>
-            </Grid>
+                {/*Name*/}
+                <Grid display="flex" justifyContent="left" alignItems="center" size={8}>
+                    <Typography fontSize={36}>{name}</Typography>
+                </Grid>
 
-            <br/>
+                <br/>
 
-        {/*Description + Stats*/}
-        <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="flex-start" size={8} spacing={0}>  
-          <Card sx={{p: 1}}>
-            <p>Height: {heightFeet}'{heightInch}" | Weight: {weight.at(-1)} lbs</p>
-            <p>{description}</p>
-          </Card>
-        </Grid>
+                {/*Description + Stats*/}
+                <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="flex-start" size={8} spacing={0}>  
+                    <Card sx={{p: 1}}>
+                        <p>Height: {heightFeet}'{heightInch}" | Weight: {weight.at(-1)} lbs</p>
+                        <p>{description}</p>
+                    </Card>
+                </Grid>
         
-        {/*Friends*/}
-        <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={4} spacing={0}>
-        <Card sx={{p: 1}}>
-          <h3>Friends</h3>
-          <AvatarGroup max={4}>
-          <Avatar alt="Remy Sharp" src="/images/profileImages/profile10.png"/>
-          <Avatar alt="Travis Howard" src="/images/profileImages/profile2.png" />
-          <Avatar alt="Cindy Baker" src="/images/profileImages/profile3.png" />
-          <Avatar alt="Agnes Walker" src="/images/profileImages/profile4.png" />
-          <Avatar alt="Trevor Henderson" src="/images/profileImages/profile5.png" />
-          </AvatarGroup>
-          </Card>
-        </Grid>
+                {/*Friends*/}
+                <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={4} spacing={0}>
+                    <Card sx={{p: 1}}>
+                        <h3>Friends</h3>
+                        <AvatarGroup max={4}>
+                            <Avatar alt="Remy Sharp" src="/images/profileImages/profile10.png"/>
+                            <Avatar alt="Travis Howard" src="/images/profileImages/profile2.png" />
+                            <Avatar alt="Cindy Baker" src="/images/profileImages/profile3.png" />
+                            <Avatar alt="Agnes Walker" src="/images/profileImages/profile4.png" />
+                            <Avatar alt="Trevor Henderson" src="/images/profileImages/profile5.png" />
+                        </AvatarGroup>
+                    </Card>
+                </Grid>
             
-        </Grid>
+            </Grid>
 
         {/*Editing Form*/}
         <Stack>
