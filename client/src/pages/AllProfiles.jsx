@@ -39,13 +39,11 @@ function AllProfiles() {
             <h3>All Users</h3>
             </Grid>
             {allUsers.map((option) => (
-            <Grid size={3}>
-              <Card> 
-                <MuiLink to={`../HomePage/profile/${option._id}`} component={RouterLink} className="button-link">
+            <Grid size={{xs:6,sm:6,md:3,lg:3}}>
+                <MuiLink to={`../HomePage/profile/${option._id}`} component={RouterLink} className="button-link" sx={{width:165}}>
                   <Avatar alt={option.name} src={option.pfp} />
                   {option.name}
                 </MuiLink> 
-              </Card>
             </Grid>
             ))}
         </Grid>
