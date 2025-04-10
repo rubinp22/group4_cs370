@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline, useMediaQuery } from '@mui/material';
+import { GlobalStateProvider } from './contexts/GlobalStateContext.jsx';
 
 import DarkTheme from '../theme/DarkTheme.jsx';
 import LightTheme from '../theme/LightTheme.jsx';

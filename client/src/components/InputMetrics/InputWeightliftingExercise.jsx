@@ -1,6 +1,8 @@
 import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
 import { useState } from 'react';
 import axios from 'axios';
+import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
+import React, { useContext } from 'react';
 
 function InputWeightliftingExercise() {
     const [repsIn, setRepsIn] = useState(undefined);
@@ -9,8 +11,9 @@ function InputWeightliftingExercise() {
     const [durationIn, setDurationIn] = useState(undefined);
     const [avgHeartRateIn, setAvgHeartRateIn] = useState(undefined);
     const [maxHeartRateIn, setMaxHeartRateIn] = useState(undefined);
-    const [bodyWeightIn, setBodyWeightIn] = useState(undefined);
-    const [fitnessLevelIn, setFitnessLevelIn] = useState(undefined);
+
+    // Global State
+    const { state, dispatch } = useContext(GlobalStateContext)
 
     const [errors, setErrors] = useState({
         reps: false,
@@ -19,8 +22,6 @@ function InputWeightliftingExercise() {
         duration: false,
         avgHeartRate: false,
         maxHeartRate: false,
-        bodyWeight: false,
-        fitnessLevel: false
     })
 
     const textInputSpacing = 3;
@@ -32,14 +33,13 @@ function InputWeightliftingExercise() {
         setDurationIn("");
         setAvgHeartRateIn("");
         setMaxHeartRateIn("");
-        setBodyWeightIn("");
-        setFitnessLevelIn("");
     }
 
     async function handleSubmit() {
         if (!isError()) {
 
             const newExercise = {
+                userID: state.user,
                 // Types: run, hike, cycle, swim, weights
                 type: "weights",
                 reps: repsIn,
@@ -48,8 +48,8 @@ function InputWeightliftingExercise() {
                 duration: durationIn,
                 avgHeartRate: avgHeartRateIn,
                 maxHeartRate: maxHeartRateIn,
-                bodyWeight: bodyWeightIn,
-                fitnessLevel: fitnessLevelIn           
+                bodyWeight: state.bodyWeight,
+                fitnessLevel: state.fitnessLevel           
             }
 
             await axios.post('http://localhost:3000/exercises/', newExercise, {
@@ -68,9 +68,6 @@ function InputWeightliftingExercise() {
             duration: (durationIn === undefined || durationIn < 0),
             avgHeartRate: (avgHeartRateIn === undefined || avgHeartRateIn < 1),
             maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),
-            bodyWeight: (bodyWeightIn === undefined || bodyWeightIn < 1),
-            fitnessLevel: (fitnessLevelIn === undefined || fitnessLevelIn < 0 || fitnessLevelIn > 2),
-
         }
 
         setErrors(newErrors);
@@ -150,30 +147,6 @@ function InputWeightliftingExercise() {
                     error={errors.maxHeartRate}
                     value={maxHeartRateIn}
                     onChange={(e) => setMaxHeartRateIn(e.target.value)}
-                />
-                <TextField 
-                    required 
-                    variant="filled" 
-                    label="Bodyweight"
-                    type="number"
-                    error={errors.bodyWeight}
-                    value={bodyWeightIn}
-                    onChange={(e) => setBodyWeightIn(e.target.value)}
-                    InputProps={{ 
-                        endAdornment: <InputAdornment position='end'>Kg</InputAdornment>
-                        }}
-                />
-                <TextField 
-                    required 
-                    variant="filled" 
-                    label="Fitness Level"
-                    type="number"
-                    error={errors.fitnessLevel}
-                    value={fitnessLevelIn}
-                    onChange={(e) => setFitnessLevelIn(e.target.value)}
-                    InputProps={{ 
-                        endAdornment: <InputAdornment position='end'>(0 - 2)</InputAdornment>
-                        }}
                 />
             </Stack>
 

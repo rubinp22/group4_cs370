@@ -10,6 +10,10 @@ function HomePage() {
     width: {lg: 200, md: 175, sm: 150, xs: 130}
   }
 
+  // Testing Global State
+  const { state, dispatch } = useContext(GlobalStateContext)
+  console.log("state: ", state)
+
   return (
     <Stack >
       <Typography fontSize={36}>Fitness Tracker</Typography>

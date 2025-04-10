@@ -4,6 +4,9 @@ import { useTheme } from '@emotion/react';
 import MyBarChart from '../MyBarChart.jsx';
 import axios from 'axios';
 
+import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
+import React, { useContext } from 'react';
+
 // MET (Metabolic Equivalent of Task) is defined as the energy expenditure for a given task
 // An MET of 1 is measured as the energy expenditure at rest. 
 // If you weigh 70 Kg (154 lbs), you burn 70 calories per hour (kcal/hr) at 1 MET
@@ -34,6 +37,9 @@ function ViewWeightliftingMetrics() {
     const fitnessLevel = weightLiftData.map(data => data.fitnessLevel);
 
     const theme = useTheme();
+
+    // Global State
+    const { state, dispatch } = useContext(GlobalStateContext)
 
     // totalReps = reps * sets
     const totalReps = reps.map((data, index) => data * sets[index]);
@@ -78,7 +84,8 @@ function ViewWeightliftingMetrics() {
                     'Content-Type': 'application/json'
                 }, 
                 params: {
-                    type: "weights"
+                    type: "weights",
+                    userID: state.user
                 }
             });
             setWeightLiftData(res.data);

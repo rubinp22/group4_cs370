@@ -4,6 +4,9 @@ import { useTheme } from '@emotion/react';
 import MyBarChart from '../MyBarChart.jsx';
 import axios from 'axios';
 
+import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
+import React, { useContext } from 'react';
+
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50];
 
@@ -19,6 +22,9 @@ function ViewCyclingMetrics() {
     const fitnessLevel = cyclingData.map(data => data.fitnessLevel);
 
     const theme = useTheme();
+
+    // Global State
+    const { state, dispatch } = useContext(GlobalStateContext)
 
     // grade represents the average slope steepness, it doesn't account for downhill slope
     // grade = (elevation / distance) * 100
@@ -47,7 +53,8 @@ function ViewCyclingMetrics() {
                     'Content-Type': 'application/json'
                 }, 
                 params: {
-                    type: "cycle"
+                    type: "cycle",
+                    userID: state.user
                 }
             });
             setCyclingData(res.data);
