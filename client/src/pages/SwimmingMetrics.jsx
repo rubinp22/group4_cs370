@@ -7,7 +7,7 @@ import ViewSwimmingMetrics from '../components/ViewMetrics/ViewSwimmingMetrics.j
 function SwimmingMetrics() {
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_swimmer.jpg" alt="A Person is swimming laps" width="85%"/>
+            <img src="/images/fitness_app_swimmer.jpg" alt="A Person is swimming laps" width="70%"/>
             <ViewSwimmingMetrics/>
 
             <Stack marginTop={5}>

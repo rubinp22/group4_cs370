@@ -61,7 +61,7 @@ function ViewRunningMetrics() {
 
     return (
         <Stack alignItems={"center"}>
-            <Typography fontSize={36} marginTop={"5%"}>
+            <Typography fontSize={"2rem"} marginTop={"5%"}>
                 RUNNING METRICS
             </Typography>
             <Stack direction="row">
