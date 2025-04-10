@@ -1,9 +1,8 @@
-import { Stack, Typography, Grid2 } from "@mui/material";
+import { Stack, Typography, Button, AppBar, Toolbar, IconButton, Box } from "@mui/material";
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import GlobalStateContext from "../contexts/GlobalStateContext";
 import { useContext } from "react";
-import { Button, Typography, Stack, AppBar, Toolbar, IconButton, Box } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
 
 function HomePage() {
@@ -20,6 +19,27 @@ function HomePage() {
 
   return (
     <Stack >
+
+      {/* ToolBar */}
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="absolute">
+          <Toolbar>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >    
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Toolbar
+            </Typography>
+            <Avatar src={state.pfp}></Avatar>
+          </Toolbar>
+        </AppBar>
+      </Box>
+
       <Typography fontSize={36}>Fitness Tracker</Typography>
       <Typography>Take charge of your health:</Typography>
 
