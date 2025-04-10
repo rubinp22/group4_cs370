@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Stack, Typography, Button, ButtonGroup, Paper } from '@mui/material';
+import { Stack, Typography, Button, ButtonGroup, Paper, Card } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 
@@ -71,16 +71,21 @@ function DietPlan() {
       {/* Diet Buttons Component */}
       <DietButtons setSelectedPlan={setSelectedPlan} />
 
-      <Paper elevation={3} sx={{ padding: 3 }}>
-        <Typography variant="h4" gutterBottom>
-          {dietPlans[selectedPlan]?.title}
-        </Typography>
-        <Stack spacing={1}>
-          {dietPlans[selectedPlan]?.meals.map((meal, index) => (
-            <Typography key={index}>• {meal}</Typography>
-          ))}
-        </Stack>
-      </Paper>
+      {selectedPlan === 'none' ? (
+        <Typography fontSize={24}>Select a diet</Typography>
+      ) : (
+        <Card elevation={3} sx={{ padding: 3 }}>
+          <Typography variant="h4" gutterBottom>
+            {dietPlans[selectedPlan]?.title}
+          </Typography>
+          <Stack spacing={1}>
+            {dietPlans[selectedPlan]?.meals.map((meal, index) => (
+              <Typography key={index}>• {meal}</Typography>
+            ))}
+          </Stack>
+        </Card>
+      )}
+
 
       <MuiLink to="../HomePage" component={RouterLink}>
         Back to Home
