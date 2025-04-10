@@ -5,6 +5,7 @@ import { TextField, Button, Stack, Typography } from '@mui/material';
 import axios from 'axios';
 import GlobalStateContext from "../contexts/GlobalStateContext";
 
+
 function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

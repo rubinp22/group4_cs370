@@ -5,7 +5,7 @@ import axios from 'axios';
 import MuiLink from '@mui/material/Link';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid2';
-import { Stack, Card } from '@mui/material';
+import { Stack, Card, Typography } from '@mui/material';
 
 function AllProfiles() {
     const { state, dispatch } = useContext(GlobalStateContext);
@@ -36,7 +36,7 @@ function AllProfiles() {
         <Stack>
         <Grid container spacing={1}>
             <Grid size={12}>
-            <h3>All Users</h3>
+            <Typography fontSize={24} marginBottom={3}>All Users</Typography>
             </Grid>
             {allUsers.map((option) => (
             <Grid size={{xs:6,sm:6,md:3,lg:3}}>

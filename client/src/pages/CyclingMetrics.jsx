@@ -7,7 +7,7 @@ import ViewCyclingMetrics from '../components/ViewMetrics/ViewCyclingMetrics.jsx
 function CyclingMetrics() {    
     return (
         <Stack alignItems="center">
-            <img src="/images/fitness_app_cycler.jpg" alt="caption of a cycler" width="85%"/>   
+            <img src="/images/fitness_app_cycler.jpg" alt="caption of a cycler" width="70%"/>   
             <ViewCyclingMetrics/>
 
             <Stack marginTop={5}>

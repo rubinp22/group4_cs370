@@ -108,7 +108,7 @@ function ViewSwimmingMetrics() {
 
     return (
         <Stack alignItems={"center"}>
-            <Typography fontSize={32} marginTop={"5%"}>SWIMMING METRICS</Typography>
+            <Typography fontSize={"2rem"} marginTop={"5%"}>SWIMMING METRICS</Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>
                     <MyBarChart
