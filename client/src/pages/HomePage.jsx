@@ -3,6 +3,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import GlobalStateContext from "../contexts/GlobalStateContext";
 import { useContext } from "react";
+import { Button, Typography, Stack, AppBar, Toolbar, IconButton, Box } from "@mui/material";
+import Avatar from '@mui/material/Avatar';
 
 function HomePage() {
 
