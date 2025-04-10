@@ -239,8 +239,8 @@ function ProfilePage() {
         </Grid>
 
         {/*Name*/}
-        <Grid display="flex" justifyContent="flex-start" alignItems="left" size={8}>
-            <h2>{name}</h2>
+        <Grid display="flex" justifyContent="flex-start" alignItems="center" size={8}>
+            <Typography fontSize={24}>{name}</Typography>
         </Grid>
 
         <br/>

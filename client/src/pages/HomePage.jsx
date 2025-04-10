@@ -61,9 +61,16 @@ function HomePage() {
           </MuiLink>
         </Stack>
         <Stack direction="row" spacing={2} padding={1}>
-          <MuiLink sx={linkStyling} to="./profile" component={RouterLink}>
+          {state.user === "" ? (
+          <MuiLink sx={linkStyling} to="../" component={RouterLink}>
+            My Profile
+          </MuiLink>     
+          ) : (
+          <MuiLink sx={linkStyling} to={`./profile/${state.user}`} component={RouterLink}>
             My Profile
           </MuiLink>
+          )}
+
           <MuiLink sx={linkStyling} to="./TrainingVideoLibrary" component={RouterLink}>
             Video Library
           </MuiLink>
