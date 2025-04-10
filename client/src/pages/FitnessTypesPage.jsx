@@ -20,7 +20,6 @@ function FitnessTypesPage () {
         <MuiLink sx={linkStyling} to="./CyclingMetrics" component={RouterLink}>CYCLING</MuiLink>
         <MuiLink sx={linkStyling} to="./SwimmingMetrics" component={RouterLink}>SWIMMING</MuiLink>
         <MuiLink sx={linkStyling} to="./WeightLiftingMetrics" component={RouterLink}>WEIGHT LIFTING</MuiLink>
-        <MuiLink sx={linkStyling} to="./SportsSelection" component={RouterLink}>SPORTS</MuiLink>
 
         <Button sx={linkStyling} to="../HomePage" component={RouterLink}>Back to Home</Button>
       </Stack>

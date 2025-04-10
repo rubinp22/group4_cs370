@@ -117,11 +117,19 @@ const LightTheme = createTheme({
         }),
       },
     },
+    MuiMenu: {
+      styleOverrides: {
+        paper: ({ theme }) => ({
+          backgroundColor: theme.palette.secondary.dark
+        })
+      }
+    },
     MuiMenuItem: {
       styleOverrides: {
         root: ({ theme }) => ({
           color: theme.palette.primary.dark,
-          backgroundColor: theme.palette.primary.light
+          backgroundColor: theme.palette.primary.light,
+          fontSize: "20px"
         })
       }
     },

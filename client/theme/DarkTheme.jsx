@@ -80,7 +80,7 @@ const DarkTheme = createTheme({
           // customize all MUI components on a granular level (unless they are MUI-X graphs 🙃)
 
           '& .MuiTypography-root': {
-            color: theme.palette.primary.dark,
+            color: theme.palette.secondary.main,
           },
           // Targeting the root of a TextField 
           '.MuiTextField-root': {  
@@ -120,11 +120,19 @@ const DarkTheme = createTheme({
         }),
       },
     },
+    MuiMenu: {
+      styleOverrides: {
+        paper: ({ theme }) => ({
+          backgroundColor: theme.palette.secondary.dark
+        })
+      }
+    },
     MuiMenuItem: {
       styleOverrides: {
         root: ({ theme }) => ({
-          color: theme.palette.secondary.main,
-          backgroundColor: theme.palette.primary.dark
+            color: theme.palette.secondary.main,
+            backgroundColor: theme.palette.primary.dark,
+            fontSize: "20px"
         })
       }
     },
@@ -132,29 +140,22 @@ const DarkTheme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           color: theme.palette.secondary.main,
-          backgroundColor: theme.palette.primary.dark
+          backgroundColor: theme.palette.primary.dark,
+          fontSize:"24px",
+          '.MuiSelect-filled': {
+            color: theme.palette.secondary.main
+          }
         })
       }
     },
     MuiTypography: {
       styleOverrides: {
         root: ({ theme }) => ({
-          color: theme.palette.primary.light
+          '&:not(.MuiChartsTooltip-root *):not(.MuiInputAdornment-root *):not(.MuiCard-root *)': {
+            color: theme.palette.primary.light,
+          },
         })
       }
-    },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          backgroundColor: '#fff',
-          color: '#000 !important',
-          fontSize: '0.875rem',
-          boxShadow: '0px 2px 10px rgba(0,0,0,0.3)',
-        },
-        arrow: {
-          color: '#fff !important',
-        },
-      },
     },
     
   },
