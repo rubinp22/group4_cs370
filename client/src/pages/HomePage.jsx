@@ -1,6 +1,8 @@
 import { Stack, Typography, Grid2 } from "@mui/material";
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
+import GlobalStateContext from "../contexts/GlobalStateContext";
+import { useContext } from "react";
 
 function HomePage() {
 
@@ -48,7 +50,12 @@ function HomePage() {
           <MuiLink sx={linkStyling} to="./DietPlan" component={RouterLink}>
             Diet Plan
           </MuiLink>
-          
+        </Stack>
+
+        <Stack marginTop="150px" alignContent={"center"} alignItems={"center"}>
+          <MuiLink to="../" sx={linkStyling} component={RouterLink}>
+            Log Out
+          </MuiLink>
         </Stack>
 
       </Stack>

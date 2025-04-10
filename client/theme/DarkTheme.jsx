@@ -79,6 +79,9 @@ const DarkTheme = createTheme({
           // elements of a TextField that has a specific class name. This allows us to really
           // customize all MUI components on a granular level (unless they are MUI-X graphs 🙃)
 
+          '& .MuiTypography-root': {
+            color: theme.palette.primary.dark,
+          },
           // Targeting the root of a TextField 
           '.MuiTextField-root': {  
             backgroundColor: theme.palette.primary.dark,
@@ -98,7 +101,7 @@ const DarkTheme = createTheme({
           '.MuiFilledInput-input': {
             color: theme.palette.secondary.dark,
             fontSize: "24px"
-          },
+          }
         }),
       },
     },
@@ -139,7 +142,21 @@ const DarkTheme = createTheme({
           color: theme.palette.primary.light
         })
       }
-    }
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          backgroundColor: '#fff',
+          color: '#000 !important',
+          fontSize: '0.875rem',
+          boxShadow: '0px 2px 10px rgba(0,0,0,0.3)',
+        },
+        arrow: {
+          color: '#fff !important',
+        },
+      },
+    },
+    
   },
 });
 

@@ -23,8 +23,11 @@ const ThemedApp = () => {
 
   return (
     <ThemeProvider theme={chosenTheme}>
-      <CssBaseline disableColorScheme />
-      <App />
+      <GlobalStateProvider>
+        <CssBaseline disableColorScheme />
+        <App />
+      </GlobalStateProvider>
+
     </ThemeProvider>
 
   );
