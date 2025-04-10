@@ -123,16 +123,19 @@ function ProfilePage() {
     const textInputSpacing = 3;
 
     async function getProfileData() {
-        const res = await axios.get('http://localhost:3000/users', {
-            headers: {
-                'Content-Type': 'application/json'
-            }, 
-            params: {
-                _id: pageID
-            }
-        });
-        //setProfileData([])
-        setProfileData(res.data);
+        try {
+            const res = await axios.get('http://localhost:3000/users', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                params: {
+                    _id: pageID
+                }
+            });
+            setProfileData(res.data);
+        } catch (err) {
+            console.log(err);
+        }
     }
     
     // getting profile data from the database
