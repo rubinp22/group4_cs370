@@ -128,8 +128,9 @@ const LightTheme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: ({ theme }) => ({
-          color: theme.palette.secondary.main,
-          backgroundColor: theme.palette.primary.dark
+          color: theme.palette.primary.dark,
+          backgroundColor: theme.palette.primary.light,
+          fontSize: "24px",
         })
       }
     },
@@ -139,7 +140,7 @@ const LightTheme = createTheme({
           color: theme.palette.primary.dark
         })
       }
-    }
+    }, 
   },
 });
 

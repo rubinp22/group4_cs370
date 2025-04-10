@@ -63,7 +63,7 @@ const DarkTheme = createTheme({
           color: theme.palette.primary.light,
           fontSize: '18px',
           '&:hover': {
-            backgroundColor: theme.palette.primary.mediumLight,
+            backgroundColor: theme.palette.secondary.dark,
             color: theme.palette.primary.dark,
             transition: "background-color 0.5s ease, color 0.5s ease",
           },
