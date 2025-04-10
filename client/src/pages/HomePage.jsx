@@ -75,9 +75,16 @@ function HomePage() {
         </Stack>
 
         <Stack marginTop="150px" alignContent={"center"} alignItems={"center"}>
-          <MuiLink to="../" sx={linkStyling} component={RouterLink}>
-            Log Out
-          </MuiLink>
+          {state.user === "" ? (
+            <MuiLink to="../" sx={linkStyling} component={RouterLink}>
+              Log In
+            </MuiLink>
+          ) : (
+            <MuiLink to="../" sx={linkStyling} component={RouterLink}>
+              Log Out
+            </MuiLink>
+          )}
+
         </Stack>
 
       </Stack>
