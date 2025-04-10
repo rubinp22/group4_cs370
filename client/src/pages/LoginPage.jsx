@@ -56,6 +56,10 @@ useEffect(() => {
     dispatch({ type: 'SETFITNESS', payload: value });
   }
 
+  const setPFP = (value) => {
+    dispatch({type: 'SETPFP', payload: value});
+  }
+
   const handleSubmit = () => {
     // The find method looks through an array until the find condition is fulfilled, then one element
     // gets assigned to the element in which that condition was true
@@ -66,6 +70,7 @@ useEffect(() => {
       setTheme(matchingUser.lightmodeToggle);
       setWeight(matchingUser.weightArray.at(-1).weight);
       setFitness(matchingUser.fitnessLevel);
+      setPFP(matchingUser.pfp)
       navigate('/HomePage');
     } else {
       setIsError(true);

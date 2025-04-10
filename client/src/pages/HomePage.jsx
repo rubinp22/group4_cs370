@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import React, { useContext } from 'react';
 import GlobalStateContext from "../contexts/GlobalStateContext";
-import { Button, Stack } from "@mui/material";
+import { Button, Typography, Stack, AppBar, Toolbar, IconButton, Box } from "@mui/material";
+import Avatar from '@mui/material/Avatar';
 
 function HomePage() {
 
@@ -75,6 +76,26 @@ function HomePage() {
 
   return (
     <div style={styles.container}>
+          <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="absolute">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Toolbar
+          </Typography>
+          <Avatar src={state.pfp}></Avatar>
+        </Toolbar>
+      </AppBar>
+    </Box>
+
       {/* Dark Mode Toggle Button */}
       <button style={styles.button} onClick={() => setDarkMode(!darkMode)}>
         {darkMode ? "☀ Light Mode" : "🌙 Dark Mode"}
