@@ -117,9 +117,13 @@ function HomePage() {
         <Link to="./LeaderBoard" style={styles.link}>
           Leaderboard
         </Link>
-        <Link to="./profile" style={styles.link}>
-          My Profile
-        </Link>
+        {state.user === "" ? (
+          <Link to="../" style={styles.link}>
+            My Profile
+          </Link>) : (
+          <Link to={`./profile/${state.user}`} style={styles.link}>
+            My Profile
+          </Link>)}
         <Link to="./TrainingVideoLibrary" style={styles.link}>
           Video Library
         </Link>
@@ -128,9 +132,13 @@ function HomePage() {
         </Link>
       </div>
         <Stack marginTop="150px">
+        {state.user === "" ? (
           <Link to="../" style={styles.link}>
-            Log Out
-          </Link>
+          Log In
+          </Link>) : (
+          <Link to="../" style={styles.link}>
+          Log Out
+          </Link>)}
         </Stack>
 
     </div>
