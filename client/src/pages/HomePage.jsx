@@ -1,147 +1,101 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import React, { useContext } from 'react';
+import { Stack, Typography, Button, AppBar, Toolbar, IconButton, Box } from "@mui/material";
+import { Link as RouterLink } from 'react-router-dom';
+import MuiLink from '@mui/material/Link';
 import GlobalStateContext from "../contexts/GlobalStateContext";
-import { Button, Typography, Stack, AppBar, Toolbar, IconButton, Box } from "@mui/material";
+import { useContext } from "react";
 import Avatar from '@mui/material/Avatar';
 
 function HomePage() {
 
-  //Load theme from localStorage to light mode
-  const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("theme") === "dark"
-  );
-
-  //Toggle that saves to the localStorage
-  useEffect(() => {
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-  }, [darkMode]);
-
-  // Reset scroll position to base page 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  //Dynamic styles for the full coverage
-  const styles = {
-    container: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100vw",
-      height: "100vh", //covers the full screen height
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      textAlign: "center",
-      backgroundColor: darkMode ? "#121212" : "#ffffff",
-      color: darkMode ? "#ffffff" : "#000000",
-      transition: "background-color 0.3s ease, color 0.3s ease",
-      overflow: "hidden", //avoids issues with scrolling
-    },
-    button: {
-      padding: "10px 20px",
-      border: "none",
-      cursor: "pointer",
-      backgroundColor: darkMode ? "#f39c12" : "#007bff",
-      color: darkMode ? "#000000" : "#ffffff",
-      fontSize: "16px",
-      borderRadius: "5px",
-      marginBottom: "20px",
-      transition: "background-color 0.3s ease, color 0.3s ease",
-    },
-    buttonContainer: {
-      display: "grid",
-      gridTemplateColumns: "1fr 1fr",
-      gap: "20px",
-      width: "80%",
-      maxWidth: "500px",
-    },
-    link: {
-      textDecoration: "none",
-      padding: "12px 18px",
-      borderRadius: "5px",
-      backgroundColor: darkMode ? "#444" : "#007bff",
-      color: "#fff",
-      textAlign: "center",
-      fontSize: "18px",
-      transition: "background-color 0.3s ease, color 0.3s ease",
-    },
-  };
+  // Responsive Design based on screen width
+  const linkStyling = {
+    fontSize: {lg: 18, md: 16, sm: 14, xs: 12},
+    width: {lg: 200, md: 175, sm: 150, xs: 130}
+  }
 
   // Testing Global State
   const { state, dispatch } = useContext(GlobalStateContext)
   console.log("state: ", state)
 
   return (
-    <div style={styles.container}>
-          <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="absolute">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Toolbar
-          </Typography>
-          <Avatar src={state.pfp}></Avatar>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <Stack >
 
-      {/* Dark Mode Toggle Button */}
-      <button style={styles.button} onClick={() => setDarkMode(!darkMode)}>
-        {darkMode ? "☀ Light Mode" : "🌙 Dark Mode"}
-      </button>
+      {/* ToolBar */}
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="absolute">
+          <Toolbar>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >    
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              Toolbar
+            </Typography>
+            <Avatar src={state.pfp}></Avatar>
+          </Toolbar>
+        </AppBar>
+      </Box>
 
-      <h1>Fitness Tracker</h1>
-      <h3>Take charge of your health:</h3>
+      <Typography fontSize={36}>Fitness Tracker</Typography>
+      <Typography>Take charge of your health:</Typography>
 
-      <div style={styles.buttonContainer}>
-        <Link to="./fitnessTypes" style={styles.link}>
-          My Metrics
-        </Link>
-        <Link to="./RecordExercises" style={styles.link}>
-          Record Exercise
-        </Link>
-        <Link to="./RewardAchievements" style={styles.link}>
-          Achievements
-        </Link>
-        <Link to="./LeaderBoard" style={styles.link}>
-          Leaderboard
-        </Link>
-        {state.user === "" ? (
-          <Link to="../" style={styles.link}>
+      <Stack width={"100%"} marginTop={5}>
+        <Stack direction="row" spacing={2} padding={1}>
+          <MuiLink sx={linkStyling} to="./fitnessTypes" component={RouterLink}>
+            My Metrics
+          </MuiLink>
+          <MuiLink sx={linkStyling} to="./RecordExercises" component={RouterLink}>
+            Record Exercise
+          </MuiLink>
+        </Stack>
+        <Stack direction="row" spacing={2} padding={1}>
+          <MuiLink sx={linkStyling} to="./RewardAchievements" component={RouterLink}>
+            Achievements
+          </MuiLink>
+          <MuiLink sx={linkStyling} to="./LeaderBoard" component={RouterLink}>
+            Leaderboard
+          </MuiLink>
+        </Stack>
+        <Stack direction="row" spacing={2} padding={1}>
+          {state.user === "" ? (
+          <MuiLink sx={linkStyling} to="../" component={RouterLink}>
             My Profile
-          </Link>) : (
-          <Link to={`./profile/${state.user}`} style={styles.link}>
+          </MuiLink>     
+          ) : (
+          <MuiLink sx={linkStyling} to={`./profile/${state.user}`} component={RouterLink}>
             My Profile
-          </Link>)}
-        <Link to="./TrainingVideoLibrary" style={styles.link}>
-          Video Library
-        </Link>
-        <Link to="./DietPlan" style={styles.link}>
-          Diet Plan
-        </Link>
-      </div>
-        <Stack marginTop="150px">
-        {state.user === "" ? (
-          <Link to="../" style={styles.link}>
-          Log In
-          </Link>) : (
-          <Link to="../" style={styles.link}>
-          Log Out
-          </Link>)}
+          </MuiLink>
+          )}
+
+          <MuiLink sx={linkStyling} to="./TrainingVideoLibrary" component={RouterLink}>
+            Video Library
+          </MuiLink>
+        </Stack>
+        <Stack direction="row" spacing={2} padding={1} justifyContent={"center"}>
+          <MuiLink sx={linkStyling} to="./DietPlan" component={RouterLink}>
+            Diet Plan
+          </MuiLink>
         </Stack>
 
-    </div>
+        <Stack marginTop="150px" alignContent={"center"} alignItems={"center"}>
+          {state.user === "" ? (
+            <MuiLink to="../" sx={linkStyling} component={RouterLink}>
+              Log In
+            </MuiLink>
+          ) : (
+            <MuiLink to="../" sx={linkStyling} component={RouterLink}>
+              Log Out
+            </MuiLink>
+          )}
+
+        </Stack>
+
+      </Stack>
+    </Stack>
   );
 }
 

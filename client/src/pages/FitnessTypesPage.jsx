@@ -6,21 +6,23 @@ import MuiLink from '@mui/material/Link';
 
 function FitnessTypesPage () {
 
+    // Responsive Design based on screen width
+    const linkStyling = {
+      fontSize: {lg: 18, md: 16, sm: 14, xs: 12},
+      width: {lg: 200, md: 175, sm: 165, xs: 150}
+    }
+
     return (
-      <>
-        <Stack direction="column" gap={3} marginBottom={4}>
-          <Typography fontSize={36}>Fitness Type</Typography>
-          <MuiLink to="./RunningMetrics" component={RouterLink} className="link">RUNNING</MuiLink>
-          <MuiLink to="./HikingMetrics" component={RouterLink} className="link">HIKING</MuiLink>
-          <MuiLink to="./CyclingMetrics" component={RouterLink} className="link">CYCLING</MuiLink>
-          <MuiLink to="./SwimmingMetrics" component={RouterLink} className="link">SWIMMING</MuiLink>
-          <MuiLink to="./WeightLiftingMetrics" component={RouterLink} className="link">WEIGHT LIFTING</MuiLink>
-        </Stack>
+      <Stack direction="column" gap={3} marginBottom={3} alignItems={"center"}>
+        <Typography fontSize={36}>Fitness Type</Typography>
+        <MuiLink sx={linkStyling} to="./RunningMetrics" component={RouterLink}>RUNNING</MuiLink>
+        <MuiLink sx={linkStyling} to="./HikingMetrics" component={RouterLink}>HIKING</MuiLink>
+        <MuiLink sx={linkStyling} to="./CyclingMetrics" component={RouterLink}>CYCLING</MuiLink>
+        <MuiLink sx={linkStyling} to="./SwimmingMetrics" component={RouterLink}>SWIMMING</MuiLink>
+        <MuiLink sx={linkStyling} to="./WeightLiftingMetrics" component={RouterLink}>WEIGHT LIFTING</MuiLink>
 
-        <Button to="../HomePage" component={RouterLink}>Back to Home</Button>
-      </>
-
-
+        <Button sx={linkStyling} to="../HomePage" component={RouterLink}>Back to Home</Button>
+      </Stack>
     );
 }
 

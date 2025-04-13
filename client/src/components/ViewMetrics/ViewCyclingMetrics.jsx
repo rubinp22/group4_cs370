@@ -64,7 +64,7 @@ function ViewCyclingMetrics() {
 
     return (
         <Stack alignItems={"center"}>
-            <Typography fontSize={36} marginTop={"5%"}>CYCLING METRICS</Typography>
+            <Typography fontSize={"2rem"} marginTop={"5%"}>CYCLING METRICS</Typography>
             <Stack direction="row">
                 <Card sx={{ margin: graphMargin }}>
                     <MyBarChart 

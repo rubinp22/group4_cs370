@@ -7,7 +7,7 @@ import ViewHikingMetrics from '../components/ViewMetrics/ViewHikingMetrics.jsx';
 function HikingMetrics() {
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_hiker.jpg" alt="Hikers in a trail" width="85%"/>
+            <img src="/images/fitness_app_hiker.jpg" alt="Hikers in a trail" width="70%"/>
             <ViewHikingMetrics/>
 
             <Stack marginTop={5}>

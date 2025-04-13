@@ -7,7 +7,7 @@ import ViewRunningMetrics from '../components/ViewMetrics/ViewRunningMetrics.jsx
 function RunningMetrics() {
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_runner.jpg" alt="Runner in background" width="85%"/>
+            <img src="/images/fitness_app_runner.jpg" alt="Runner in background" width="70%"/>
             <ViewRunningMetrics/>
 
             <Stack marginTop={5}>
