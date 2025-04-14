@@ -32,6 +32,23 @@ function InputRunningExercise() {
             setAvgHeartRateIn("");
             setMaxHeartRateIn("");
         }
+
+        async function getNewExerciseID() {
+            try {
+                const res = await axios.get('http://localhost:3000/exercises', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }, 
+                    params: {
+                        userID: state.user
+                    }
+                });
+                const exerciseID = res.data.at(-1)._id;
+                return exerciseID;
+            } catch (error) {
+                console.error('Error Fetching user exercises');
+            }
+        }
     
         async function handleSubmit() {
             if (!isError()) {
@@ -55,6 +72,16 @@ function InputRunningExercise() {
                         'Content-Type': 'application/json'
                     }
                 });
+
+                const newExerciseID = await getNewExerciseID();
+                console.log("new Exercise ID for user", state.user, ": ", newExerciseID);
+                const updatedData = {
+                    _id: state.user,
+                    exercises: // push onto the array
+                    // First need to add exercises to global state and refer to them here using the spread operator
+                }
+                await axios.put('http://localhost:3000/users/', updatedData)
+
             }
         }
     

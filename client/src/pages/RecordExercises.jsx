@@ -24,8 +24,6 @@ function RecordExercises() {
     const [exerciseType, setExerciseType] = useState(undefined);
     const SelectedComponent = components[exerciseType];
 
-    console.log(SelectedComponent)
-
     return (
             <Stack alignItems={"center"}>
                 <Card sx={{ width: "100%", p:2}}>

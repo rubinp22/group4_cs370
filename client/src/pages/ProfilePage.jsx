@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
 import GlobalStateContext from '../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
+import Profile from '../../../api/models/Profile.js';
 
 const profilePictures = [
     {
@@ -104,7 +105,8 @@ function ProfilePage() {
     const { state, dispatch } = useContext(GlobalStateContext)
 
     const [editingData, setEditingData] = useState(false);
-    const [ProfileData, setProfileData] = useState([]);
+    const [profileData, setProfileData] = useState([]);
+    const [achievementData, setAchievementData] = useState([]);
 
     const [nameIn, setnameIn] = useState(undefined);
     const [heightFeetIn, setHeightFeetIn] = useState(undefined);
@@ -113,12 +115,12 @@ function ProfilePage() {
     const [descriptionIn, setDescriptionIn] = useState(undefined); 
     const [pfpIn, setPfpIn] = useState(undefined);
 
-    const name = ProfileData.map(data => data.name);
-    const heightFeet = ProfileData.map(data => data.heightFeet);
-    const heightInch = ProfileData.map(data => data.heightInch);
-    const weight = ProfileData.map(data => data.weight);
-    const description = ProfileData.map(data => data.description);
-    const pfp = ProfileData.map(data => data.pfp);
+    const name = profileData.map(data => data.name);
+    const heightFeet = profileData.map(data => data.heightFeet);
+    const heightInch = profileData.map(data => data.heightInch);
+    const weight = profileData.map(data => data.weight);
+    const description = profileData.map(data => data.description);
+    const pfp = profileData.map(data => data.pfp);
 
     const textInputSpacing = 3;
 
@@ -138,10 +140,30 @@ function ProfilePage() {
         }
     }
     
-    // getting profile data from the database
+
+    async function getAchievementData() {
+        try {
+            const res = await axios.get('http://localhost:3000/achievements', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params: { }
+            });
+            setAchievementData(res.data);
+        } catch (error) {
+            console.error('Error fetching user achievements', error);
+        }
+    }
+
+    // getting profile and achievement data from the database
     useEffect(() => {
         getProfileData();
+        getAchievementData();
     }, [])
+
+    console.log("profile page achievement data: ", achievementData)
+    console.log("profile page profile data: ", profileData)
+
 
     // input field errors, all set to false by default
     const [errors, setErrors] = useState({
