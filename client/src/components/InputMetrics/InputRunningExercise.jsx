@@ -43,6 +43,7 @@ function InputRunningExercise() {
                         userID: state.user
                     }
                 });
+                // Getting the most recent exercise Object ID recorded by the user and returning it
                 const exerciseID = res.data.at(-1)._id;
                 return exerciseID;
             } catch (error) {
@@ -73,14 +74,24 @@ function InputRunningExercise() {
                     }
                 });
 
+                // await (from axios) needs to be called here because getNewExerciseID() returns an ID that
+                // results from an API call. Without await, it will only return a promise. We need that
+                // promise to first be fulfilled.
                 const newExerciseID = await getNewExerciseID();
-                console.log("new Exercise ID for user", state.user, ": ", newExerciseID);
+
                 const updatedData = {
                     _id: state.user,
-                    exercises: // push onto the array
-                    // First need to add exercises to global state and refer to them here using the spread operator
+                    // Appending the new exerciseID into user.exercises using our global state's data
+                    // with the spread operator (...). This is because we are pushing a new value onto
+                    // the array, not overwriting it. 
+                    exercises: [...state.exercises, newExerciseID]
                 }
                 await axios.put('http://localhost:3000/users/', updatedData)
+
+                // Updating our global state with the newly-appended exercise ID
+                // This way submitting more than one exercise on the same page correctly appends
+                // and doesn't just update the last exercise ID in the array.
+                dispatch({ type: 'SETEXERCISES', payload: updatedData.exercises });
 
             }
         }

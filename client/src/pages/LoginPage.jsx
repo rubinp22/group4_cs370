@@ -58,7 +58,11 @@ useEffect(() => {
   }
 
   const setPFP = (value) => {
-    dispatch({type: 'SETPFP', payload: value});
+    dispatch({ type: 'SETPFP', payload: value });
+  }
+
+  const setExercises = (value) => {
+    dispatch({ type: 'SETEXERCISES', payload: value });
   }
 
   const handleSubmit = () => {
@@ -72,6 +76,7 @@ useEffect(() => {
       setWeight(matchingUser.weightArray.at(-1).weight);
       setFitness(matchingUser.fitnessLevel);
       setPFP(matchingUser.pfp)
+      setExercises(matchingUser.exercises)
       navigate('/HomePage');
     } else {
       setIsError(true);

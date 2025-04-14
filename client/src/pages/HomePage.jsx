@@ -15,7 +15,7 @@ function HomePage() {
 
   // Testing Global State
   const { state, dispatch } = useContext(GlobalStateContext)
-  console.log("state: ", state)
+  //console.log("state: ", state)
 
   return (
     <Stack >
