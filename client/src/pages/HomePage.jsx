@@ -53,8 +53,8 @@ function HomePage() {
           </MuiLink>
         </Stack>
         <Stack direction="row" spacing={2} padding={1}>
-          <MuiLink sx={linkStyling} to="./RewardAchievements" component={RouterLink}>
-            Achievements
+          <MuiLink sx={linkStyling} to={`./profile/${state.user}`} component={RouterLink}>
+            My Profile
           </MuiLink>
           <MuiLink sx={linkStyling} to="./LeaderBoard" component={RouterLink}>
             Leaderboard
@@ -66,8 +66,8 @@ function HomePage() {
             My Profile
           </MuiLink>     
           ) : (
-          <MuiLink sx={linkStyling} to={`./profile/${state.user}`} component={RouterLink}>
-            My Profile
+          <MuiLink sx={linkStyling} to="./DietPlan" component={RouterLink}>
+            Diet Plan
           </MuiLink>
           )}
 
@@ -76,9 +76,7 @@ function HomePage() {
           </MuiLink>
         </Stack>
         <Stack direction="row" spacing={2} padding={1} justifyContent={"center"}>
-          <MuiLink sx={linkStyling} to="./DietPlan" component={RouterLink}>
-            Diet Plan
-          </MuiLink>
+
         </Stack>
 
         <Stack marginTop="150px" alignContent={"center"} alignItems={"center"}>
