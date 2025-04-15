@@ -20,6 +20,7 @@ import ProfilePage from './pages/ProfilePage';
 import TrainingVideoLibrary from './pages/TrainingVideoLibrary';
 import RecordExercises from './pages/RecordExercises';
 import AllProfiles from './pages/AllProfiles';
+import CreateAccount from './pages/CreateAccount'
 
 function App() {
  return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/HomePage/RecordExercises" element={<RecordExercises/>}/>
           <Route path="/HomePage/DietPlan" element={<DietPlan/>} />
           <Route path="/HomePage/AllProfiles" element={<AllProfiles/>} />
+          <Route path="/CreateAccount" element={<CreateAccount/>} />
         </Routes>
       </Router>
     </>
