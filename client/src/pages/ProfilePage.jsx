@@ -1,4 +1,4 @@
-import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui/material';
+import { Stack, Card, Typography, Button, TextField, InputAdornment, Chip } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid2';
@@ -107,6 +107,7 @@ function ProfilePage() {
     const [editingData, setEditingData] = useState(false);
     const [profileData, setProfileData] = useState([]);
     const [achievementData, setAchievementData] = useState([]);
+    const [earnedAchievements, setEarnedAchievements] = useState([]);
 
     const [nameIn, setnameIn] = useState(undefined);
     const [heightFeetIn, setHeightFeetIn] = useState(undefined);
@@ -124,6 +125,7 @@ function ProfilePage() {
 
     const textInputSpacing = 3;
 
+    // Fetching all data that belongs to the user
     async function getProfileData() {
         try {
             const res = await axios.get('http://localhost:3000/users', {
@@ -135,35 +137,137 @@ function ProfilePage() {
                 }
             });
             setProfileData(res.data);
+            return res.data
         } catch (err) {
             console.log(err);
         }
     }
     
 
+    // Fetching the data of all achievements from the DB (name, category, metric, requirement,)
     async function getAchievementData() {
         try {
             const res = await axios.get('http://localhost:3000/achievements', {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            params: { }
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: { }
             });
             setAchievementData(res.data);
-        } catch (error) {
-            console.error('Error fetching user achievements', error);
+            return res.data;
+        } catch (err) {
+            console.error('Error fetching user achievements', err);
         }
     }
 
+    // This function is meant to put all a user's exercise data into an easy-to-understand object
+    // It will either hold a metric's sum or max depending on the context
+    // Once all exercise metric data is in one object, we are able to use that data to determine
+    // which achievements a user has earned!
+    async function sumUserMetrics(profileData) {
+        const exerciseIDs = profileData[0].exercises
+
+        let metrics = {
+            distance: {
+                run: 0,
+                cycle: 0
+            },
+            duration: {
+                run: 0,
+                cycle: 0
+            },
+            elevationGain: 0,
+            elevationLoss: 0,
+            // Revisit lap times when I know exactly how to interpret the achievement requirements
+            maxHeartRate: 1,
+            reps: 0,
+            sets: 0,
+            steps: 0,
+            weightOfWeights: 0
+        }
+
+        // Didn't realize you could mark a map function as async!
+        const exercisePromises = exerciseIDs.map(async (ID, idx) => {
+            try {
+                const res = await axios.get('http://localhost:3000/exercises', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    params: { _id: ID }
+                });
+                const currentExercise = res.data[0];
+
+                if (currentExercise.type === "run") {
+                    metrics.distance.run += currentExercise.distance;
+                    metrics.duration.run += currentExercise.duration;   
+                } else if (currentExercise.type === "hike") {
+                    metrics.elevationGain += currentExercise.elevationGain;
+                } else if (currentExercise.type === "cycle") {
+                    metrics.distance.cycle += currentExercise.distance;
+                    metrics.duration.cycle += currentExercise.duration;
+                } else if (currentExercise.type === "swim") {
+                    // Add behavior here
+                } else if (currentExercise.type === "weights") {
+                    metrics.reps += currentExercise.reps;
+                    metrics.sets += currentExercise.sets;
+                    metrics.weightOfWeights += currentExercise.weightOfWeights;
+                }
+
+                if (metrics.maxHeartRate < currentExercise.maxHeartRate) {
+                    metrics.maxHeartRate = currentExercise.maxHeartRate;
+                }
+
+            } catch (err) {
+                console.error('Error fetching user exercises', err);
+            }
+        });
+
+        // I had an issue where I was returning metrics before my asynchronous calls to map could 
+        // finish. So I was just returning the metrics object with its default values. 
+        // Each time our async map gets called, exercisePromises (an array of promises) gains a new promise. 
+        // Each time we successully query data that is represented by a promise, it gets resolved. This line
+        // causes the program to wait until exercsisePromises is an array full of resolved promises. 
+        await Promise.all(exercisePromises);
+
+        return metrics;
+    }
+
+    async function achievementCheck() {
+        const profileData = await getProfileData();
+        const achievementData = await getAchievementData();
+        const metrics = await sumUserMetrics(profileData);
+
+        const earnedBadges = [];
+
+        achievementData.map((achievement, idx) => {
+            const category = achievement.category;
+            const metric = achievement.metric;
+            // This check exists because there are achievements that measure distance and duration for both
+            // running and cycling
+            if (category === "distance" || category === "duration") {
+
+                if (metrics[category][metric] >= achievement.requirement) {
+                    earnedBadges.push(achievement.name);
+                }
+
+            // This check is for all other achievements
+            } else if (metrics[category] >= achievement.requirement) {
+                earnedBadges.push(achievement.name);
+            }
+        })
+
+        return earnedBadges;
+    }
+
     // getting profile and achievement data from the database
-    useEffect(() => {
-        getProfileData();
-        getAchievementData();
+        useEffect(() => {
+            async function fetchAchievements() {
+                const achievementsEarned = await achievementCheck();
+                setEarnedAchievements(achievementsEarned);
+            }
+
+            fetchAchievements();
     }, [])
-
-    console.log("profile page achievement data: ", achievementData)
-    console.log("profile page profile data: ", profileData)
-
 
     // input field errors, all set to false by default
     const [errors, setErrors] = useState({
@@ -250,150 +354,169 @@ function ProfilePage() {
     return (
         
         <Stack spacing={2}>
-        <Grid container spacing={4}>
-        {/*Profile picture*/}
-        <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
-            <Avatar
-            sx={{ width: 100, height: 100}}
-            alt={name}
-            src={pfp}
-            ></Avatar>
-        </Grid>
+            <Grid container spacing={1}>
+                {/*Profile picture*/}
+                <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
+                    <Avatar
+                    sx={{ width: 100, height: 100}}
+                    alt={name}
+                    src={pfp}
+                    ></Avatar>
+                </Grid>
 
-        {/*Name*/}
-        <Grid display="flex" justifyContent="flex-start" alignItems="center" size={8}>
-            <Typography fontSize={24}>{name}</Typography>
-        </Grid>
+                {/*Name*/}
+                <Grid display="flex" justifyContent="flex-start" alignItems="center" size={8}>
+                    <Typography fontSize={24}>{name}</Typography>
+                </Grid>
 
-        <br/>
+                <br/>
 
-        {/*Bio*/}
-        <Grid size={{xs:8,sm:7.5,md:7.6}} spacing={4} alignItems="left" justifyContent="left">  
-        <Card sx={{p: 2}} align='left'>
-            <Typography variant="body2">
-            Height: {heightFeet}'{heightInch}" | Weight: {weight} kg
-            </Typography>
-            <Typography variant="body">
-            {description}
-            </Typography>
-        </Card>
-        </Grid>
-    
-        
-        {/*Friends*/}
-        <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={4} spacing={0}>
-         <Card sx={{p: 1}}>
-          <h3>Friends</h3>
-          <AvatarGroup max={4}>
-            {defaultFriends.map((friend) => (
-                <Avatar alt={friend.name} src={friend.pfp}></Avatar>
-            ))}
-          </AvatarGroup>
-         </Card>
-        </Grid>
+                {/*Bio*/}
+                <Grid size={{xs:8,sm:7.5,md:7.6}} spacing={4} alignItems="left" justifyContent="left">  
+                    <Card sx={{p: 2}} align='left'>
+                        <Typography variant="body2">
+                            Height: {heightFeet}'{heightInch}" | Weight: {weight} kg
+                        </Typography>
+                        <Typography variant="body">
+                            {description}
+                        </Typography>
+                    </Card>
+                </Grid>
             
+                
+                {/*Friends*/}
+                <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={4} spacing={0}>
+                    <Card sx={{p: 1}}>
+                        <h3>Friends</h3>
+                        <AvatarGroup max={4}>
+                            {defaultFriends.map((friend) => (
+                                <Avatar alt={friend.name} src={friend.pfp}></Avatar>
+                            ))}
+                        </AvatarGroup>
+                    </Card>
+                </Grid>
+
+                {/*Achievements*/}
+                <Grid size={4}>
+                    <Card sx={{ pb: 3 }}>
+                    <h3>Achievements</h3>
+                        {earnedAchievements.map((achievement, idx) => {
+                            return (
+                                <Chip
+                                    key={idx}
+                                    label={achievement}
+                                />
+                            )
+                        })}
+                    </Card>
+                </Grid>
+
+                
             </Grid>
 
-        {/*Editing Form*/}
-        <Stack>
-            {!editingData ? (
-                <></>
-            ) : (
-                <Card sx={{ padding:"40px"}}>
-                    <Typography marginBottom={5} fontSize={24}>Edit Profile</Typography>
-                    <Stack direction="column" spacing={textInputSpacing}>
-                        <TextField 
-                            required
-                            variant="filled" 
-                            label="Name"
-                            error={errors.name}
-                            value={nameIn}
-                            onChange={(e) => setnameIn(e.target.value)}
-                        />
-                        <TextField 
-                            required
-                            variant="filled"
-                            label="Profile"
-                            value={pfpIn}
-                            select
-                            onChange={(e) => setPfpIn(e.target.value)}
-                        >
-                            {profilePictures.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                  {option.label}
-                                </MenuItem>
-                              ))}
-                              
-                        </TextField>
-
-                        <Box>
+            {/*Editing Form*/}
+            <Stack>
+                {!editingData ? (
+                    <></>
+                ) : (
+                    <Card sx={{ padding:"40px"}}>
+                        <Typography marginBottom={5} fontSize={24}>Edit Profile</Typography>
+                        <Stack direction="column" spacing={textInputSpacing}>
                             <TextField 
                                 required
                                 variant="filled" 
-                                label="Height"
-                                error={errors.heightFeet}
-                                value={heightFeetIn}
-                                type="number"
-                                onChange={(e) => setHeightFeetIn(e.target.value)}
-                                InputProps={{ 
-                                    endAdornment: <InputAdornment position='end'>Ft</InputAdornment>
-                                }}
+                                label="Name"
+                                error={errors.name}
+                                value={nameIn}
+                                onChange={(e) => setnameIn(e.target.value)}
                             />
                             <TextField 
                                 required
-                                variant="filled" 
-                                error={errors.heightInch}
-                                value={heightInchIn}
+                                variant="filled"
+                                label="Profile"
+                                value={pfpIn}
+                                select
+                                onChange={(e) => setPfpIn(e.target.value)}
+                            >
+                                {profilePictures.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                    </MenuItem>
+                                ))}
+                                
+                            </TextField>
+
+                            <Stack direction="row">
+                                <TextField 
+                                    required
+                                    variant="filled" 
+                                    label="Height"
+                                    error={errors.heightFeet}
+                                    value={heightFeetIn}
+                                    type="number"
+                                    onChange={(e) => setHeightFeetIn(e.target.value)}
+                                    InputProps={{ 
+                                        endAdornment: <InputAdornment position='end'>Ft</InputAdornment>
+                                    }}
+                                    sx={{width: "50%"}}
+                                    
+                                />
+                                <TextField 
+                                    required
+                                    variant="filled" 
+                                    error={errors.heightInch}
+                                    value={heightInchIn}
+                                    type="number"
+                                    onChange={(e) => setHeightInchIn(e.target.value)}
+                                    InputProps={{ 
+                                        endAdornment: <InputAdornment position='end'>In</InputAdornment>
+                                    }}
+                                    sx={{width: "50%"}}
+                                />
+                                </Stack>
+                            <TextField 
+                                required
+                                variant="filled"
+                                label="Weight" 
+                                error={errors.weight}
+                                value={weightIn}
                                 type="number"
-                                onChange={(e) => setHeightInchIn(e.target.value)}
+                                onChange={(e) => setWeightIn(e.target.value)}
                                 InputProps={{ 
-                                    endAdornment: <InputAdornment position='end'>In</InputAdornment>
+                                    endAdornment: <InputAdornment position='end'>lbs</InputAdornment>
                                 }}
                             />
-                            </Box>
-                        <TextField 
-                            required
-                            variant="filled"
-                            label="Weight" 
-                            error={errors.weight}
-                            value={weightIn}
-                            type="number"
-                            onChange={(e) => setWeightIn(e.target.value)}
-                            InputProps={{ 
-                                endAdornment: <InputAdornment position='end'>lbs</InputAdornment>
-                            }}
-                        />
-                        <TextField 
-                            variant="filled" 
-                            label="Description"
-                            error={errors.description}
-                            value={descriptionIn}
-                            multiline
-                            maxRows={4}
-                            onChange={(e) => setDescriptionIn(e.target.value)}
-                        />
-                    </Stack>
-                    <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
-                        <Button variant="contained" onClick={handleSubmit}>Save</Button>
-                        <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
-                    </Stack>
-                </Card>
-            )}
-        </Stack>
+                            <TextField 
+                                variant="filled" 
+                                label="Description"
+                                error={errors.description}
+                                value={descriptionIn}
+                                multiline
+                                maxRows={4}
+                                onChange={(e) => setDescriptionIn(e.target.value)}
+                            />
+                        </Stack>
+                        <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
+                            <Button variant="contained" onClick={handleSubmit}>Save</Button>
+                            <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
+                        </Stack>
+                    </Card>
+                )}
+            </Stack>
 
-        {/*Buttons*/}
-        <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
-            {state.user === pageID ? (
-                <Button variant="contained" 
-                onClick={handleEdit}>
-                {editingData ? "Stop Editing" : "Edit"}
-                </Button>
-            ) : (
-            <></>)}
-            <MuiLink to="../HomePage/AllProfiles" component={RouterLink} className="button-link">All Profiles</MuiLink>
-            <MuiLink to="../HomePage" component={RouterLink} className="button-link">Home</MuiLink>
+            {/*Buttons*/}
+            <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
+                {state.user === pageID ? (
+                    <Button variant="contained" 
+                    onClick={handleEdit}>
+                    {editingData ? "Stop Editing" : "Edit"}
+                    </Button>
+                ) : (
+                <></>)}
+                <MuiLink to="../HomePage/AllProfiles" component={RouterLink} className="button-link">All Profiles</MuiLink>
+                <MuiLink to="../HomePage" component={RouterLink} className="button-link">Home</MuiLink>
+            </Stack>
         </Stack>
-    </Stack>
 
     );
 }
