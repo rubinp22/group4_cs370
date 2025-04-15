@@ -17,11 +17,43 @@ function CreateAccount() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [accountCreated, setAccountCreated] = useState(false);
-  const navigate = useNavigate();
 
   const [allUsers, setAllUsers] = useState([]);
-  const [isUsernameError, setIsUsernameError] = useState(false);
-  const [isPasswordError, setIsPasswordError] = useState(false);
+
+  const [errors, setErrors] = useState({
+    usernameTaken: false,
+    usernameEmpty: false,
+    passwordEmpty: false
+  })
+
+  // check for errors
+  function isError() {
+
+    // check if user already exists
+    const isUserTaken = allUsers.find(user => username === user.username);
+    
+    // update errors
+    let newErrors = {
+        usernameTaken: isUserTaken,
+        usernameEmpty: (username === ""),
+        passwordEmpty: (password === ""),
+    }
+
+    setErrors(newErrors);
+
+    // Converting the newErrors object to a Boolean array of just the values from the newErrors object
+    let newErrorsArray = Object.values(newErrors)
+    let errorFound = false;
+
+    // Loop through the new Boolean array, setting errorFound to true if any values are true
+    newErrorsArray.forEach(val => {
+        if (val === true) {
+            errorFound = true;
+        }
+    })
+
+    return errorFound;
+}
 
 useEffect(() => {
   async function getProfileData() {
@@ -45,13 +77,7 @@ useEffect(() => {
 }, []);
   
   const handleSubmit = () => {
-    // check if user already exists then update username error
-    const matchingUser = allUsers.find(user => username === user.username);
-    setIsUsernameError(matchingUser);
-    // check if password is defined
-    setIsPasswordError(password === "");
-
-    if (!isUsernameError && !isPasswordError) {
+    if (!isError()) {
         createUser();
         setAccountCreated(true);
     }
@@ -82,9 +108,9 @@ useEffect(() => {
           fullWidth
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          error={isUsernameError}
+          error={errors.usernameTaken || errors.usernameEmpty}
+          helperText={errors.usernameTaken ? ("That username is taken") : (" ")}
         />
-        {isUsernameError ? (<Typography>That username is taken</Typography>) : (<></>)}
         <Typography>Password:</Typography>
         <TextField
           variant="outlined"
@@ -92,9 +118,8 @@ useEffect(() => {
           fullWidth
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          error={isPasswordError}
+          error={errors.passwordEmpty}
         />
-        {isPasswordError ? (<Typography>Please enter password</Typography>) : (<></>)}
       </Stack>
         {accountCreated ? (
         <Stack alignItems={"center"}>
