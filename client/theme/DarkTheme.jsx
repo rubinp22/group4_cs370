@@ -157,7 +157,15 @@ const DarkTheme = createTheme({
         })
       }
     },
-    
+    MuiChip: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.palette.secondary.main,
+          fontSize: 16,
+          margin: 5
+        })
+      }
+    }
   },
 });
 
