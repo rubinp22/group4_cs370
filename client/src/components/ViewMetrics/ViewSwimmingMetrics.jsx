@@ -132,8 +132,8 @@ function ViewSwimmingMetrics() {
                     <BarChart
                         xAxis={[{ scaleType: "band", data: labels }]}
                         series={result.map(item => ({ ...item, stack: "total" }))}
-                        width={500}
-                        height={300}
+                        width={400}
+                        height={250}
                     />
                 </Card>
                 <Card sx={{ margin: graphMargin }}>
