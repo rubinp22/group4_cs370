@@ -30,11 +30,15 @@ function CreateAccount() {
   function isError() {
 
     // check if user already exists
-    const isUserTaken = allUsers.find(user => username === user.username);
+    const findUser = allUsers.find(user => username === user.username);
+    let userTaken = false;
+    if (findUser) {
+      userTaken = true;
+    }
     
     // update errors
     let newErrors = {
-        usernameTaken: isUserTaken,
+        usernameTaken: userTaken,
         usernameEmpty: (username === ""),
         passwordEmpty: (password === ""),
     }
@@ -109,7 +113,7 @@ useEffect(() => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           error={errors.usernameTaken || errors.usernameEmpty}
-          helperText={errors.usernameTaken ? ("That username is taken") : (" ")}
+          helperText={errors.usernameTaken ? ("That username is taken") : ("")}
         />
         <Typography>Password:</Typography>
         <TextField

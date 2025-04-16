@@ -183,6 +183,7 @@ function ProfilePage() {
     async function handleSubmit() {
         if (!isError()) {
             weightArray.push({weight: weightIn, dateLogged: Date.now()});
+            let weightArrayIn = weightArray.flat();
             const updatedData = {
                 _id: pageID,
                 name: nameIn,
@@ -190,9 +191,9 @@ function ProfilePage() {
                 heightInch: heightInchIn,
                 description: descriptionIn,
                 pfp: pfpIn,
-                weightArray: weightArray
+                weightArray: weightArrayIn
             }
-
+            console.log(weightArray);
             // update the database
             await axios.put('http://localhost:3000/users/', updatedData)
             getProfileData();
