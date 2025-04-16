@@ -13,7 +13,7 @@ const Profile = new mongoose.Schema({
     dateJoined: { type: Date, default: Date.now },
     heightFeet: { type: Number, default: -1},
     heightInch: { type: Number, default: -1},
-    weightArray: { type: Array, default: [{weight: "0", dateLogged: Date.now}]},
+    weightArray: { type: Array, default: {weight: "0", dateLogged: Date.now}},
     pfp: { type: String, default: '/images/profileImages/profile13.png'},
     description: { type: String, default: '' }
 });
