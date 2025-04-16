@@ -18,12 +18,14 @@ function CreateAccount() {
   const [password, setPassword] = useState('');
   const [accountCreated, setAccountCreated] = useState(false);
 
+  const [usernameHelperText, setUsernameHelperText] = useState('');
+  const [passwordHelperText, setPasswordHelperText] = useState('');
+
   const [allUsers, setAllUsers] = useState([]);
 
   const [errors, setErrors] = useState({
-    usernameTaken: false,
-    usernameEmpty: false,
-    passwordEmpty: false
+    usernameError: false,
+    passwordError: false
   })
 
   // check for errors
@@ -31,16 +33,41 @@ function CreateAccount() {
 
     // check if user already exists
     const findUser = allUsers.find(user => username === user.username);
-    let userTaken = false;
+
+    // check for errors + set helper text message
+    let userError = false;
+    setUsernameHelperText("");
     if (findUser) {
-      userTaken = true;
+      userError = true;
+      setUsernameHelperText("That username is taken");
+    } else if (username === "") {
+      userError = true;
+      setUsernameHelperText("Please enter a username");
+    } else if (username.length > 29) {
+      userError = true;
+      setUsernameHelperText("Please enter a username less than 30 characters");
+    } else if (username.length < 4) {
+      userError = true;
+      setUsernameHelperText("Please enter a username that is 4 or more characters");
     }
-    
+
+    let passwordError = false;
+    setPasswordHelperText("");
+    if (password === "") {
+      passwordError = true;
+      setPasswordHelperText("Please enter a password");
+    } else if (password.length > 99) {
+      passwordError = true;
+      setPasswordHelperText("Please enter a username less than 100 characters");
+    } else if (password.length < 5) {
+      passwordError = true;
+      setPasswordHelperText("Please enter a password that is 5 or more characters");
+    }
+
     // update errors
     let newErrors = {
-        usernameTaken: userTaken,
-        usernameEmpty: (username === ""),
-        passwordEmpty: (password === ""),
+        usernameError: userError,
+        passwordError: passwordError,
     }
 
     setErrors(newErrors);
@@ -112,8 +139,8 @@ useEffect(() => {
           fullWidth
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          error={errors.usernameTaken || errors.usernameEmpty}
-          helperText={errors.usernameTaken ? ("That username is taken") : ("")}
+          error={errors.usernameError}
+          helperText={usernameHelperText}
         />
         <Typography>Password:</Typography>
         <TextField
@@ -122,7 +149,8 @@ useEffect(() => {
           fullWidth
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          error={errors.passwordEmpty}
+          error={errors.passwordError}
+          helperText={passwordHelperText}
         />
       </Stack>
         {accountCreated ? (

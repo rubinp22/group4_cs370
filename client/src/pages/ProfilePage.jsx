@@ -193,7 +193,7 @@ function ProfilePage() {
                 pfp: pfpIn,
                 weightArray: weightArrayIn
             }
-            console.log(weightArray);
+
             // update the database
             await axios.put('http://localhost:3000/users/', updatedData)
             getProfileData();
