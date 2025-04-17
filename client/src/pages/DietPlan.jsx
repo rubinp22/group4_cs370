@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Stack, Typography, Button, ButtonGroup, Paper } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
+import ToolBar from '../components/ToolBar';
 
 const dietPlans = {
   paleo: {
@@ -65,8 +66,10 @@ function DietPlan() {
   const [selectedPlan, setSelectedPlan] = useState('none');
 
   return (
-    <Stack spacing={4} margin={4}>
-      <Typography variant="h2">Diet Plans</Typography>
+    <>
+      <ToolBar /> {/* add new elements */}
+      <Stack spacing={4} margin={4}>
+        <Typography variant="h2">Diet Plans</Typography>
 
       {/* Diet Buttons Component */}
       <DietButtons setSelectedPlan={setSelectedPlan} />
@@ -86,6 +89,7 @@ function DietPlan() {
         Back to Home
       </MuiLink>
     </Stack>
+    </>
   );
 }
 

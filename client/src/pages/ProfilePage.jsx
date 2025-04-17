@@ -8,6 +8,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
+import ToolBar from '../components/ToolBar';
 
 const profilePictures = [
     {
@@ -195,9 +196,10 @@ function ProfilePage() {
     
 
     return (
-        
-        <Stack>
-            <Grid container spacing={2}>
+        <>
+            <ToolBar /> {/* add new elements */}
+            <Stack>
+                <Grid container spacing={2}>
             {/*Profile picture*/}
             <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
                 <Avatar
@@ -335,7 +337,7 @@ function ProfilePage() {
             <MuiLink to="../HomePage" component={RouterLink} className="button-link">Home</MuiLink>
         </Stack>
     </Stack>
-
+    </>
     );
 }
 

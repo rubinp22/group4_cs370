@@ -2,12 +2,14 @@ import { Stack } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
 import MuiLink from '@mui/material/Link';
+import ToolBar from '../components/ToolBar';
 
 
 function FitnessTypesPage () {
 
     return (
       <>
+        <ToolBar /> {/* <-- Toolbar at the top */}
         <Stack direction="column" gap={3} marginBottom={4}>
           <Typography fontSize={36}>Fitness Type</Typography>
           <MuiLink to="./RunningMetrics" component={RouterLink} className="link">RUNNING</MuiLink>

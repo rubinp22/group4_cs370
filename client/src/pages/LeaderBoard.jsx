@@ -2,6 +2,7 @@ import React, {use, useState} from 'react';
 import { useNavigate, Link  } from 'react-router-dom';
 import { Stack, Avatar, Button, ButtonGroup, AvatarGroup} from '@mui/material';
 import { amber, blueGrey, orange } from '@mui/material/colors';
+import ToolBar from '../components/ToolBar';
 
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
@@ -128,8 +129,10 @@ function LeaderBoard () {
   // after that we have the top 5 users with their exercise value and unit of measurement for said value
   // lastly we have the button to return to the main page
   return (
-  <Stack direction="column" gap={2} marginBottom={3}>
-    <h1>Leaderboard</h1>
+    <>
+      <ToolBar /> {/* add new elements */}
+      <Stack direction="column" gap={2} marginBottom={3}>
+        <h1>Leaderboard</h1>
     <ButtonGroup variant="contained" aria-label="Basic button group">
         <Button onClick={() => handleButtons(1, setMessage, setPlaces, setValues, setMeasure, setMMM)}>Distance</Button>
         <Button onClick={() => handleButtons(2, setMessage, setPlaces, setValues, setMeasure, setMMM)}>MaxHeartRate</Button>
@@ -151,7 +154,7 @@ function LeaderBoard () {
     <h3>Max:{maxMinMedian[0]}  Min:{maxMinMedian[1]}  Median:{maxMinMedian[2]}</h3>
     <MuiLink to="../HomePage" component={RouterLink}>Back to Home</MuiLink>
   </Stack>
+  </>
   );
 }
-
 export default LeaderBoard

@@ -3,6 +3,7 @@ import { Stack, Typography, Button, ButtonGroup, Box  } from '@mui/material';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
+import ToolBar from '../components/ToolBar';
 
 
 // there is probably a better way to do this, but I just copied every video into "all"
@@ -94,6 +95,8 @@ function TrainingVideoLibrary () {
     //'strength', 'cardio', 'yoga', 'pilates', 'dance'
     // testing out Typography idk if its a good call yet makes the style pretty different
     return (
+      <>
+      <ToolBar /> {/* add new elements */}
       <Stack direction="column" gap={3} marginBottom={3}>
       <Typography variant="h2">Training Video Library</Typography>
 
@@ -136,6 +139,7 @@ function TrainingVideoLibrary () {
       </Stack>
         <MuiLink to="../HomePage" component={RouterLink} className="button-link">Back to Home</MuiLink>
       </Stack>
+      </>
     );
 }
 

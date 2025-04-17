@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 
+import ToolBar from './components/ToolBar';
 import DietPlan from './pages/DietPlan'; 
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage"
