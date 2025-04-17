@@ -16,16 +16,18 @@ const linkStyling = {
 function CreateAccount() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmedPass, setConfirmedPass] = useState('');
   const [accountCreated, setAccountCreated] = useState(false);
-
-  const [usernameHelperText, setUsernameHelperText] = useState('');
-  const [passwordHelperText, setPasswordHelperText] = useState('');
-
   const [allUsers, setAllUsers] = useState([]);
 
   const [errors, setErrors] = useState({
-    usernameError: false,
-    passwordError: false
+    username: false,
+    password: false
+  })
+
+  const [helperTexts, setHelperTexts] = useState({
+    username: "",
+    password: ""
   })
 
   // check for errors
@@ -35,39 +37,45 @@ function CreateAccount() {
     const findUser = allUsers.find(user => username === user.username);
 
     // check for errors + set helper text message
-    let userError = false;
-    setUsernameHelperText("");
+    let userError = true;
+    let userHelper = "";
     if (findUser) {
-      userError = true;
-      setUsernameHelperText("That username is taken");
+      userHelper = "That username is taken";
     } else if (username === "") {
-      userError = true;
-      setUsernameHelperText("Please enter a username");
+      userHelper = "Please enter a username";
     } else if (username.length > 29) {
-      userError = true;
-      setUsernameHelperText("Please enter a username less than 30 characters");
+      userHelper = "Please enter a username less than 30 characters";
     } else if (username.length < 4) {
-      userError = true;
-      setUsernameHelperText("Please enter a username that is 4 or more characters");
+      userHelper = "Please enter a username that is 4 or more characters";
+    } else {
+      userError = false;
     }
 
-    let passwordError = false;
-    setPasswordHelperText("");
+    let passwordError = true;
+    let passwordHelper = "";
     if (password === "") {
-      passwordError = true;
-      setPasswordHelperText("Please enter a password");
+      passwordHelper = "Please enter a password";
     } else if (password.length > 99) {
-      passwordError = true;
-      setPasswordHelperText("Please enter a username less than 100 characters");
+      passwordHelper = "Please enter a username less than 100 characters";
     } else if (password.length < 5) {
-      passwordError = true;
-      setPasswordHelperText("Please enter a password that is 5 or more characters");
+      passwordHelper = "Please enter a password that is 5 or more characters";
+    } else if (password != confirmedPass) {
+      passwordHelper = "Passwords do not match";
+    } else {
+      passwordError = false;
     }
+
+    // update helper texts
+    let newHelper = {
+      username: userHelper,
+      password: passwordHelper
+    }
+    setHelperTexts(newHelper);
 
     // update errors
     let newErrors = {
-        usernameError: userError,
-        passwordError: passwordError,
+        username: userError,
+        password: passwordError,
     }
 
     setErrors(newErrors);
@@ -139,8 +147,8 @@ useEffect(() => {
           fullWidth
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          error={errors.usernameError}
-          helperText={usernameHelperText}
+          error={errors.username}
+          helperText={helperTexts.username}
         />
         <Typography>Password:</Typography>
         <TextField
@@ -149,8 +157,17 @@ useEffect(() => {
           fullWidth
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          error={errors.passwordError}
-          helperText={passwordHelperText}
+          error={errors.password}
+          helperText={helperTexts.password}
+        />
+        <Typography>Confirm Password:</Typography>
+        <TextField
+          variant="outlined"
+          type="password"
+          fullWidth
+          value={confirmedPass}
+          onChange={(e) => setConfirmedPass(e.target.value)}
+          error={errors.password}
         />
       </Stack>
         {accountCreated ? (
