@@ -3,6 +3,7 @@ import { useState } from 'react';
 import MuiLink from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import MenuItem from '@mui/material/MenuItem';
+import ToolBar from '../components/ToolBar';
 
 
 import InputRunningExercise from '../components/InputMetrics/InputRunningExercise';
@@ -27,6 +28,8 @@ function RecordExercises() {
     console.log(SelectedComponent)
 
     return (
+        <>
+            <ToolBar /> {/* add new elements */}
             <Stack alignItems={"center"}>
                 <Card sx={{ width: "100%", p:2}}>
                     <Typography fontSize={36} padding={2} marginLeft={3} marginRight={3}>Record an Exercise</Typography>
@@ -54,7 +57,7 @@ function RecordExercises() {
                     <MuiLink to="../HomePage" component={RouterLink} className="button-link">Back to Home</MuiLink>
                 </Stack>
             </Stack>
-
+        </>
     );
 }
 

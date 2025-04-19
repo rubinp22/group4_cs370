@@ -8,6 +8,7 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
+import ToolBar from '../components/ToolBar';
 import GlobalStateContext from '../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
 
@@ -230,17 +231,18 @@ function ProfilePage() {
     
 
     return (
-        
-        <Stack spacing={2}>
-        <Grid container spacing={4}>
-        {/*Profile picture*/}
-        <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
-            <Avatar
-            sx={{ width: 100, height: 100}}
-            alt={name}
-            src={pfp}
-            ></Avatar>
-        </Grid>
+        <>
+          <ToolBar /> {/* add new elements */}
+          <Stack>
+              <Grid container spacing={2}>
+          {/*Profile picture*/}
+          <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
+              <Avatar
+              sx={{ width: 100, height: 100}}
+              alt={name}
+              src={pfp}
+              ></Avatar>
+          </Grid>
 
         {/*Name*/}
         <Grid display="flex" justifyContent="flex-start" alignItems="center" size={8}>
@@ -376,7 +378,7 @@ function ProfilePage() {
             <MuiLink to="../HomePage" component={RouterLink} className="button-link">Home</MuiLink>
         </Stack>
     </Stack>
-
+    </>
     );
 }
 
