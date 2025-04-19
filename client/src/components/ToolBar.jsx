@@ -19,7 +19,7 @@ function ToolBar() {
             {/* Optional icon */}
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Toolbar
+            Fitness Tracker
           </Typography>
           <Avatar src={state.pfp} />
         </Toolbar>
