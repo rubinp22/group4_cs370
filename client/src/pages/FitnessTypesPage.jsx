@@ -27,6 +27,7 @@ function FitnessTypesPage () {
 
         <Button to="../HomePage" component={RouterLink}>Back to Home</Button>
       </>
+    );
 }
 
 export default FitnessTypesPage
