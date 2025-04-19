@@ -116,7 +116,8 @@ function ProfilePage() {
     const name = ProfileData.map(data => data.name);
     const heightFeet = ProfileData.map(data => data.heightFeet);
     const heightInch = ProfileData.map(data => data.heightInch);
-    const weight = ProfileData.map(data => data.weight);
+    const weight = ProfileData.map(data => data.weightArray.at(-1).weight);
+    const weightArray = ProfileData.map(data => data.weightArray)
     const description = ProfileData.map(data => data.description);
     const pfp = ProfileData.map(data => data.pfp);
 
@@ -181,13 +182,16 @@ function ProfilePage() {
 
     async function handleSubmit() {
         if (!isError()) {
+            weightArray.push({weight: weightIn, dateLogged: Date.now()});
+            let weightArrayIn = weightArray.flat();
             const updatedData = {
                 _id: pageID,
                 name: nameIn,
                 heightFeet: heightFeetIn,
                 heightInch: heightInchIn,
                 description: descriptionIn,
-                pfp: pfpIn
+                pfp: pfpIn,
+                weightArray: weightArrayIn
             }
 
             // update the database
@@ -249,7 +253,7 @@ function ProfilePage() {
         <Grid size={{xs:8,sm:7.5,md:7.6}} spacing={4} alignItems="left" justifyContent="left">  
         <Card sx={{p: 2}} align='left'>
             <Typography variant="body2">
-            Height: {heightFeet}'{heightInch}" | Weight: {weight} kg
+            Height: {heightFeet}'{heightInch}" | Weight: {weight} lbs
             </Typography>
             <Typography variant="body">
             {description}
