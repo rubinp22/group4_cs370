@@ -185,9 +185,6 @@ function ProfilePage() {
     // Once all exercise metric data is in one object, we are able to use that data to determine
     // which achievements a user has earned!
     async function sumUserMetrics(userExercises) {
-        console.log("sumUserMetrics, userExercises: ", userExercises);
-        //const exerciseIDs = profileData[0].exercises
-
         let metrics = {
             distance: {
                 run: 0,
@@ -199,7 +196,10 @@ function ProfilePage() {
                 cycle: 0,
                 hike: 0
             },
-            elevationGain: 0,
+            elevationGain: {
+                cycle: 0,
+                hike: 0
+            },
             elevationLoss: 0,
             maxHeartRate: 1,
             steps: 0,
@@ -212,17 +212,19 @@ function ProfilePage() {
         }
 
         userExercises.map((data, idx) => {
-            //console.log("exercise ", idx + 1, ": ", data);
 
             if (data.type === "run") {
                 metrics.distance.run += data.distance;
                 metrics.duration.run += data.duration;
                 metrics.steps += data.steps;
             } else if (data.type === "hike") {
-                metrics.elevationGain += data.elevationGain;
+                metrics.elevationGain.hike += data.elevationGain;
+                metrics.distance.hike += data.distance;
+                metrics.duration.hike += data.duration;
             } else if (data.type === "cycle") {
                 metrics.distance.cycle += data.distance;
                 metrics.duration.cycle += data.duration;
+                metrics.elevationGain.cycle += data.elevationGain;
             } else if (data.type === "swim") {
                 metrics.lapCount += data.lapCount;
                 data.lapTimes.map((data, idx) => {
@@ -246,7 +248,7 @@ function ProfilePage() {
         })
 
 
-        console.log("sumUserMetrics returning: ", metrics);
+        // console.log("sumUserMetrics returning: ", metrics);
 
         return metrics;
     }
@@ -262,17 +264,17 @@ function ProfilePage() {
         achievementData.map((achievement, idx) => {
             const category = achievement.category;
             const metric = achievement.metric;
-            // This check exists because there are achievements that measure distance and duration for both
-            // running and cycling
+            // This check exists because there are achievements that measure distance and duration for 
+            // Running, Cycling, and Hiking
             if (category === "distance" || category === "duration") {
 
                 if (metrics[category][metric] >= achievement.requirement) {
-                    earnedBadges.push(achievement.name);
+                    earnedBadges.push(achievement);
                 }
 
             // This check is for all other achievements
             } else if (metrics[category] >= achievement.requirement) {
-                earnedBadges.push(achievement.name);
+                earnedBadges.push(achievement);
             }
         })
 
@@ -426,7 +428,6 @@ function ProfilePage() {
                                     <Chip
                                         key={idx}
                                         label={achievement.name}
-                                        alt={"test"}
                                     />
                                 </Tooltip>
  
