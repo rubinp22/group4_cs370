@@ -108,6 +108,7 @@ function ProfilePage() {
     const [profileData, setProfileData] = useState([]);
     const [achievementData, setAchievementData] = useState([]);
     const [earnedAchievements, setEarnedAchievements] = useState([]);
+    const [userExercises, setUserExercises] = useState([]);
 
     const [nameIn, setnameIn] = useState(undefined);
     const [heightFeetIn, setHeightFeetIn] = useState(undefined);
@@ -142,6 +143,25 @@ function ProfilePage() {
             console.log(err);
         }
     }
+
+    
+    async function getUserExercises() {
+        try {
+            const res = await axios.get('http://localhost:3000/exercises', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    userID: pageID
+                }
+            });
+            setUserExercises(res.data);
+            //console.log("getUserExercises returning: ", res.data);
+            return res.data;
+        } catch (err) {
+            console.log(err);
+        }
+    }
     
 
     // Fetching the data of all achievements from the DB (name, category, metric, requirement,)
@@ -164,78 +184,120 @@ function ProfilePage() {
     // It will either hold a metric's sum or max depending on the context
     // Once all exercise metric data is in one object, we are able to use that data to determine
     // which achievements a user has earned!
-    async function sumUserMetrics(profileData) {
-        const exerciseIDs = profileData[0].exercises
+    async function sumUserMetrics(userExercises) {
+        console.log("sumUserMetrics, userExercises: ", userExercises);
+        //const exerciseIDs = profileData[0].exercises
 
         let metrics = {
             distance: {
                 run: 0,
-                cycle: 0
+                cycle: 0,
+                hike: 0
             },
             duration: {
                 run: 0,
-                cycle: 0
+                cycle: 0,
+                hike: 0
             },
             elevationGain: 0,
             elevationLoss: 0,
-            // Revisit lap times when I know exactly how to interpret the achievement requirements
             maxHeartRate: 1,
-            reps: 0,
-            sets: 0,
             steps: 0,
-            weightOfWeights: 0
+            maxWeightOfWeights: 0,
+            totalVolume: 0,
+            totalReps: 0,
+            lapCount: 0,
+            totalLapTime: 0,
+            totalStrokes: 0
         }
 
-        // Didn't realize you could mark a map function as async!
-        const exercisePromises = exerciseIDs.map(async (ID, idx) => {
-            try {
-                const res = await axios.get('http://localhost:3000/exercises', {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    params: { _id: ID }
-                });
-                const currentExercise = res.data[0];
+        userExercises.map((data, idx) => {
+            //console.log("exercise ", idx + 1, ": ", data);
 
-                if (currentExercise.type === "run") {
-                    metrics.distance.run += currentExercise.distance;
-                    metrics.duration.run += currentExercise.duration;   
-                } else if (currentExercise.type === "hike") {
-                    metrics.elevationGain += currentExercise.elevationGain;
-                } else if (currentExercise.type === "cycle") {
-                    metrics.distance.cycle += currentExercise.distance;
-                    metrics.duration.cycle += currentExercise.duration;
-                } else if (currentExercise.type === "swim") {
-                    // Add behavior here
-                } else if (currentExercise.type === "weights") {
-                    metrics.reps += currentExercise.reps;
-                    metrics.sets += currentExercise.sets;
-                    metrics.weightOfWeights += currentExercise.weightOfWeights;
+            if (data.type === "run") {
+                metrics.distance.run += data.distance;
+                metrics.duration.run += data.duration;
+                metrics.steps += data.steps;
+            } else if (data.type === "hike") {
+                metrics.elevationGain += data.elevationGain;
+            } else if (data.type === "cycle") {
+                metrics.distance.cycle += data.distance;
+                metrics.duration.cycle += data.duration;
+            } else if (data.type === "swim") {
+                metrics.lapCount += data.lapCount;
+                data.lapTimes.map((data, idx) => {
+                    metrics.totalLapTime += data;
+                })
+                data.strokeCount.map((data, idx) => {
+                    metrics.totalStrokes += data
+                })
+            } else if (data.type === "weights") {
+                metrics.totalReps += (data.reps * data.sets);
+                if (metrics.maxWeightOfWeights < data.weightOfWeights) {
+                    metrics.maxWeightOfWeights = data.weightOfWeights
                 }
+                metrics.totalVolume += (data.reps * data.sets * data.weightOfWeights);
 
-                if (metrics.maxHeartRate < currentExercise.maxHeartRate) {
-                    metrics.maxHeartRate = currentExercise.maxHeartRate;
-                }
-
-            } catch (err) {
-                console.error('Error fetching user exercises', err);
             }
-        });
+
+            if (metrics.maxHeartRate < data.maxHeartRate) {
+                metrics.maxHeartRate = data.maxHeartRate;
+            }
+        })
+
+        // Didn't realize you could mark a map function as async!
+        // const exercisePromises = exerciseIDs.map(async (ID, idx) => {
+        //     try {
+        //         const res = await axios.get('http://localhost:3000/exercises', {
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             params: { _id: ID }
+        //         });
+        //         const currentExercise = res.data[0];
+
+        //         if (currentExercise.type === "run") {
+        //             metrics.distance.run += currentExercise.distance;
+        //             metrics.duration.run += currentExercise.duration;   
+        //         } else if (currentExercise.type === "hike") {
+        //             metrics.elevationGain += currentExercise.elevationGain;
+        //         } else if (currentExercise.type === "cycle") {
+        //             metrics.distance.cycle += currentExercise.distance;
+        //             metrics.duration.cycle += currentExercise.duration;
+        //         } else if (currentExercise.type === "swim") {
+        //             // Add behavior here
+        //         } else if (currentExercise.type === "weights") {
+        //             metrics.reps += currentExercise.reps;
+        //             metrics.sets += currentExercise.sets;
+        //             metrics.weightOfWeights += currentExercise.weightOfWeights;
+        //         }
+
+        //         if (metrics.maxHeartRate < currentExercise.maxHeartRate) {
+        //             metrics.maxHeartRate = currentExercise.maxHeartRate;
+        //         }
+
+        //     } catch (err) {
+        //         console.error('Error fetching user exercises', err);
+        //     }
+        // });
 
         // I had an issue where I was returning metrics before my asynchronous calls to map could 
         // finish. So I was just returning the metrics object with its default values. 
         // Each time our async map gets called, exercisePromises (an array of promises) gains a new promise. 
         // Each time we successully query data that is represented by a promise, it gets resolved. This line
         // causes the program to wait until exercsisePromises is an array full of resolved promises. 
-        await Promise.all(exercisePromises);
+        //await Promise.all(exercisePromises);
+
+        console.log("sumUserMetrics returning: ", metrics);
 
         return metrics;
     }
 
     async function achievementCheck() {
         const profileData = await getProfileData();
+        const userExercises = await getUserExercises();
         const achievementData = await getAchievementData();
-        const metrics = await sumUserMetrics(profileData);
+        const metrics = await sumUserMetrics(userExercises);
 
         const earnedBadges = [];
 
