@@ -106,7 +106,7 @@ function ProfilePage() {
     const { state, dispatch } = useContext(GlobalStateContext)
 
     const [editingData, setEditingData] = useState(false);
-    const [profileData, setProfileData] = useState([]);
+    const [profileData, setprofileData] = useState([]);
     const [achievementData, setAchievementData] = useState([]);
     const [earnedAchievements, setEarnedAchievements] = useState([]);
     const [userExercises, setUserExercises] = useState([]);
@@ -118,18 +118,18 @@ function ProfilePage() {
     const [descriptionIn, setDescriptionIn] = useState(undefined); 
     const [pfpIn, setPfpIn] = useState(undefined);
 
-    const name = ProfileData.map(data => data.name);
-    const heightFeet = ProfileData.map(data => data.heightFeet);
-    const heightInch = ProfileData.map(data => data.heightInch);
-    const weight = ProfileData.map(data => data.weightArray.at(-1).weight);
-    const weightArray = ProfileData.map(data => data.weightArray)
-    const description = ProfileData.map(data => data.description);
-    const pfp = ProfileData.map(data => data.pfp);
+    const name = profileData.map(data => data.name);
+    const heightFeet = profileData.map(data => data.heightFeet);
+    const heightInch = profileData.map(data => data.heightInch);
+    const weight = profileData.map(data => data.weightArray.at(-1).weight);
+    const weightArray = profileData.map(data => data.weightArray)
+    const description = profileData.map(data => data.description);
+    const pfp = profileData.map(data => data.pfp);
 
     const textInputSpacing = 3;
 
     // Fetching all data that belongs to the user
-    async function getProfileData() {
+    async function getprofileData() {
         try {
             const res = await axios.get('http://localhost:3000/users', {
                 headers: {
@@ -139,7 +139,7 @@ function ProfilePage() {
                     _id: pageID
                 }
             });
-            setProfileData(res.data);
+            setprofileData(res.data);
             return res.data
         } catch (err) {
             console.log(err);
@@ -256,7 +256,7 @@ function ProfilePage() {
     }
 
     async function achievementCheck() {
-        const profileData = await getProfileData();
+        const profileData = await getprofileData();
         const userExercises = await getUserExercises();
         const achievementData = await getAchievementData();
         const metrics = await sumUserMetrics(userExercises);
@@ -345,7 +345,7 @@ function ProfilePage() {
 
             // update the database
             await axios.put('http://localhost:3000/users/', updatedData)
-            getProfileData();
+            getprofileData();
         }
     }
 
@@ -422,6 +422,24 @@ function ProfilePage() {
             ))}
           </AvatarGroup>
          </Card>
+        </Grid>
+
+        {/*Achievements*/}
+        <Grid size={4}>
+            <Card sx={{ pb: 3 }}>
+            <h3>Achievements</h3>
+                {earnedAchievements.map((achievement, idx) => {
+                    return (
+                        <Tooltip title={achievement.tooltip}>
+                            <Chip
+                                key={idx}
+                                label={achievement.name}
+                            />
+                        </Tooltip>
+
+                    )
+                })}
+            </Card>
         </Grid>
             
             </Grid>
