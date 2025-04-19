@@ -1,4 +1,4 @@
-import { Stack, Card, Typography, Button, TextField, InputAdornment, Chip } from '@mui/material';
+import { Stack, Card, Typography, Button, TextField, InputAdornment, Chip, Tooltip } from '@mui/material';
 import { useState, useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid2';
@@ -464,10 +464,14 @@ function ProfilePage() {
                     <h3>Achievements</h3>
                         {earnedAchievements.map((achievement, idx) => {
                             return (
-                                <Chip
-                                    key={idx}
-                                    label={achievement}
-                                />
+                                <Tooltip title={achievement.tooltip}>
+                                    <Chip
+                                        key={idx}
+                                        label={achievement.name}
+                                        alt={"test"}
+                                    />
+                                </Tooltip>
+ 
                             )
                         })}
                     </Card>
