@@ -7,7 +7,7 @@ import ViewWeightliftingMetrics from '../components/ViewMetrics/ViewWeightliftin
 function WeightLiftingMetrics() {
     return (
         <Stack alignItems={"center"}>
-            <img src="/images/fitness_app_weights.jpg" alt="Gym that contains some weights" width="85%"/>
+            <img src="/images/fitness_app_weights.jpg" alt="Gym that contains some weights" width="70%"/>
             <ViewWeightliftingMetrics/>
 
             <Stack marginTop={5}>

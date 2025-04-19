@@ -4,6 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Stack, Typography } from '@mui/material';
 import axios from 'axios';
 import GlobalStateContext from "../contexts/GlobalStateContext";
+import { AppBar, Toolbar, IconButton, Box } from "@mui/material";
+import { Link as RouterLink } from 'react-router-dom';
+import MuiLink from '@mui/material/Link';
+
+const linkStyling = {
+  fontSize: {lg: 18, md: 16, sm: 14, xs: 12},
+  width: {lg: 200, md: 175, sm: 150, xs: 130}
+}
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -104,7 +112,13 @@ useEffect(() => {
         <Button variant="contained" onClick={handleSubmit} sx={{mt: 5, width: "40%"}}>
           Submit
         </Button>
+        <br/>
+        <Typography>Don't have an account?</Typography>
+        <MuiLink sx={linkStyling} to="./CreateAccount" component={RouterLink}>
+            Sign Up
+        </MuiLink>
       </Stack>
+      
     </Stack>
   );
 }

@@ -4,11 +4,13 @@ import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid2';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Box from '@mui/material/Box';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
 import ToolBar from '../components/ToolBar';
+import GlobalStateContext from '../contexts/GlobalStateContext.jsx';
+import React, { useContext } from 'react';
 
 const profilePictures = [
     {
@@ -73,9 +75,35 @@ const profilePictures = [
     },
   ];
 
-const userID = '67f1a53185ffddaa0be300ca';
+  const defaultFriends = [
+    {
+        name:"Remy Sharp",
+        pfp:"/images/profileImages/profile10.png",
+    },
+    {
+        name:"Travis Howard",
+        pfp:"/images/profileImages/profile2.png",
+    },
+    {
+        name:"Cindy Baker",
+        pfp:"/images/profileImages/profile3.png",
+    },
+    {
+        name:"Agnes Walker",
+        pfp:"/images/profileImages/profile4.png",
+    },
+    {
+        name:"Trevor Henderson",
+        pfp:"/images/profileImages/profile5.png",
+    },
+];
 
 function ProfilePage() {
+    // taking the id from the dynamic route 
+    const { pageID } = useParams();
+    // global state
+    const { state, dispatch } = useContext(GlobalStateContext)
+
     const [editingData, setEditingData] = useState(false);
     const [ProfileData, setProfileData] = useState([]);
 
@@ -89,23 +117,27 @@ function ProfilePage() {
     const name = ProfileData.map(data => data.name);
     const heightFeet = ProfileData.map(data => data.heightFeet);
     const heightInch = ProfileData.map(data => data.heightInch);
-    const weight = ProfileData.map(data => data.weight);
+    const weight = ProfileData.map(data => data.weightArray.at(-1).weight);
+    const weightArray = ProfileData.map(data => data.weightArray)
     const description = ProfileData.map(data => data.description);
     const pfp = ProfileData.map(data => data.pfp);
 
     const textInputSpacing = 3;
 
     async function getProfileData() {
-        const res = await axios.get('http://localhost:3000/users', {
-            headers: {
-                'Content-Type': 'application/json'
-            }, 
-            params: {
-                _id: userID
-            }
-        });
-        //setProfileData([])
-        setProfileData(res.data);
+        try {
+            const res = await axios.get('http://localhost:3000/users', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                params: {
+                    _id: pageID
+                }
+            });
+            setProfileData(res.data);
+        } catch (err) {
+            console.log(err);
+        }
     }
     
     // getting profile data from the database
@@ -151,13 +183,16 @@ function ProfilePage() {
 
     async function handleSubmit() {
         if (!isError()) {
+            weightArray.push({weight: weightIn, dateLogged: Date.now()});
+            let weightArrayIn = weightArray.flat();
             const updatedData = {
-                _id: userID,
+                _id: pageID,
                 name: nameIn,
                 heightFeet: heightFeetIn,
                 heightInch: heightInchIn,
                 description: descriptionIn,
-                pfp: pfpIn
+                pfp: pfpIn,
+                weightArray: weightArrayIn
             }
 
             // update the database
@@ -197,48 +232,51 @@ function ProfilePage() {
 
     return (
         <>
-            <ToolBar /> {/* add new elements */}
-            <Stack>
-                <Grid container spacing={2}>
-            {/*Profile picture*/}
-            <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
-                <Avatar
-                sx={{ width: 100, height: 100}}
-                alt={name}
-                src={pfp}
-                ></Avatar>
-            </Grid>
+          <ToolBar /> {/* add new elements */}
+          <Stack>
+              <Grid container spacing={2}>
+          {/*Profile picture*/}
+          <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
+              <Avatar
+              sx={{ width: 100, height: 100}}
+              alt={name}
+              src={pfp}
+              ></Avatar>
+          </Grid>
 
-            {/*Name*/}
-            <Grid display="flex" justifyContent="flex-start" alignItems="left" size={8}>
-                <h2>{name}</h2>
-            </Grid>
-
-            <br/>
-
-        {/*Description + Stats*/}
-        <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="flex-start" size={8} spacing={0}>  
-          <Card sx={{p: 1}}>
-            <p>Height: {heightFeet}'{heightInch}" | Weight: {weight.at(-1)} lbs</p>
-            <p>{description}</p>
-          </Card>
+        {/*Name*/}
+        <Grid display="flex" justifyContent="flex-start" alignItems="center" size={8}>
+            <Typography fontSize={24}>{name}</Typography>
         </Grid>
+
+        <br/>
+
+        {/*Bio*/}
+        <Grid size={{xs:8,sm:7.5,md:7.6}} spacing={4} alignItems="left" justifyContent="left">  
+        <Card sx={{p: 2}} align='left'>
+            <Typography variant="body2">
+            Height: {heightFeet}'{heightInch}" | Weight: {weight} lbs
+            </Typography>
+            <Typography variant="body">
+            {description}
+            </Typography>
+        </Card>
+        </Grid>
+    
         
         {/*Friends*/}
         <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={4} spacing={0}>
-        <Card sx={{p: 1}}>
+         <Card sx={{p: 1}}>
           <h3>Friends</h3>
           <AvatarGroup max={4}>
-          <Avatar alt="Remy Sharp" src="/images/profileImages/profile10.png"/>
-          <Avatar alt="Travis Howard" src="/images/profileImages/profile2.png" />
-          <Avatar alt="Cindy Baker" src="/images/profileImages/profile3.png" />
-          <Avatar alt="Agnes Walker" src="/images/profileImages/profile4.png" />
-          <Avatar alt="Trevor Henderson" src="/images/profileImages/profile5.png" />
+            {defaultFriends.map((friend) => (
+                <Avatar alt={friend.name} src={friend.pfp}></Avatar>
+            ))}
           </AvatarGroup>
-          </Card>
+         </Card>
         </Grid>
             
-        </Grid>
+            </Grid>
 
         {/*Editing Form*/}
         <Stack>
@@ -320,7 +358,7 @@ function ProfilePage() {
                         />
                     </Stack>
                     <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
-                        <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                        <Button variant="contained" onClick={handleSubmit}>Save</Button>
                         <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
                     </Stack>
                 </Card>
@@ -329,11 +367,14 @@ function ProfilePage() {
 
         {/*Buttons*/}
         <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
-            <Button variant="contained" 
-                onClick={handleEdit}
-            >
+            {state.user === pageID ? (
+                <Button variant="contained" 
+                onClick={handleEdit}>
                 {editingData ? "Stop Editing" : "Edit"}
-            </Button>
+                </Button>
+            ) : (
+            <></>)}
+            <MuiLink to="../HomePage/AllProfiles" component={RouterLink} className="button-link">All Profiles</MuiLink>
             <MuiLink to="../HomePage" component={RouterLink} className="button-link">Home</MuiLink>
         </Stack>
     </Stack>

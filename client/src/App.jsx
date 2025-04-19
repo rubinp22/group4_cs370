@@ -20,6 +20,8 @@ import RewardAchievements from './pages/RewardAchievements';
 import ProfilePage from './pages/ProfilePage';
 import TrainingVideoLibrary from './pages/TrainingVideoLibrary';
 import RecordExercises from './pages/RecordExercises';
+import AllProfiles from './pages/AllProfiles';
+import CreateAccount from './pages/CreateAccount'
 
 function App() {
  return (
@@ -39,11 +41,13 @@ function App() {
           <Route path="/HomePage/fitnessTypes/CyclingMetrics" element={<CyclingMetrics/>}/>
           <Route path="/HomePage/fitnessTypes/SwimmingMetrics" element={<SwimmingMetrics/>}/>
           <Route path="/HomePage/LeaderBoard" element={<LeaderBoard/>}/>
-          <Route path="/HomePage/profile" element={<ProfilePage/>} />
+          <Route path="/HomePage/profile/:pageID" element={<ProfilePage/>} />
           <Route path="/HomePage/RewardAchievements" element={<RewardAchievements/>}/>
           <Route path="/HomePage/TrainingVideoLibrary" element={<TrainingVideoLibrary/>}/>
           <Route path="/HomePage/RecordExercises" element={<RecordExercises/>}/>
           <Route path="/HomePage/DietPlan" element={<DietPlan/>} />
+          <Route path="/HomePage/AllProfiles" element={<AllProfiles/>} />
+          <Route path="/CreateAccount" element={<CreateAccount/>} />
         </Routes>
       </Router>
     </>
