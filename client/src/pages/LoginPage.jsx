@@ -115,7 +115,7 @@ useEffect(() => {
       </Stack>
       <Stack alignItems={"center"}>
         <Button variant="contained" onClick={handleSubmit} sx={{mt: 5, width: "40%"}}>
-          Submit
+          Log In
         </Button>
         <br/>
         <Typography>Don't have an account?</Typography>
