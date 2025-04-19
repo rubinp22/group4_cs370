@@ -8,6 +8,7 @@ import { Link as RouterLink, useParams } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
+import ToolBar from '../components/ToolBar';
 import GlobalStateContext from '../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
 import Profile from '../../../api/models/Profile.js';
@@ -117,12 +118,13 @@ function ProfilePage() {
     const [descriptionIn, setDescriptionIn] = useState(undefined); 
     const [pfpIn, setPfpIn] = useState(undefined);
 
-    const name = profileData.map(data => data.name);
-    const heightFeet = profileData.map(data => data.heightFeet);
-    const heightInch = profileData.map(data => data.heightInch);
-    const weight = profileData.map(data => data.weight);
-    const description = profileData.map(data => data.description);
-    const pfp = profileData.map(data => data.pfp);
+    const name = ProfileData.map(data => data.name);
+    const heightFeet = ProfileData.map(data => data.heightFeet);
+    const heightInch = ProfileData.map(data => data.heightInch);
+    const weight = ProfileData.map(data => data.weightArray.at(-1).weight);
+    const weightArray = ProfileData.map(data => data.weightArray)
+    const description = ProfileData.map(data => data.description);
+    const pfp = ProfileData.map(data => data.pfp);
 
     const textInputSpacing = 3;
 
@@ -329,13 +331,16 @@ function ProfilePage() {
 
     async function handleSubmit() {
         if (!isError()) {
+            weightArray.push({weight: weightIn, dateLogged: Date.now()});
+            let weightArrayIn = weightArray.flat();
             const updatedData = {
                 _id: pageID,
                 name: nameIn,
                 heightFeet: heightFeetIn,
                 heightInch: heightInchIn,
                 description: descriptionIn,
-                pfp: pfpIn
+                pfp: pfpIn,
+                weightArray: weightArrayIn
             }
 
             // update the database
@@ -374,17 +379,18 @@ function ProfilePage() {
     
 
     return (
-        
-        <Stack spacing={2}>
-            <Grid container spacing={1}>
-                {/*Profile picture*/}
-                <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
-                    <Avatar
-                    sx={{ width: 100, height: 100}}
-                    alt={name}
-                    src={pfp}
-                    ></Avatar>
-                </Grid>
+        <>
+          <ToolBar /> {/* add new elements */}
+          <Stack>
+              <Grid container spacing={2}>
+          {/*Profile picture*/}
+          <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
+              <Avatar
+              sx={{ width: 100, height: 100}}
+              alt={name}
+              src={pfp}
+              ></Avatar>
+          </Grid>
 
                 {/*Name*/}
                 <Grid display="flex" justifyContent="flex-start" alignItems="center" size={8}>
@@ -393,50 +399,31 @@ function ProfilePage() {
 
                 <br/>
 
-                {/*Bio*/}
-                <Grid size={{xs:8,sm:7.5,md:7.6}} spacing={4} alignItems="left" justifyContent="left">  
-                    <Card sx={{p: 2}} align='left'>
-                        <Typography variant="body2">
-                            Height: {heightFeet}'{heightInch}" | Weight: {weight} kg
-                        </Typography>
-                        <Typography variant="body">
-                            {description}
-                        </Typography>
-                    </Card>
-                </Grid>
+        {/*Bio*/}
+        <Grid size={{xs:8,sm:7.5,md:7.6}} spacing={4} alignItems="left" justifyContent="left">  
+        <Card sx={{p: 2}} align='left'>
+            <Typography variant="body2">
+            Height: {heightFeet}'{heightInch}" | Weight: {weight} lbs
+            </Typography>
+            <Typography variant="body">
+            {description}
+            </Typography>
+        </Card>
+        </Grid>
+    
+        
+        {/*Friends*/}
+        <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={4} spacing={0}>
+         <Card sx={{p: 1}}>
+          <h3>Friends</h3>
+          <AvatarGroup max={4}>
+            {defaultFriends.map((friend) => (
+                <Avatar alt={friend.name} src={friend.pfp}></Avatar>
+            ))}
+          </AvatarGroup>
+         </Card>
+        </Grid>
             
-                
-                {/*Friends*/}
-                <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={4} spacing={0}>
-                    <Card sx={{p: 1}}>
-                        <h3>Friends</h3>
-                        <AvatarGroup max={4}>
-                            {defaultFriends.map((friend) => (
-                                <Avatar alt={friend.name} src={friend.pfp}></Avatar>
-                            ))}
-                        </AvatarGroup>
-                    </Card>
-                </Grid>
-
-                {/*Achievements*/}
-                <Grid size={4}>
-                    <Card sx={{ pb: 3 }}>
-                    <h3>Achievements</h3>
-                        {earnedAchievements.map((achievement, idx) => {
-                            return (
-                                <Tooltip title={achievement.tooltip}>
-                                    <Chip
-                                        key={idx}
-                                        label={achievement.name}
-                                    />
-                                </Tooltip>
- 
-                            )
-                        })}
-                    </Card>
-                </Grid>
-
-                
             </Grid>
 
             {/*Editing Form*/}
@@ -529,20 +516,20 @@ function ProfilePage() {
                 )}
             </Stack>
 
-            {/*Buttons*/}
-            <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
-                {state.user === pageID ? (
-                    <Button variant="contained" 
-                    onClick={handleEdit}>
-                    {editingData ? "Stop Editing" : "Edit"}
-                    </Button>
-                ) : (
-                <></>)}
-                <MuiLink to="../HomePage/AllProfiles" component={RouterLink} className="button-link">All Profiles</MuiLink>
-                <MuiLink to="../HomePage" component={RouterLink} className="button-link">Home</MuiLink>
-            </Stack>
+        {/*Buttons*/}
+        <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
+            {state.user === pageID ? (
+                <Button variant="contained" 
+                onClick={handleEdit}>
+                {editingData ? "Stop Editing" : "Edit"}
+                </Button>
+            ) : (
+            <></>)}
+            <MuiLink to="../HomePage/AllProfiles" component={RouterLink} className="button-link">All Profiles</MuiLink>
+            <MuiLink to="../HomePage" component={RouterLink} className="button-link">Home</MuiLink>
         </Stack>
-
+    </Stack>
+    </>
     );
 }
 

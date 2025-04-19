@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css';
 
+import ToolBar from './components/ToolBar';
 import DietPlan from './pages/DietPlan'; 
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage"
@@ -20,6 +21,7 @@ import ProfilePage from './pages/ProfilePage';
 import TrainingVideoLibrary from './pages/TrainingVideoLibrary';
 import RecordExercises from './pages/RecordExercises';
 import AllProfiles from './pages/AllProfiles';
+import CreateAccount from './pages/CreateAccount'
 
 function App() {
  return (
@@ -45,6 +47,7 @@ function App() {
           <Route path="/HomePage/RecordExercises" element={<RecordExercises/>}/>
           <Route path="/HomePage/DietPlan" element={<DietPlan/>} />
           <Route path="/HomePage/AllProfiles" element={<AllProfiles/>} />
+          <Route path="/CreateAccount" element={<CreateAccount/>} />
         </Routes>
       </Router>
     </>

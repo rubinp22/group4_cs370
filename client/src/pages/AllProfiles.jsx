@@ -6,6 +6,7 @@ import MuiLink from '@mui/material/Link';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid2';
 import { Stack, Card, Typography } from '@mui/material';
+import ToolBar from '../components/ToolBar.jsx';
 
 function AllProfiles() {
     const { state, dispatch } = useContext(GlobalStateContext);
@@ -33,6 +34,8 @@ function AllProfiles() {
       }, []);
 
     return (
+      <>
+        <ToolBar /> {/* add new elements */}
         <Stack>
         <Grid container spacing={1}>
             <Grid size={12}>
@@ -54,7 +57,7 @@ function AllProfiles() {
         </Stack>
 
         </Stack>
-        
+     </>  
     );
 } 
 

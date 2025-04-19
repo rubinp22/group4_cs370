@@ -1,11 +1,14 @@
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
 import { Stack } from '@mui/material';
+import ToolBar from '../components/ToolBar.jsx';
 
 import ViewCyclingMetrics from '../components/ViewMetrics/ViewCyclingMetrics.jsx';
 
 function CyclingMetrics() {    
     return (
+    <>
+        <ToolBar /> {/* add new elements */}
         <Stack alignItems="center">
             <img src="/images/fitness_app_cycler.jpg" alt="caption of a cycler" width="70%"/>   
             <ViewCyclingMetrics/>
@@ -14,6 +17,7 @@ function CyclingMetrics() {
                 <MuiLink to="../HomePage/fitnessTypes" component={RouterLink}>Back to Fitness Types</MuiLink>
             </Stack>
         </Stack>
+    </>
     );
 }
 

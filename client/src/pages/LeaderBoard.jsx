@@ -2,6 +2,7 @@ import React, {use, useState} from 'react';
 import { useNavigate, Link  } from 'react-router-dom';
 import { Stack, Avatar, Button, ButtonGroup, Typography} from '@mui/material';
 import { amber, blueGrey, orange } from '@mui/material/colors';
+import ToolBar from '../components/ToolBar';
 
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
@@ -128,30 +129,33 @@ function LeaderBoard () {
   // after that we have the top 5 users with their exercise value and unit of measurement for said value
   // lastly we have the button to return to the main page
   return (
-  <Stack direction="column" gap={2} marginBottom={3}>
-    <Typography fontSize={36}>Leaderboard</Typography>
-    <ButtonGroup variant="contained" aria-label="Basic button group">
-        <Button onClick={() => handleButtons(1, setMessage, setPlaces, setValues, setMeasure, setMMM)}>Distance</Button>
-        <Button onClick={() => handleButtons(2, setMessage, setPlaces, setValues, setMeasure, setMMM)}>MaxHeartRate</Button>
-        <Button onClick={() => handleButtons(3, setMessage, setPlaces, setValues, setMeasure, setMMM)}>Duration</Button>
-      </ButtonGroup>
-    <Stack direction="row" gap={2} justifyContent={"center"}>
-      <Avatar sx={{ bgcolor: amber[600] }} variant="square">{placeNames[0][0]}</Avatar>
-      <Avatar sx={{ bgcolor: blueGrey[200] }} variant="square">{placeNames[1][0]}</Avatar>
-      <Avatar sx={{ bgcolor: orange[500] }} variant="square">{placeNames[2][0]}</Avatar>
-    </Stack>
-    <Typography fontSize={20}>
-    {message}
-    <br></br>{placeNames[0]} -- {placeValues[0]} {unitsOfMeasure}
-    <br></br>{placeNames[1]} -- {placeValues[1]} {unitsOfMeasure}
-    <br></br>{placeNames[2]} -- {placeValues[2]} {unitsOfMeasure}
-    <br></br>{placeNames[3]} -- {placeValues[3]} {unitsOfMeasure}
-    <br></br>{placeNames[4]} -- {placeValues[4]} {unitsOfMeasure}
-    </Typography>
-    <Typography fontSize={20}>Max:{maxMinMedian[0]}  Min:{maxMinMedian[1]}  Median:{maxMinMedian[2]}</Typography>
-    <MuiLink to="../HomePage" component={RouterLink}>Back to Home</MuiLink>
-  </Stack>
+    <>
+      <ToolBar /> {/* add new elements */}
+      <Stack direction="column" gap={2} marginBottom={3}>
+        <Typography fontSize={36}>Leaderboard</Typography>
+
+        <ButtonGroup variant="contained" aria-label="Basic button group">
+          <Button onClick={() => handleButtons(1, setMessage, setPlaces, setValues, setMeasure, setMMM)}>Distance</Button>
+          <Button onClick={() => handleButtons(2, setMessage, setPlaces, setValues, setMeasure, setMMM)}>MaxHeartRate</Button>
+          <Button onClick={() => handleButtons(3, setMessage, setPlaces, setValues, setMeasure, setMMM)}>Duration</Button>
+        </ButtonGroup>
+        <Stack direction="row" gap={2} justifyContent={"center"}>
+          <Avatar sx={{ bgcolor: amber[600] }} variant="square">{placeNames[0][0]}</Avatar>
+          <Avatar sx={{ bgcolor: blueGrey[200] }} variant="square">{placeNames[1][0]}</Avatar>
+          <Avatar sx={{ bgcolor: orange[500] }} variant="square">{placeNames[2][0]}</Avatar>
+        </Stack>
+        <Typography fontSize={20}>
+        {message}
+        <br></br>{placeNames[0]} -- {placeValues[0]} {unitsOfMeasure}
+        <br></br>{placeNames[1]} -- {placeValues[1]} {unitsOfMeasure}
+        <br></br>{placeNames[2]} -- {placeValues[2]} {unitsOfMeasure}
+        <br></br>{placeNames[3]} -- {placeValues[3]} {unitsOfMeasure}
+        <br></br>{placeNames[4]} -- {placeValues[4]} {unitsOfMeasure}
+        </Typography>
+        <Typography fontSize={20}>Max:{maxMinMedian[0]}  Min:{maxMinMedian[1]}  Median:{maxMinMedian[2]}</Typography>
+        <MuiLink to="../HomePage" component={RouterLink}>Back to Home</MuiLink>
+      </Stack>
+    </>
   );
 }
-
 export default LeaderBoard
