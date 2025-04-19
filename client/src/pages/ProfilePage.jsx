@@ -245,48 +245,6 @@ function ProfilePage() {
             }
         })
 
-        // Didn't realize you could mark a map function as async!
-        // const exercisePromises = exerciseIDs.map(async (ID, idx) => {
-        //     try {
-        //         const res = await axios.get('http://localhost:3000/exercises', {
-        //             headers: {
-        //                 'Content-Type': 'application/json'
-        //             },
-        //             params: { _id: ID }
-        //         });
-        //         const currentExercise = res.data[0];
-
-        //         if (currentExercise.type === "run") {
-        //             metrics.distance.run += currentExercise.distance;
-        //             metrics.duration.run += currentExercise.duration;   
-        //         } else if (currentExercise.type === "hike") {
-        //             metrics.elevationGain += currentExercise.elevationGain;
-        //         } else if (currentExercise.type === "cycle") {
-        //             metrics.distance.cycle += currentExercise.distance;
-        //             metrics.duration.cycle += currentExercise.duration;
-        //         } else if (currentExercise.type === "swim") {
-        //             // Add behavior here
-        //         } else if (currentExercise.type === "weights") {
-        //             metrics.reps += currentExercise.reps;
-        //             metrics.sets += currentExercise.sets;
-        //             metrics.weightOfWeights += currentExercise.weightOfWeights;
-        //         }
-
-        //         if (metrics.maxHeartRate < currentExercise.maxHeartRate) {
-        //             metrics.maxHeartRate = currentExercise.maxHeartRate;
-        //         }
-
-        //     } catch (err) {
-        //         console.error('Error fetching user exercises', err);
-        //     }
-        // });
-
-        // I had an issue where I was returning metrics before my asynchronous calls to map could 
-        // finish. So I was just returning the metrics object with its default values. 
-        // Each time our async map gets called, exercisePromises (an array of promises) gains a new promise. 
-        // Each time we successully query data that is represented by a promise, it gets resolved. This line
-        // causes the program to wait until exercsisePromises is an array full of resolved promises. 
-        //await Promise.all(exercisePromises);
 
         console.log("sumUserMetrics returning: ", metrics);
 
