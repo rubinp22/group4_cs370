@@ -4,6 +4,7 @@ import MuiLink from '@mui/material/Link';
 import GlobalStateContext from "../contexts/GlobalStateContext";
 import { useContext } from "react";
 import Avatar from '@mui/material/Avatar';
+import ToolBar from "../components/ToolBar";
 
 function HomePage() {
 
@@ -18,28 +19,9 @@ function HomePage() {
   console.log("state: ", state)
 
   return (
+    <>
+        <ToolBar /> {/* <-- Toolbar at the top */}
     <Stack >
-
-      {/* ToolBar */}
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="absolute">
-          <Toolbar>
-            <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >    
-            </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Toolbar
-            </Typography>
-            <Avatar src={state.pfp}></Avatar>
-          </Toolbar>
-        </AppBar>
-      </Box>
-
       <Typography fontSize={36}>Fitness Tracker</Typography>
       <Typography>Take charge of your health:</Typography>
 
@@ -96,6 +78,7 @@ function HomePage() {
 
       </Stack>
     </Stack>
+  </>
   );
 }
 
