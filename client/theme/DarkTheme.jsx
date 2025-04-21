@@ -151,7 +151,7 @@ const DarkTheme = createTheme({
     MuiTypography: {
       styleOverrides: {
         root: ({ theme }) => ({
-          '&:not(.MuiChartsTooltip-root *):not(.MuiInputAdornment-root *):not(.MuiCard-root *)': {
+          '&:not(.MuiChartsTooltip-root *):not(.MuiInputAdornment-root *):not(.MuiCard-root *):not(.MuiToolbar-root *)': {
             color: theme.palette.primary.light,
           },
         })
@@ -165,7 +165,17 @@ const DarkTheme = createTheme({
           margin: 5
         })
       }
-    }
+    },
+    MuiToolbar: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.palette.primary.medium,
+          '& .MuiTypography-root': {
+            color: theme.palette.primary.light,
+          },
+        }),
+      },
+    },
   },
 });
 

@@ -158,7 +158,17 @@ const LightTheme = createTheme({
           margin: 5
         })
       }
-    } 
+    },
+    MuiToolbar: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.palette.primary.medium,
+          '& .MuiTypography-root': {
+            color: theme.palette.primary.light,
+          },
+        }),
+      },
+    }, 
   },
 });
 

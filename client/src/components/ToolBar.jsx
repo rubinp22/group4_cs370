@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Typography, AppBar, Toolbar, IconButton, Box, Avatar } from "@mui/material";
 import GlobalStateContext from "../contexts/GlobalStateContext";
 
+
 function ToolBar() {
   const { state } = useContext(GlobalStateContext);
 
