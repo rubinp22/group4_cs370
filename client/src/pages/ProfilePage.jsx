@@ -343,6 +343,8 @@ function ProfilePage() {
                 weightArray: weightArrayIn
             }
 
+            dispatch({ type: 'SETWEIGHT', payload: weightArrayIn.at(-1).weight });
+            dispatch({ type: 'SETPFP', payload: pfpIn});
             // update the database
             await axios.put('http://localhost:3000/users/', updatedData)
             getprofileData();

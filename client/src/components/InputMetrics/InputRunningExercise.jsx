@@ -2,6 +2,7 @@ import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui
 import { useState } from 'react';
 import axios from 'axios';
 import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
+
 import React, { useContext } from 'react';
 
 function InputRunningExercise() {
@@ -13,6 +14,8 @@ function InputRunningExercise() {
 
     // Global State
     const { state, dispatch } = useContext(GlobalStateContext)
+
+    console.log("weight: ", state.bodyWeight)
 
     // This new state is accessed by the error attribute for each Textfield
     const [errors, setErrors] = useState({
