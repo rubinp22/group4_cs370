@@ -35,31 +35,28 @@ function HomePage() {
           </MuiLink>
         </Stack>
         <Stack direction="row" spacing={2} padding={1}>
-          <MuiLink sx={linkStyling} to="./RewardAchievements" component={RouterLink}>
+          {/* <MuiLink sx={linkStyling} to="./RewardAchievements" component={RouterLink}>
             Achievements
-          </MuiLink>
+          </MuiLink> */}
+          {state.user === "" ? (
+            <MuiLink sx={linkStyling} to="../" component={RouterLink}>
+              My Profile
+            </MuiLink>     
+            ) : (
+            <MuiLink sx={linkStyling} to={`./profile/${state.user}`} component={RouterLink}>
+              My Profile
+            </MuiLink>
+          )}
           <MuiLink sx={linkStyling} to="./LeaderBoard" component={RouterLink}>
             Leaderboard
           </MuiLink>
         </Stack>
         <Stack direction="row" spacing={2} padding={1}>
-          {state.user === "" ? (
-          <MuiLink sx={linkStyling} to="../" component={RouterLink}>
-            My Profile
-          </MuiLink>     
-          ) : (
-          <MuiLink sx={linkStyling} to={`./profile/${state.user}`} component={RouterLink}>
-            My Profile
-          </MuiLink>
-          )}
-
-          <MuiLink sx={linkStyling} to="./TrainingVideoLibrary" component={RouterLink}>
-            Video Library
-          </MuiLink>
-        </Stack>
-        <Stack direction="row" spacing={2} padding={1} justifyContent={"center"}>
           <MuiLink sx={linkStyling} to="./DietPlan" component={RouterLink}>
             Diet Plan
+          </MuiLink>
+          <MuiLink sx={linkStyling} to="./TrainingVideoLibrary" component={RouterLink}>
+            Video Library
           </MuiLink>
         </Stack>
 
