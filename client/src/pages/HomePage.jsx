@@ -16,12 +16,12 @@ function HomePage() {
 
   // Testing Global State
   const { state, dispatch } = useContext(GlobalStateContext)
-  console.log("state: ", state)
+  //console.log("state: ", state)
 
   return (
     <>
-        <ToolBar /> {/* <-- Toolbar at the top */}
     <Stack >
+      <ToolBar/>
       <Typography fontSize={36}>Fitness Tracker</Typography>
       <Typography>Take charge of your health:</Typography>
 
@@ -35,8 +35,8 @@ function HomePage() {
           </MuiLink>
         </Stack>
         <Stack direction="row" spacing={2} padding={1}>
-          <MuiLink sx={linkStyling} to="./RewardAchievements" component={RouterLink}>
-            Achievements
+          <MuiLink sx={linkStyling} to={`./profile/${state.user}`} component={RouterLink}>
+            My Profile
           </MuiLink>
           <MuiLink sx={linkStyling} to="./LeaderBoard" component={RouterLink}>
             Leaderboard
@@ -48,8 +48,8 @@ function HomePage() {
             My Profile
           </MuiLink>     
           ) : (
-          <MuiLink sx={linkStyling} to={`./profile/${state.user}`} component={RouterLink}>
-            My Profile
+          <MuiLink sx={linkStyling} to="./DietPlan" component={RouterLink}>
+            Diet Plan
           </MuiLink>
           )}
 
@@ -58,9 +58,7 @@ function HomePage() {
           </MuiLink>
         </Stack>
         <Stack direction="row" spacing={2} padding={1} justifyContent={"center"}>
-          <MuiLink sx={linkStyling} to="./DietPlan" component={RouterLink}>
-            Diet Plan
-          </MuiLink>
+
         </Stack>
 
         <Stack marginTop="150px" alignContent={"center"} alignItems={"center"}>

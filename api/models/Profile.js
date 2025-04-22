@@ -9,7 +9,7 @@ const Profile = new mongoose.Schema({
     bmi: { type: Number, default: -1},
     username: { type: String, default: 'defaultUser'},
     password: { type: String, default: 'defaultPass'},
-    fitnessLevel: { type: Number, default: -1 },
+    fitnessLevel: { type: Number, default: 1 },
     dateJoined: { type: Date, default: Date.now },
     heightFeet: { type: Number, default: -1},
     heightInch: { type: Number, default: -1},

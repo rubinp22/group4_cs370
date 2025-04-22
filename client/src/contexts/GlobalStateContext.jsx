@@ -18,7 +18,9 @@ function reducer(state, action) {
     case 'SETFITNESS':
       return { ...state, fitnessLevel: action.payload };
     case 'SETPFP':
-      return {...state, pfp: action.payload };
+      return { ...state, pfp: action.payload };
+    case 'SETEXERCISES':
+      return { ...state, exercises: action.payload };
     default:
       return state;
   }
@@ -31,7 +33,8 @@ const initialState = {
   theme: "",
   bodyWeight: "",
   fitnessLevel: "",
-  pfp: ""
+  pfp: "",
+  exercises: []
 }
 
 export const GlobalStateProvider = ({ children }) => {

@@ -32,6 +32,23 @@ function InputCyclingExercise() {
         setMaxHeartRateIn("");
     }
 
+    async function getNewExerciseID() {
+        try {
+            const res = await axios.get('http://localhost:3000/exercises', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                params: {
+                    userID: state.user
+                }
+            });
+            const exerciseID = res.data.at(-1)._id;
+            return exerciseID;
+        } catch (error) {
+            console.error('Error Fetching user exercises');
+        }
+    }
+
     async function handleSubmit() {
         if (!isError()) {
 
@@ -53,14 +70,24 @@ function InputCyclingExercise() {
                     'Content-Type': 'application/json'
                 }
             });
+
+            const newExerciseID = await getNewExerciseID();
+
+            const updatedData = {
+                _id: state.user,
+                exercises: [...state.exercises, newExerciseID]
+            }
+            await axios.put('http://localhost:3000/users/', updatedData)
+
+            dispatch({ type: 'SETEXERCISES', payload: updatedData.exercises });
         }
     }
 
     function isError() {
         let newErrors = {
-            distance: (distanceIn === undefined || distanceIn < 1),
-            elevationGain: (elevationGainIn === undefined || elevationGainIn < 1),
-            duration: (durationIn === undefined || durationIn < 1),
+            distance: (distanceIn === undefined || distanceIn < 0),
+            elevationGain: (elevationGainIn === undefined || elevationGainIn < 0),
+            duration: (durationIn === undefined || durationIn < 0),
             avgHeartRate: (avgHeartRateIn === undefined || avgHeartRateIn < 1),
             maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),
         }

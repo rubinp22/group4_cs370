@@ -148,6 +148,26 @@ const LightTheme = createTheme({
           color: theme.palette.primary.dark
         })
       }
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.palette.secondary.main,
+          color: theme.palette.primary.light,
+          fontSize: 16,
+          margin: 5
+        })
+      }
+    },
+    MuiToolbar: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.palette.primary.medium,
+          '& .MuiTypography-root': {
+            color: theme.palette.primary.light,
+          },
+        }),
+      },
     }, 
   },
 });
