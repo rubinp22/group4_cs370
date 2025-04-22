@@ -25,8 +25,6 @@ function RecordExercises() {
     const [exerciseType, setExerciseType] = useState(undefined);
     const SelectedComponent = components[exerciseType];
 
-    console.log(SelectedComponent)
-
     return (
         <>
             <ToolBar /> {/* add new elements */}

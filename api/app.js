@@ -7,6 +7,7 @@ import 'dotenv/config';
 import Exercise from './models/Exercise.js'
 // This schema represents user profile data
 import Profile from './models/Profile.js'
+import Achievement from './models/Achievement.js';
 
 // Instantiate the API
 const app = new Hono();
@@ -95,6 +96,13 @@ app.put('users/', async (c) => {
     );
     
     return c.text('Profile Updated');
+})
+
+app.get('/achievements', async (c) => {
+    const params = c.req.query();
+
+    const Achievements = await Achievement.find(params);
+    return c.json(Achievements);
 })
 
 serve({

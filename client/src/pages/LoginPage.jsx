@@ -65,7 +65,11 @@ useEffect(() => {
   }
 
   const setPFP = (value) => {
-    dispatch({type: 'SETPFP', payload: value});
+    dispatch({ type: 'SETPFP', payload: value });
+  }
+
+  const setExercises = (value) => {
+    dispatch({ type: 'SETEXERCISES', payload: value });
   }
 
   const handleSubmit = () => {
@@ -74,11 +78,15 @@ useEffect(() => {
     const matchingUser = allUsers.find(user => username === user.username && password === user.password);
     if (matchingUser) {
       console.log("logging in as user: ", matchingUser);
+
+      console.log("weight: ", matchingUser.weightArray.at(-1).weight)
+
       selectUser(matchingUser._id);
       setTheme(matchingUser.lightmodeToggle);
       setWeight(matchingUser.weightArray.at(-1).weight);
       setFitness(matchingUser.fitnessLevel);
       setPFP(matchingUser.pfp)
+      setExercises(matchingUser.exercises)
       navigate('/HomePage');
     } else {
       setIsError(true);
@@ -110,7 +118,7 @@ useEffect(() => {
       </Stack>
       <Stack alignItems={"center"}>
         <Button variant="contained" onClick={handleSubmit} sx={{mt: 5, width: "40%"}}>
-          Submit
+          Log In
         </Button>
         <br/>
         <Typography>Don't have an account?</Typography>

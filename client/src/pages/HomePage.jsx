@@ -16,12 +16,12 @@ function HomePage() {
 
   // Testing Global State
   const { state, dispatch } = useContext(GlobalStateContext)
-  console.log("state: ", state)
+  //console.log("state: ", state)
 
   return (
     <>
-        <ToolBar /> {/* <-- Toolbar at the top */}
     <Stack >
+      <ToolBar/>
       <Typography fontSize={36}>Fitness Tracker</Typography>
       <Typography>Take charge of your health:</Typography>
 

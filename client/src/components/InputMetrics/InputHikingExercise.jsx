@@ -35,6 +35,23 @@ function InputHikingExercise() {
         setMaxHeartRateIn("");
     }
 
+    async function getNewExerciseID() {
+        try {
+            const res = await axios.get('http://localhost:3000/exercises', {
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                params: {
+                    userID: state.user
+                }
+            });
+            const exerciseID = res.data.at(-1)._id;
+            return exerciseID;
+        } catch (error) {
+            console.error('Error Fetching user exercises');
+        }
+    }
+
     async function handleSubmit() {
         if (!isError()) {
 
@@ -57,6 +74,16 @@ function InputHikingExercise() {
                     'Content-Type': 'application/json'
                 }
             });
+
+                const newExerciseID = await getNewExerciseID();
+
+                const updatedData = {
+                    _id: state.user,
+                    exercises: [...state.exercises, newExerciseID]
+                }
+                await axios.put('http://localhost:3000/users/', updatedData)
+
+                dispatch({ type: 'SETEXERCISES', payload: updatedData.exercises });
         }
     }
 

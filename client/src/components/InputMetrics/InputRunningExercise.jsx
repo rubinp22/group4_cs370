@@ -2,6 +2,7 @@ import { Stack, Card, Typography, Button, TextField, InputAdornment } from '@mui
 import { useState } from 'react';
 import axios from 'axios';
 import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
+
 import React, { useContext } from 'react';
 
 function InputRunningExercise() {
@@ -13,6 +14,8 @@ function InputRunningExercise() {
 
     // Global State
     const { state, dispatch } = useContext(GlobalStateContext)
+
+    console.log("weight: ", state.bodyWeight)
 
     // This new state is accessed by the error attribute for each Textfield
     const [errors, setErrors] = useState({
@@ -31,6 +34,24 @@ function InputRunningExercise() {
             setStepsIn("");
             setAvgHeartRateIn("");
             setMaxHeartRateIn("");
+        }
+
+        async function getNewExerciseID() {
+            try {
+                const res = await axios.get('http://localhost:3000/exercises', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }, 
+                    params: {
+                        userID: state.user
+                    }
+                });
+                // Getting the most recent exercise Object ID recorded by the user and returning it
+                const exerciseID = res.data.at(-1)._id;
+                return exerciseID;
+            } catch (error) {
+                console.error('Error Fetching user exercises');
+            }
         }
     
         async function handleSubmit() {
@@ -55,6 +76,26 @@ function InputRunningExercise() {
                         'Content-Type': 'application/json'
                     }
                 });
+
+                // await (from axios) needs to be called here because getNewExerciseID() returns an ID that
+                // results from an API call. Without await, it will only return a promise. We need that
+                // promise to first be fulfilled.
+                const newExerciseID = await getNewExerciseID();
+
+                const updatedData = {
+                    _id: state.user,
+                    // Appending the new exerciseID into user.exercises using our global state's data
+                    // with the spread operator (...). This is because we are pushing a new value onto
+                    // the array, not overwriting it. 
+                    exercises: [...state.exercises, newExerciseID]
+                }
+                await axios.put('http://localhost:3000/users/', updatedData)
+
+                // Updating our global state with the newly-appended exercise ID
+                // This way submitting more than one exercise on the same page correctly appends
+                // and doesn't just update the last exercise ID in the array.
+                dispatch({ type: 'SETEXERCISES', payload: updatedData.exercises });
+
             }
         }
     
