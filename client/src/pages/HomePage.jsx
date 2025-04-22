@@ -19,6 +19,7 @@ function HomePage() {
   //console.log("state: ", state)
 
   return (
+    <>
     <Stack >
       <ToolBar/>
       <Typography fontSize={36}>Fitness Tracker</Typography>
@@ -75,6 +76,7 @@ function HomePage() {
 
       </Stack>
     </Stack>
+  </>
   );
 }
 
