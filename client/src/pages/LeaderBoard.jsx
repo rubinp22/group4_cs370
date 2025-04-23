@@ -13,10 +13,11 @@ function LeaderBoard () {
 
   const { state, dispatch } = useContext(GlobalStateContext)
   const [userData, setUserData] = useState([]);
-  // very similar to userData except it will hold the cumulative exercise data
-  // for each user.
+
   const [userExercises, setUserExercises] = useState([]);
+  
   const [cumulativeMetrics, setCumulativeMetrics] = useState([]);
+  const [leaderboardData, setLeaderboardData] = useState();
 
 
   // Fetching every user from the database
@@ -167,19 +168,116 @@ useEffect(() => {
     setCumulativeMetrics(allMetrics);
   }
 
+  function populateLeaderboard() {
+
+    let leaderboard = {
+      run: {
+        distance: [ /*{distance: null, name: null}*/ ],
+        duration: [ /*{duration: null, name: null}*/ ],
+        steps: [ /*{steps: null, name: null} */]
+      },
+      hike: {
+        distance: [ /*{distance: null, name: null}*/ ],
+        duration: [ /*{duration: null, name: null}*/ ],
+        elevationGain: [ /*{elevationGain: null, name: null}*/ ]
+      },
+      cycle: {
+        distance: [ /*{distance: null, name: null}*/ ],
+        duration: [ /*{duration: null, name: null}*/ ],
+        elevationGain: [ /*{elevationGain: null, name: null}*/ ]
+      },
+      swim: {
+        lapCount: [ /*{lapCount: null, name: null}*/ ],
+        totalLapTime: [ /*{totalLapTime: null, name: null}*/ ],
+        totalStrokes: [ /*{totalStrokes: null, name: null}*/ ]
+      },
+      weights: {
+        totalReps: [ /*{totalReps: null, name: null}*/ ],
+        maxWeightOfWeights: [ /*{maxWeightOfWeights: null, name: null}*/ ],
+        totalVolume: [ /*{totalVolume: null, name: null}*/ ]
+      }
+    }
+
+    // Loop through all cumulative metrics and store them in the leaderboard object above
+    // first without sorting
+    cumulativeMetrics.map((user, idx) => {
+      leaderboard.run.distance.push({ distance: user.distance.run, name: user.name });
+      leaderboard.run.duration.push({ duration: user.duration.run, name: user.name });
+      leaderboard.run.steps.push({ steps: user.steps, name: user.name });
+
+      leaderboard.hike.distance.push({ distance: user.distance.hike, name: user.name });
+      leaderboard.hike.duration.push({ duration: user.duration.hike, name: user.name });
+      leaderboard.hike.elevationGain.push({ elevationGain: user.elevationGain.hike, name: user.name });
+
+      leaderboard.cycle.distance.push({ distance: user.distance.cycle, name: user.name });
+      leaderboard.cycle.duration.push({ duration: user.duration.cycle, name: user.name });
+      leaderboard.cycle.elevationGain.push({ elevationGain: user.elevationGain.cycle, name: user.name });
+
+      leaderboard.swim.lapCount.push({ lapCount: user.lapCount, name: user.name });
+      leaderboard.swim.totalLapTime.push({ totalLapTime: user.totalLapTime, name: user.name });
+      leaderboard.swim.totalStrokes.push({ totalStrokes: user.totalStrokes, name: user.name });
+
+      leaderboard.weights.totalReps.push({ totalReps: user.totalReps, name: user.name });
+      leaderboard.weights.maxWeightOfWeights.push({ maxWeightOfWeights: user.maxWeightOfWeights, name: user.name });
+      leaderboard.weights.totalVolume.push({ totalVolume: user.totalVolume, name: user.name });
+    })
+
+    return leaderboard;
+  }
+
+  // Use the sort function to sort each object in the array of the respective category of metric
+  // In other words, each object represents a user's cumulative data for a specfic metric, and we 
+  // are sorting these objects by the the value (first element)
+  function sortLeaderboard(leaderboard) {
+    // If we wanted ascending order, our dispatch function we are sending to sort() would look
+    // something like this: (a, b) => a.value - b.value
+    leaderboard.run.distance.sort((a, b) => b.distance - a.distance);
+    leaderboard.run.duration.sort((a, b) => b.duration - a.duration);
+    leaderboard.run.steps.sort((a, b) => b.steps - a.steps);
+
+    leaderboard.hike.distance.sort((a, b) => b.distance - a.distance);
+    leaderboard.hike.duration.sort((a, b) => b.duration - a.duration);
+    leaderboard.hike.elevationGain.sort((a, b) => b.elevationGain - a.elevationGain);
+
+    leaderboard.cycle.distance.sort((a, b) => b.distance - a.distance);
+    leaderboard.cycle.duration.sort((a, b) => b.duration - a.duration);
+    leaderboard.cycle.elevationGain.sort((a, b) => b.elevationGain - a.elevationGain);
+
+    leaderboard.swim.lapCount.sort((a, b) => b.lapCount - a.lapCount);
+    leaderboard.swim.totalLapTime.sort((a, b) => b.totalLapTime - a.totalLapTime);
+    leaderboard.swim.totalStrokes.sort((a, b) => b.totalStrokes - a.totalStrokes);
+
+    leaderboard.weights.totalReps.sort((a, b) => b.totalReps - a.totalReps);
+    leaderboard.weights.maxWeightOfWeights.sort((a, b) => b.maxWeightOfWeights - a.maxWeightOfWeights);
+    leaderboard.weights.totalVolume.sort((a, b) => b.totalVolume - a.totalVolume);
+
+    console.log("sorted: ", leaderboard);
+
+    return leaderboard;
+    
+  }
+
   // When all user exercises are fetched, run the function above to accumulate
   // their metrics. 
   useEffect(() => {
     if (userExercises.length === 0) return;
 
     sumAllUserMetrics();
-    console.log("3rd hook cumulativeMetrics: ", cumulativeMetrics)
+    //console.log("3rd hook cumulativeMetrics: ", cumulativeMetrics)
+
+    const leaderboard = populateLeaderboard();
+    const sortedLeaderboard = sortLeaderboard(leaderboard);
+
+    // Once we have a sorted leaderboard, we store it in state, triggering a DOM re-render, and for 
+    // our data to be visible on screen!
+    setLeaderboardData(sortedLeaderboard);
+
   }, [userExercises])
 
 
   return (
     <>
-      <ToolBar /> {/* add new elements */}
+      <ToolBar />
 
     </>
   );
