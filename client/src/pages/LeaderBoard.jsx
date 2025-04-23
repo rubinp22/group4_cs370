@@ -288,7 +288,7 @@ useEffect(() => {
       console.log("selected metric: ", exerciseMetric);
       setSelectedMetric(leaderboardData[exerciseCategory][exerciseMetric])
     } 
-  }, [exerciseMetric])
+  }, [exerciseCategory, exerciseMetric])
 
 
   return (
@@ -395,13 +395,18 @@ useEffect(() => {
 
         <Stack>
           <Card>
-            <BarChart
-              height={300}
-              width={600}
-              dataset={selectedMetric}
-              xAxis={[{ scaleType: 'band', dataKey: 'name' }]}
-              series={[{ dataKey: exerciseMetric, label: exerciseMetric }]}
-            />
+            {exerciseCategory !== undefined && exerciseMetric !== undefined && selectedMetric !== undefined ? (
+              <>
+                <BarChart
+                  height={300}
+                  width={600}
+                  dataset={selectedMetric}
+                  xAxis={[{ scaleType: 'band', dataKey: 'name' }]}
+                  series={[{ dataKey: exerciseMetric, label: exerciseMetric }]}
+                />       
+              </>
+            ) : (<></>)}
+
           </Card>
         </Stack>
 
