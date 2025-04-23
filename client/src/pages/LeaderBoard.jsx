@@ -1,5 +1,5 @@
 import { useNavigate, Link  } from 'react-router-dom';
-import { Stack, Avatar, Button, ButtonGroup, Typography} from '@mui/material';
+import { Stack, Card, Button, ButtonGroup, Typography} from '@mui/material';
 import { amber, blueGrey, orange } from '@mui/material/colors';
 import ToolBar from '../components/ToolBar';
 import GlobalStateContext from '../contexts/GlobalStateContext';
@@ -7,6 +7,7 @@ import { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
+import { BarChart } from "@mui/x-charts";
 
 
 function LeaderBoard () {
@@ -16,6 +17,7 @@ function LeaderBoard () {
   const [userExercises, setUserExercises] = useState([]);
   const [cumulativeMetrics, setCumulativeMetrics] = useState([]);
   const [leaderboardData, setLeaderboardData] = useState();
+  const [selectedMetric, setSelectedMetric] = useState();
 
   // Ex: run, hike, cycle, swim, weights
   const [exerciseCategory, setExerciseCategory] = useState(undefined);
@@ -282,6 +284,9 @@ useEffect(() => {
   useEffect(() => {
     if (exerciseCategory !== undefined && exerciseMetric !== undefined) {
       console.log("selected leaderboard metric: ", leaderboardData[exerciseCategory][exerciseMetric]);
+      console.log("selected category: ", exerciseCategory);
+      console.log("selected metric: ", exerciseMetric);
+      setSelectedMetric(leaderboardData[exerciseCategory][exerciseMetric])
     } 
   }, [exerciseMetric])
 
@@ -303,91 +308,102 @@ useEffect(() => {
         </ButtonGroup>
 
         <Stack margin={5}>
-        <ButtonGroup variant="outlined" aria-label="Basic button group">
-          {exerciseCategory === "run" ? (
+          <ButtonGroup variant="outlined" aria-label="Basic button group">
+            {exerciseCategory === "run" ? (
+                <>
+                  <Typography 
+                    alignContent={"center"} 
+                    justifyContent={"center"} 
+                    marginRight={5}
+                    fontSize={24}
+                  >
+                    Running Metrics
+                  </Typography>
+
+                  <Button onClick={() => setExerciseMetric("distance")}>Distance</Button>
+                  <Button onClick={() => setExerciseMetric("duration")}>Duration</Button>
+                  <Button onClick={() => setExerciseMetric("steps")}>Steps</Button>
+
+                </>
+              ) : (<></>)}
+            {exerciseCategory === "hike" ? (
               <>
-                <Typography 
-                  alignContent={"center"} 
-                  justifyContent={"center"} 
-                  marginRight={5}
-                  fontSize={24}
-                >
-                  Running Metrics
-                </Typography>
+                  <Typography 
+                    alignContent={"center"} 
+                    justifyContent={"center"} 
+                    marginRight={5}
+                    fontSize={24}
+                  >
+                    Hiking Metrics
+                  </Typography>
 
-                <Button onClick={() => setExerciseMetric("distance")}>Distance</Button>
-                <Button onClick={() => setExerciseMetric("duration")}>Duration</Button>
-                <Button onClick={() => setExerciseMetric("steps")}>Steps</Button>
-
+                  <Button onClick={() => setExerciseMetric("distance")}>Distance</Button>
+                  <Button onClick={() => setExerciseMetric("duration")}>Duration</Button>
+                  <Button onClick={() => setExerciseMetric("elevationGain")}>Elevation Gain</Button>
               </>
             ) : (<></>)}
-          {exerciseCategory === "hike" ? (
-            <>
-                <Typography 
-                  alignContent={"center"} 
-                  justifyContent={"center"} 
-                  marginRight={5}
-                  fontSize={24}
-                >
-                  Hiking Metrics
-                </Typography>
+            {exerciseCategory === "cycle" ? (
+              <>
+                  <Typography 
+                    alignContent={"center"} 
+                    justifyContent={"center"} 
+                    marginRight={5}
+                    fontSize={24}
+                  >
+                    Cycling Metrics
+                  </Typography>
 
-                <Button onClick={() => setExerciseMetric("distance")}>Distance</Button>
-                <Button onClick={() => setExerciseMetric("duration")}>Duration</Button>
-                <Button onClick={() => setExerciseMetric("elevationGain")}>Elevation Gain</Button>
-            </>
-          ) : (<></>)}
-          {exerciseCategory === "cycle" ? (
-            <>
-                <Typography 
-                  alignContent={"center"} 
-                  justifyContent={"center"} 
-                  marginRight={5}
-                  fontSize={24}
-                >
-                  Cycling Metrics
-                </Typography>
+                  <Button onClick={() => setExerciseMetric("distance")}>Distance</Button>
+                  <Button onClick={() => setExerciseMetric("duration")}>Duration</Button>
+                  <Button onClick={() => setExerciseMetric("elevationGain")}>Elevation Gain</Button>
+              </>
+            ) : (<></>)}
+            {exerciseCategory === "swim" ? (
+              <>
+                  <Typography 
+                    alignContent={"center"} 
+                    justifyContent={"center"} 
+                    marginRight={5}
+                    fontSize={24}
+                  >
+                    Swimming Metrics
+                  </Typography>
 
-                <Button onClick={() => setExerciseMetric("distance")}>Distance</Button>
-                <Button onClick={() => setExerciseMetric("duration")}>Duration</Button>
-                <Button onClick={() => setExerciseMetric("elevationGain")}>Elevation Gain</Button>
-            </>
-          ) : (<></>)}
-          {exerciseCategory === "swim" ? (
-            <>
-                <Typography 
-                  alignContent={"center"} 
-                  justifyContent={"center"} 
-                  marginRight={5}
-                  fontSize={24}
-                >
-                  Swimming Metrics
-                </Typography>
+                  <Button onClick={() => setExerciseMetric("lapCount")}>Lap Count</Button>
+                  <Button onClick={() => setExerciseMetric("totalLapTime")}>Total Lap Time</Button>
+                  <Button onClick={() => setExerciseMetric("totalStrokes")}>Total Strokes</Button>
+              </>
+            ) : (<></>)}
+            {exerciseCategory === "weights" ? (
+              <>
+                  <Typography 
+                    alignContent={"center"} 
+                    justifyContent={"center"} 
+                    marginRight={5}
+                    fontSize={24}
+                  >
+                    Weightlifting Metrics
+                  </Typography>
 
-                <Button onClick={() => setExerciseMetric("lapCount")}>Lap Count</Button>
-                <Button onClick={() => setExerciseMetric("totalLapTime")}>Total Lap Time</Button>
-                <Button onClick={() => setExerciseMetric("totalStrokes")}>Total Strokes</Button>
-            </>
-          ) : (<></>)}
-          {exerciseCategory === "weights" ? (
-            <>
-                <Typography 
-                  alignContent={"center"} 
-                  justifyContent={"center"} 
-                  marginRight={5}
-                  fontSize={24}
-                >
-                  Weightlifting Metrics
-                </Typography>
-
-                <Button onClick={() => setExerciseMetric("totalReps")}>Total Reps</Button>
-                <Button onClick={() => setExerciseMetric("maxWeightOfWeights")}>Max Weight Of Weights</Button>
-                <Button onClick={() => setExerciseMetric("totalVolume")}>Total Volume</Button>
-            </>
-          ) : (<></>)}
-        </ButtonGroup>
+                  <Button onClick={() => setExerciseMetric("totalReps")}>Total Reps</Button>
+                  <Button onClick={() => setExerciseMetric("maxWeightOfWeights")}>Max Weight Of Weights</Button>
+                  <Button onClick={() => setExerciseMetric("totalVolume")}>Total Volume</Button>
+              </>
+            ) : (<></>)}
+          </ButtonGroup>
         </Stack>
 
+        <Stack>
+          <Card>
+            <BarChart
+              height={300}
+              width={600}
+              dataset={selectedMetric}
+              xAxis={[{ scaleType: 'band', dataKey: 'name' }]}
+              series={[{ dataKey: exerciseMetric, label: exerciseMetric }]}
+            />
+          </Card>
+        </Stack>
 
       </Stack>
 
