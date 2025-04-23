@@ -168,6 +168,14 @@ function TrainingVideoLibrary () {
         <Button onClick={() => setVideoType("dance")}>dance</Button>
         <Button onClick={() => setVideoType("all")}>All Videos</Button>
       </ButtonGroup>
+      <ButtonGroup variant="contained" aria-label="Basic button group">
+        <Button onClick={() => setVideoType("running")}>running</Button>
+        <Button onClick={() => setVideoType("cycling")}>cycling</Button>
+        <Button onClick={() => setVideoType("hiking")}>hiking</Button>
+        <Button onClick={() => setVideoType("swimming")}>swimming</Button>
+        <Button onClick={() => setVideoType("lifting")}>lifting</Button>
+        <Button onClick={() => setVideoType("all")}>All Videos</Button>
+      </ButtonGroup>
 
       {/* Mapping videos alonging with embedding them */}
       <Stack direction="column" gap={2}>
