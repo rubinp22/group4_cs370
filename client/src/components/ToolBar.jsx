@@ -18,7 +18,7 @@ function ToolBar() {
 
   const handleProfileClick = () => {
     handleMenuClose();
-    navigate(`./profile/${state.user}`);
+    navigate(`/HomePage/profile/${state.user}`);
   };
 
   const handleLogoutClick = () => {
