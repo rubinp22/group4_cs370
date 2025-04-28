@@ -1,14 +1,12 @@
-import { useNavigate, Link  } from 'react-router-dom';
-import { Stack, Card, Button, ButtonGroup, Typography} from '@mui/material';
-import { amber, blueGrey, orange } from '@mui/material/colors';
-import ToolBar from '../components/ToolBar';
-import GlobalStateContext from '../contexts/GlobalStateContext';
-import { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { useTheme } from '@emotion/react';
+import { useContext, useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import MuiLink from '@mui/material/Link';
-import { BarChart } from "@mui/x-charts";
+import { BarChart } from '@mui/x-charts';
+import { Button, ButtonGroup, Card, Link as MuiLink, Stack, Typography} from '@mui/material';
 
+import GlobalStateContext from '../contexts/GlobalStateContext';
+import ToolBar from '../components/ToolBar';
 
 function LeaderBoard () {
 
@@ -18,6 +16,8 @@ function LeaderBoard () {
   const [cumulativeMetrics, setCumulativeMetrics] = useState([]);
   const [leaderboardData, setLeaderboardData] = useState();
   const [selectedMetric, setSelectedMetric] = useState();
+
+  const theme = useTheme();
 
   // Ex: run, hike, cycle, swim, weights
   const [exerciseCategory, setExerciseCategory] = useState(undefined);
@@ -403,7 +403,8 @@ useEffect(() => {
                   dataset={selectedMetric}
                   xAxis={[{ scaleType: 'band', dataKey: 'name' }]}
                   series={[{ dataKey: exerciseMetric, label: exerciseMetric }]}
-                />       
+                  colors={[theme.palette.secondary.main]}
+                />
               </>
             ) : (<></>)}
 
