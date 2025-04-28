@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Stack, Typography } from '@mui/material';
+import { TextField, Button, Stack, Typography, InputAdornment } from '@mui/material';
 import axios from 'axios';
 import GlobalStateContext from "../contexts/GlobalStateContext";
 import { AppBar, Toolbar, IconButton, Box } from "@mui/material";
@@ -18,16 +18,32 @@ function CreateAccount() {
   const [password, setPassword] = useState('');
   const [confirmedPass, setConfirmedPass] = useState('');
   const [accountCreated, setAccountCreated] = useState(false);
+  const [enteringUserInfo, setEnteringUserInfo] = useState(false);
+  const [name, setName] = useState('');
+  const [heightFeet, setHeightFeet] = useState(undefined);
+  const [heightInches, setHeightInches] = useState(undefined);
+  const [weight, setWeight] = useState('');
+  const [description, setDescription] = useState('');
   const [allUsers, setAllUsers] = useState([]);
 
   const [errors, setErrors] = useState({
     username: false,
-    password: false
+    password: false,
+    name: false,
+    heightFeet: false,
+    heightInches: false,
+    weight: false,
+    description: false
   })
 
   const [helperTexts, setHelperTexts] = useState({
     username: "",
-    password: ""
+    password: "",
+    name: "",
+    heightFeet: "",
+    heightInches: "",
+    weight: "",
+    description: ""
   })
 
   // check for errors
@@ -115,11 +131,21 @@ useEffect(() => {
   getProfileData();
 }, []);
   
-  const handleSubmit = () => {
+  const handleSubmitCredentials = () => {
     if (!isError()) {
-        createUser();
-        setAccountCreated(true);
+          setEnteringUserInfo(true);
+        //createUser();
+        //setAccountCreated(true);
     }
+  }
+
+  const handleSubmitUserInfo = () => {
+    console.log("handleSubmitUserInfo")
+    // if (!isErrorInfo())
+      // with extra info
+      //createUser();
+      //setAccountCreated(true);
+
   }
 
   async function createUser() {
@@ -136,39 +162,106 @@ useEffect(() => {
       }
   }
 
-
   return (
     <Stack>
-      <Typography fontSize={36}>Create New Account</Typography>
+      <Typography fontSize={36}>{enteringUserInfo ? "Tell us about yourself" : "Create New Account"}</Typography>
       <Stack spacing={2} alignItems="flex-start" sx={{ width: 300, margin: 'auto', mt: 5 }}>
-        <Typography>Username:</Typography>
-        <TextField
-          variant="outlined"
-          fullWidth
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          error={errors.username}
-          helperText={helperTexts.username}
-        />
-        <Typography>Password:</Typography>
-        <TextField
-          variant="outlined"
-          type="password"
-          fullWidth
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={errors.password}
-          helperText={helperTexts.password}
-        />
-        <Typography>Confirm Password:</Typography>
-        <TextField
-          variant="outlined"
-          type="password"
-          fullWidth
-          value={confirmedPass}
-          onChange={(e) => setConfirmedPass(e.target.value)}
-          error={errors.password}
-        />
+        {enteringUserInfo ? (
+          <>
+            <Typography>Name:</Typography>
+            <TextField
+              variant="outlined"
+              fullWidth
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              error={errors.name}
+              helperText={helperTexts.name}
+            />
+            <Typography>Height:</Typography>
+            <Stack direction="row">
+              <TextField
+                variant="outlined"
+                fullWidth
+                value={heightFeet}
+                onChange={(e) => setHeightFeet(e.target.value)}
+                error={errors.heightFeet}
+                helperText={helperTexts.heightFeet}
+                InputProps={{
+                  endAdornment: <InputAdornment position='end'>Ft</InputAdornment>
+                }}
+                sx={{width: "50%"}}
+              />
+              <TextField
+                variant="outlined"
+                fullWidth
+                value={heightInches}
+                onChange={(e) => setHeightInches(e.target.value)}
+                error={errors.heightInches}
+                helperText={helperTexts.heightInches}
+                InputProps={{
+                  endAdornment: <InputAdornment position='end'>In</InputAdornment>
+                }}
+                sx={{width: "50%"}}
+              />
+            </Stack>
+            <Typography>Weight:</Typography>
+            <TextField
+                variant="outlined"
+                fullWidth
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+                error={errors.weight}
+                helperText={helperTexts.weight}
+                InputProps={{
+                  endAdornment: <InputAdornment position='end'>lbs</InputAdornment>
+                }}
+              />
+              <Typography>Description:</Typography>
+              <TextField
+                variant="outlined"
+                fullWidth
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                error={errors.description}
+                helperText={helperTexts.description}
+                multiline
+                maxRows={6}
+              />
+              
+          </>
+        ) : (
+          <>
+            <Typography>Username:</Typography>
+            <TextField
+              variant="outlined"
+              fullWidth
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              error={errors.username}
+              helperText={helperTexts.username}
+            />
+            <Typography>Password:</Typography>
+            <TextField
+              variant="outlined"
+              type="password"
+              fullWidth
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={errors.password}
+              helperText={helperTexts.password}
+            />
+            <Typography>Confirm Password:</Typography>
+            <TextField
+              variant="outlined"
+              type="password"
+              fullWidth
+              value={confirmedPass}
+              onChange={(e) => setConfirmedPass(e.target.value)}
+              error={errors.password}
+            />
+          </>
+        )}
+
       </Stack>
         {accountCreated ? (
         <Stack alignItems={"center"}>
@@ -179,7 +272,7 @@ useEffect(() => {
             </MuiLink> 
         </Stack>): 
         (<Stack alignItems={"center"}>
-            <Button variant="contained" onClick={handleSubmit} sx={{mt: 5, width: "40%"}}>
+            <Button variant="contained" onClick={enteringUserInfo ? (handleSubmitUserInfo) : (handleSubmitCredentials)} sx={{mt: 5, width: "40%"}}>
                 Submit
             </Button>
             <br/>

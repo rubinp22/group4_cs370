@@ -77,10 +77,6 @@ useEffect(() => {
     // gets assigned to the element in which that condition was true
     const matchingUser = allUsers.find(user => username === user.username && password === user.password);
     if (matchingUser) {
-      console.log("logging in as user: ", matchingUser);
-
-      console.log("weight: ", matchingUser.weightArray.at(-1).weight)
-
       selectUser(matchingUser._id);
       setTheme(matchingUser.lightmodeToggle);
       setWeight(matchingUser.weightArray.at(-1).weight);

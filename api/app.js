@@ -12,7 +12,8 @@ import Achievement from './models/Achievement.js';
 // Instantiate the API
 const app = new Hono();
 
-const database = "Fitness-Tracker";
+//const database = "Fitness-Tracker";
+const database = "test";
 
 // Connect to mongo
 // Here I've added the database variable to the URI. Without specifying this, Mongo defaults to the "test" database
