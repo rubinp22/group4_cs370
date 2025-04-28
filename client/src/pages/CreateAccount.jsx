@@ -46,8 +46,8 @@ function CreateAccount() {
     description: ""
   })
 
-  // check for errors
-  function isError() {
+  // check for errors relating to username and password
+  function isCredentialError() {
 
     // check if user already exists
     const findUser = allUsers.find(user => username === user.username);
@@ -110,6 +110,90 @@ function CreateAccount() {
     return errorFound;
 }
 
+// check for errors relating to user info
+function isInfoError() {
+  let nameError = true;
+  let nameHelper = "";
+  if (name === "") {
+    nameHelper = "Please enter a name";
+  } else if (name.length > 30) {
+    nameHelper = "Exceeded character limit of 30 by " + (name.length - 30);
+  } else {
+    nameError = false;
+  }
+
+  let heightFeetError = true;
+  let heightFeetHelper = "";
+  if (heightFeet === "") {
+    heightFeetHelper = "Please enter Feet";
+  } else if (heightFeet > 7 || heightFeet < 1) {
+    heightFeetHelper = "Valid range: 1 - 7";
+  } else {
+    heightFeetError = false;
+  }
+
+  let heightInchesError = true;
+  let heightInchesHelper = "";
+  if (heightInches === "") {
+    heightInchesHelper = "Please enter Inches";
+  } else if (heightInches > 11 || heightInches < 0) {
+    heightInchesHelper = "Valid range: 0 - 11";
+  } else {
+    heightInchesError = false;
+  }
+
+  let weightError = true;
+  let weightHelper = "";
+  if (weight === "") {
+    weightHelper = "Please enter a weight";
+  } else if (weight > 1000 || weight < 1) {
+    weightHelper = "Valid range: 1 - 1000";
+  } else {
+    weightError = false;
+  }
+
+  let descriptionError = true;
+  let descriptionHelper = "";
+  if (description === "") {
+    descriptionHelper = "Please enter a description"
+  } else if (description.length > 200) {
+    descriptionHelper = "Exceeded character limit of 200 by " + (description.length - 200);
+  } else {
+    descriptionError = false;
+  }
+
+  let newHelper = {
+    name: nameHelper,
+    heightFeet: heightFeetHelper,
+    heightInches: heightInchesHelper,
+    weight: weightHelper,
+    description: descriptionHelper
+  }
+
+  setHelperTexts(newHelper);
+
+  let newErrors = {
+    name: nameError,
+    heightFeet: heightFeetError,
+    heightInches: heightInchesError,
+    weight: weightError,
+    description: descriptionError
+  }
+
+  setErrors(newErrors);
+
+  let newErrorsArray = Object.values(newErrors)
+  let errorFound = false;
+
+  newErrorsArray.forEach(val => {
+    if (val === true) {
+        errorFound = true;
+    }
+})
+
+return errorFound;
+}
+
 useEffect(() => {
   async function getProfileData() {
     try {
@@ -132,25 +216,33 @@ useEffect(() => {
 }, []);
   
   const handleSubmitCredentials = () => {
-    if (!isError()) {
+    if (!isCredentialError()) {
           setEnteringUserInfo(true);
-        //createUser();
-        //setAccountCreated(true);
     }
   }
 
   const handleSubmitUserInfo = () => {
-    console.log("handleSubmitUserInfo")
-    // if (!isErrorInfo())
-      // with extra info
-      //createUser();
-      //setAccountCreated(true);
+      if (!isInfoError()) {
+        createUser();
+        setAccountCreated(true);
+      }
 
   }
 
   async function createUser() {
     // create new user if no errors found
-    const newUser = {username: username, password: password};
+    const newUser = {
+      username: username, 
+      password: password,
+      name: name,
+      heightFeet: heightFeet,
+      heightInch: heightInches,
+      weightArray: {
+        weight: weight,
+        dateLogged: Date.now()
+      },
+      description: description
+    };
     try {
         await axios.post('http://localhost:3000/users/', newUser, {
             headers: {

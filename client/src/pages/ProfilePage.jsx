@@ -249,9 +249,6 @@ function ProfilePage() {
             }
         })
 
-
-        // console.log("sumUserMetrics returning: ", metrics);
-
         return metrics;
     }
 
@@ -358,7 +355,7 @@ function ProfilePage() {
             name: (nameIn === undefined || nameIn.length > 30 || nameIn.length < 1),
             heightFeet: (heightFeetIn === undefined || heightFeetIn > 7 || heightFeetIn < 1),
             heightInch: (heightInchIn === undefined || heightInchIn > 11 || heightInchIn < 0),
-            weight: (weightIn === undefined || weightIn > 1000 || weightIn < 0),
+            weight: (weightIn === undefined || weightIn > 1000 || weightIn < 1),
             description: (description != undefined && description.length > 200),
             pfp: (pfp === undefined)
         }
