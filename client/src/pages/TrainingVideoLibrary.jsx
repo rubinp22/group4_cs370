@@ -45,39 +45,39 @@ const videoLibrary = {
       { title: 'Dance Video 5', url: 'https://www.youtube.com/watch?v=jRLvEQsguMk' }
   ],
   running: [
-      { title: 'Running Video 1', url: 'https://youtu.be/u-e0ZO5L0s0?si=3QQt92JB4lrmVrCH' },
-      { title: 'Running Video 2', url: 'https://youtu.be/RCBOV43EDg0?si=0HteGCLLp0TvfiuI' },
-      { title: 'Running Video 3', url: 'https://youtu.be/_kGESn8ArrU?si=D5i1_DEu70xCj9J5' },
-      { title: 'Running Video 4', url: 'https://youtu.be/LqTCmMtWdGA?si=6w5M1CLT2rpy9o1e' },
-      { title: 'Running Video 5', url: 'https://youtu.be/utADwnhrCQ4?si=dkfN3Q3eC6yn2-H9' }
+      { title: 'Running Video 1', url: 'https://www.youtube.com/watch?v=u-e0ZO5L0s0' },
+      { title: 'Running Video 2', url: 'https://www.youtube.com/watch?v=RCBOV43EDg0' },
+      { title: 'Running Video 3', url: 'https://www.youtube.com/watch?v=_kGESn8ArrU' },
+      { title: 'Running Video 4', url: 'https://www.youtube.com/watch?v=LqTCmMtWdGA' },
+      { title: 'Running Video 5', url: 'https://www.youtube.com/watch?v=utADwnhrCQ4' }
   ],
   cycling: [
-      { title: 'Cycling Video 1', url: 'https://youtu.be/4ssLDk1eX9w?si=WXphVb_a_o6VSMDL' },
-      { title: 'Cycling Video 2', url: 'https://youtu.be/gUapMtJIb1s?si=i2esD_5MqQIOVEkA' },
-      { title: 'Cycling Video 3', url: 'https://youtu.be/M-viV5DZ2mo?si=ZqtCSMHpVKaJ18KX' },
-      { title: 'Cycling Video 4', url: 'https://youtu.be/bb9m_n4jckQ?si=jTiEjvFGLQ4e7t9q' },
-      { title: 'Cycling Video 5', url: 'https://youtu.be/VKBNDzCLzK8?si=HbsIJ-3zfhSBNI1X' }
+      { title: 'Cycling Video 1', url: 'https://www.youtube.com/watch?v=4ssLDk1eX9w' },
+      { title: 'Cycling Video 2', url: 'https://www.youtube.com/watch?v=gUapMtJIb1s' },
+      { title: 'Cycling Video 3', url: 'https://www.youtube.com/watch?v=M-viV5DZ2mo' },
+      { title: 'Cycling Video 4', url: 'https://www.youtube.com/watch?v=bb9m_n4jckQ' },
+      { title: 'Cycling Video 5', url: 'https://www.youtube.com/watch?v=VKBNDzCLzK8' }
   ],
   hiking: [
-      { title: 'Hiking Video 1', url: 'https://youtu.be/lrESF9eecxk?si=pz25EgujbkYPWX2q' },
-      { title: 'Hiking Video 2', url: 'https://youtu.be/Ul9ryQiK8VM?si=rB_ULvdl7MZHmGi-' },
-      { title: 'Hiking Video 3', url: 'https://youtu.be/ZnOzpERDmjU?si=gXQp0_URMNUQdq36' },
-      { title: 'Hiking Video 4', url: 'https://youtu.be/PDJJaPxCbxg?si=UUjuBuJ0I6t2gRSW' },
-      { title: 'Hiking Video 5', url: 'https://youtu.be/YXjyrUd2mTg?si=0P9Y1G_Mc-WXSajt' }
+      { title: 'Hiking Video 1', url: 'https://www.youtube.com/watch?v=lrESF9eecxk' },
+      { title: 'Hiking Video 2', url: 'https://www.youtube.com/watch?v=Ul9ryQiK8VM' },
+      { title: 'Hiking Video 3', url: 'https://www.youtube.com/watch?v=ZnOzpERDmjU' },
+      { title: 'Hiking Video 4', url: 'https://www.youtube.com/watch?v=PDJJaPxCbxg' },
+      { title: 'Hiking Video 5', url: 'https://www.youtube.com/watch?v=YXjyrUd2mTg' }
   ],
   swimming: [
-      { title: 'Swimming Video 1', url: 'https://youtu.be/6_vXycbD2TM?si=nMpSD6F2QRX4Edje' },
-      { title: 'Swimming Video 2', url: 'https://youtu.be/ZdKBXAoxoDE?si=puR_esaGJVOz_JHP' },
-      { title: 'Swimming Video 3', url: 'https://youtu.be/lFU0aZEElqc?si=92SCyXS0K-cUfudw' },
-      { title: 'Swimming Video 4', url: 'https://youtu.be/riIyImmuB_M?si=HOQLOyYnyyv3zn18' },
-      { title: 'Swimming Video 5', url: 'https://youtu.be/WaKMgWGXE9c?si=oqYOPpxS06X70DVM' }
+      { title: 'Swimming Video 1', url: 'https://www.youtube.com/watch?v=6_vXycbD2TM' },
+      { title: 'Swimming Video 2', url: 'https://www.youtube.com/watch?v=ZdKBXAoxoDE' },
+      { title: 'Swimming Video 3', url: 'https://www.youtube.com/watch?v=lFU0aZEElqc' },
+      { title: 'Swimming Video 4', url: 'https://www.youtube.com/watch?v=riIyImmuB_M' },
+      { title: 'Swimming Video 5', url: 'https://www.youtube.com/watch?v=WaKMgWGXE9c' }
   ],
   lifting: [
-      { title: 'Lifting Video 1', url: 'https://youtu.be/u7AFpzWV2I8?si=Q6FILwjeVJQ2QNX-' },
-      { title: 'Lifting Video 2', url: 'https://youtu.be/dEKpR6sGxDY?si=x66qDy8aiTZTG7UU' },
-      { title: 'Lifting Video 3', url: 'https://youtu.be/4Y2ZdHCOXok?si=WS1LYivnPZ0j9ECg' },
-      { title: 'Lifting Video 4', url: 'https://youtu.be/Yb2TgKMA8y4?si=hysxyTBXqxIkXOMA' },
-      { title: 'Lifting Video 5', url: 'https://youtu.be/BNsKEG3hIzI?si=8hNk08YPOyCo1vNE' }
+      { title: 'Lifting Video 1', url: 'https://www.youtube.com/watch?v=u7AFpzWV2I8' },
+      { title: 'Lifting Video 2', url: 'https://www.youtube.com/watch?v=dEKpR6sGxDY' },
+      { title: 'Lifting Video 3', url: 'https://www.youtube.com/watch?v=4Y2ZdHCOXok' },
+      { title: 'Lifting Video 4', url: 'https://www.youtube.com/watch?v=Yb2TgKMA8y4' },
+      { title: 'Lifting Video 5', url: 'https://www.youtube.com/watch?v=BNsKEG3hIzI' }
   ],
   all: [
       { title: 'Strength Video 1', url: 'https://www.youtube.com/watch?v=ZCcX2Egirp4' },
@@ -105,31 +105,31 @@ const videoLibrary = {
       { title: 'Dance Video 3', url: 'https://www.youtube.com/watch?v=so0eQJVtZEM' },
       { title: 'Dance Video 4', url: 'https://www.youtube.com/watch?v=QKV-KhMjOWA' },
       { title: 'Dance Video 5', url: 'https://www.youtube.com/watch?v=jRLvEQsguMk' },
-      { title: 'Running Video 1', url: 'https://youtu.be/u-e0ZO5L0s0?si=3QQt92JB4lrmVrCH' },
-      { title: 'Running Video 2', url: 'https://youtu.be/RCBOV43EDg0?si=0HteGCLLp0TvfiuI' },
-      { title: 'Running Video 3', url: 'https://youtu.be/_kGESn8ArrU?si=D5i1_DEu70xCj9J5' },
-      { title: 'Running Video 4', url: 'https://youtu.be/LqTCmMtWdGA?si=6w5M1CLT2rpy9o1e' },
-      { title: 'Running Video 5', url: 'https://youtu.be/utADwnhrCQ4?si=dkfN3Q3eC6yn2-H9' },
-      { title: 'Cycling Video 1', url: 'https://youtu.be/4ssLDk1eX9w?si=WXphVb_a_o6VSMDL' },
-      { title: 'Cycling Video 2', url: 'https://youtu.be/gUapMtJIb1s?si=i2esD_5MqQIOVEkA' },
-      { title: 'Cycling Video 3', url: 'https://youtu.be/M-viV5DZ2mo?si=ZqtCSMHpVKaJ18KX' },
-      { title: 'Cycling Video 4', url: 'https://youtu.be/bb9m_n4jckQ?si=jTiEjvFGLQ4e7t9q' },
-      { title: 'Cycling Video 5', url: 'https://youtu.be/VKBNDzCLzK8?si=HbsIJ-3zfhSBNI1X' },
-      { title: 'Hiking Video 1', url: 'https://youtu.be/lrESF9eecxk?si=pz25EgujbkYPWX2q' },
-      { title: 'Hiking Video 2', url: 'https://youtu.be/Ul9ryQiK8VM?si=rB_ULvdl7MZHmGi-' },
-      { title: 'Hiking Video 3', url: 'https://youtu.be/ZnOzpERDmjU?si=gXQp0_URMNUQdq36' },
-      { title: 'Hiking Video 4', url: 'https://youtu.be/PDJJaPxCbxg?si=UUjuBuJ0I6t2gRSW' },
-      { title: 'Hiking Video 5', url: 'https://youtu.be/YXjyrUd2mTg?si=0P9Y1G_Mc-WXSajt' },
-      { title: 'Swimming Video 1', url: 'https://youtu.be/6_vXycbD2TM?si=nMpSD6F2QRX4Edje' },
-      { title: 'Swimming Video 2', url: 'https://youtu.be/ZdKBXAoxoDE?si=puR_esaGJVOz_JHP' },
-      { title: 'Swimming Video 3', url: 'https://youtu.be/lFU0aZEElqc?si=92SCyXS0K-cUfudw' },
-      { title: 'Swimming Video 4', url: 'https://youtu.be/riIyImmuB_M?si=HOQLOyYnyyv3zn18' },
-      { title: 'Swimming Video 5', url: 'https://youtu.be/WaKMgWGXE9c?si=oqYOPpxS06X70DVM' },
-      { title: 'Lifting Video 1', url: 'https://youtu.be/u7AFpzWV2I8?si=Q6FILwjeVJQ2QNX-' },
-      { title: 'Lifting Video 2', url: 'https://youtu.be/dEKpR6sGxDY?si=x66qDy8aiTZTG7UU' },
-      { title: 'Lifting Video 3', url: 'https://youtu.be/4Y2ZdHCOXok?si=WS1LYivnPZ0j9ECg' },
-      { title: 'Lifting Video 4', url: 'https://youtu.be/Yb2TgKMA8y4?si=hysxyTBXqxIkXOMA' },
-      { title: 'Lifting Video 5', url: 'https://youtu.be/BNsKEG3hIzI?si=8hNk08YPOyCo1vNE' }
+      { title: 'Running Video 1', url: 'https://www.youtube.com/watch?v=u-e0ZO5L0s0' },
+      { title: 'Running Video 2', url: 'https://www.youtube.com/watch?v=RCBOV43EDg0' },
+      { title: 'Running Video 3', url: 'https://www.youtube.com/watch?v=_kGESn8ArrU' },
+      { title: 'Running Video 4', url: 'https://www.youtube.com/watch?v=LqTCmMtWdGA' },
+      { title: 'Running Video 5', url: 'https://www.youtube.com/watch?v=utADwnhrCQ4' },
+      { title: 'Cycling Video 1', url: 'https://www.youtube.com/watch?v=4ssLDk1eX9w' },
+      { title: 'Cycling Video 2', url: 'https://www.youtube.com/watch?v=gUapMtJIb1s' },
+      { title: 'Cycling Video 3', url: 'https://www.youtube.com/watch?v=M-viV5DZ2mo' },
+      { title: 'Cycling Video 4', url: 'https://www.youtube.com/watch?v=bb9m_n4jckQ' },
+      { title: 'Cycling Video 5', url: 'https://www.youtube.com/watch?v=VKBNDzCLzK8' },
+      { title: 'Hiking Video 1', url: 'https://www.youtube.com/watch?v=lrESF9eecxk' },
+      { title: 'Hiking Video 2', url: 'https://www.youtube.com/watch?v=Ul9ryQiK8VM' },
+      { title: 'Hiking Video 3', url: 'https://www.youtube.com/watch?v=ZnOzpERDmjU' },
+      { title: 'Hiking Video 4', url: 'https://www.youtube.com/watch?v=PDJJaPxCbxg' },
+      { title: 'Hiking Video 5', url: 'https://www.youtube.com/watch?v=YXjyrUd2mTg' },
+      { title: 'Swimming Video 1', url: 'https://www.youtube.com/watch?v=6_vXycbD2TM' },
+      { title: 'Swimming Video 2', url: 'https://www.youtube.com/watch?v=ZdKBXAoxoDE' },
+      { title: 'Swimming Video 3', url: 'https://www.youtube.com/watch?v=lFU0aZEElqc' },
+      { title: 'Swimming Video 4', url: 'https://www.youtube.com/watch?v=riIyImmuB_M' },
+      { title: 'Swimming Video 5', url: 'https://www.youtube.com/watch?v=WaKMgWGXE9c' },
+      { title: 'Lifting Video 1', url: 'https://www.youtube.com/watch?v=u7AFpzWV2I8' },
+      { title: 'Lifting Video 2', url: 'https://www.youtube.com/watch?v=dEKpR6sGxDY' },
+      { title: 'Lifting Video 3', url: 'https://www.youtube.com/watch?v=4Y2ZdHCOXok' },
+      { title: 'Lifting Video 4', url: 'https://www.youtube.com/watch?v=Yb2TgKMA8y4' },
+      { title: 'Lifting Video 5', url: 'https://www.youtube.com/watch?v=BNsKEG3hIzI' }
   ],
   none: [{title: 'Select a button at the top to see exercise videos', url:'null'}]
 };
@@ -158,22 +158,19 @@ function TrainingVideoLibrary () {
       <>
       <ToolBar /> {/* add new elements */}
       <Stack direction="column" gap={3} marginBottom={3}>
-      <Typography variant="h2">Training Video Library</Typography>
+      <Typography marginTop="10%" variant="h2">Training Video Library</Typography>
 
-      <ButtonGroup variant="contained" aria-label="Basic button group">
-        <Button onClick={() => setVideoType("strength")}>strength</Button>
-        <Button onClick={() => setVideoType("cardio")}>cardio</Button>
-        <Button onClick={() => setVideoType("yoga")}>yoga</Button>
-        <Button onClick={() => setVideoType("pilates")}>pilates</Button>
-        <Button onClick={() => setVideoType("dance")}>dance</Button>
-        <Button onClick={() => setVideoType("all")}>All Videos</Button>
-      </ButtonGroup>
       <ButtonGroup variant="contained" aria-label="Basic button group">
         <Button onClick={() => setVideoType("running")}>running</Button>
         <Button onClick={() => setVideoType("cycling")}>cycling</Button>
         <Button onClick={() => setVideoType("hiking")}>hiking</Button>
         <Button onClick={() => setVideoType("swimming")}>swimming</Button>
         <Button onClick={() => setVideoType("lifting")}>lifting</Button>
+        <Button onClick={() => setVideoType("strength")}>strength</Button>
+        <Button onClick={() => setVideoType("cardio")}>cardio</Button>
+        <Button onClick={() => setVideoType("yoga")}>yoga</Button>
+        <Button onClick={() => setVideoType("pilates")}>pilates</Button>
+        <Button onClick={() => setVideoType("dance")}>dance</Button>
         <Button onClick={() => setVideoType("all")}>All Videos</Button>
       </ButtonGroup>
 
