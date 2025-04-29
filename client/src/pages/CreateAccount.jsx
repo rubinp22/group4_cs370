@@ -1,12 +1,15 @@
 
 import React, { useState, useEffect, useContext } from 'react';
+import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
-import { TextField, Button, Stack, Typography, InputAdornment } from '@mui/material';
+import { TextField, Button, Stack, Typography, InputAdornment, Avatar } from '@mui/material';
 import axios from 'axios';
 import GlobalStateContext from "../contexts/GlobalStateContext";
 import { AppBar, Toolbar, IconButton, Box } from "@mui/material";
 import { Link as RouterLink } from 'react-router-dom';
 import MuiLink from '@mui/material/Link';
+import ProfilePictures from '../data/ProfilePictures';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
 const linkStyling = {
   fontSize: {lg: 18, md: 16, sm: 14, xs: 12},
@@ -24,6 +27,7 @@ function CreateAccount() {
   const [heightInches, setHeightInches] = useState(undefined);
   const [weight, setWeight] = useState('');
   const [description, setDescription] = useState('');
+  const [pfp, setpfp] = useState('/images/profileImages/profile1.png')
   const [allUsers, setAllUsers] = useState([]);
 
   const [errors, setErrors] = useState({
@@ -241,7 +245,8 @@ useEffect(() => {
         weight: weight,
         dateLogged: Date.now()
       },
-      description: description
+      description: description,
+      pfp: pfp
     };
     try {
         await axios.post('http://localhost:3000/users/', newUser, {
@@ -319,6 +324,28 @@ useEffect(() => {
                 multiline
                 maxRows={6}
               />
+              <Typography>Profile Picture:</Typography>
+              <TextField
+                  variant="outlined"
+                  fullWidth
+                  value={pfp}
+                  onChange={(e) => setpfp(e.target.value)}
+                  select
+              >
+                {ProfilePictures.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      <ListItemIcon>
+                        <Avatar
+                          src={option.value}
+                          alt={option.label}
+                          sx={{ width: 32, height: 32, marginRight: 4 }}
+                        />
+                      </ListItemIcon>
+                      {option.label}
+                    </MenuItem>
+                ))}
+              </TextField>
+
               
           </>
         ) : (
