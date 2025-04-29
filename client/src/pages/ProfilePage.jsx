@@ -12,31 +12,9 @@ import ToolBar from '../components/ToolBar';
 import GlobalStateContext from '../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
 import Profile from '../../../api/models/Profile.js';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
 import ProfilePictures from '../data/ProfilePictures.jsx';
-
-  const defaultFriends = [
-    {
-        name:"Remy Sharp",
-        pfp:"/images/profileImages/profile10.png",
-    },
-    {
-        name:"Travis Howard",
-        pfp:"/images/profileImages/profile2.png",
-    },
-    {
-        name:"Cindy Baker",
-        pfp:"/images/profileImages/profile3.png",
-    },
-    {
-        name:"Agnes Walker",
-        pfp:"/images/profileImages/profile4.png",
-    },
-    {
-        name:"Trevor Henderson",
-        pfp:"/images/profileImages/profile5.png",
-    },
-];
 
 function ProfilePage() {
     // taking the id from the dynamic route 
@@ -435,6 +413,13 @@ function ProfilePage() {
                             >
                                 {ProfilePictures.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
+                                    <ListItemIcon>
+                                        <Avatar
+                                        src={option.value}
+                                        alt={option.label}
+                                        sx={{ width: 32, height: 32, marginRight: 4 }}
+                                        />
+                                    </ListItemIcon>
                                     {option.label}
                                     </MenuItem>
                                 ))}
