@@ -313,7 +313,7 @@ useEffect(() => {
                   endAdornment: <InputAdornment position='end'>lbs</InputAdornment>
                 }}
               />
-              <Typography>Description:</Typography>
+              <Typography>Profile Description:</Typography>
               <TextField
                 variant="outlined"
                 fullWidth
