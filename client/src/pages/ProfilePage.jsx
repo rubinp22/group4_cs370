@@ -13,68 +13,7 @@ import GlobalStateContext from '../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
 import Profile from '../../../api/models/Profile.js';
 
-const profilePictures = [
-    {
-        value: '/images/profileImages/profile1.png',
-        label: 'Red and Yellow Rectangles',
-    },
-    {
-        value: '/images/profileImages/profile4.png',
-        label: 'Red and Yellow Semicircles',
-    },
-    {
-        value: '/images/profileImages/profile5.png',
-        label: 'Red and Yellow Grid',
-    },
-    {
-        value: '/images/profileImages/profile6.png',
-        label: 'Red and Yellow Quarter Circles',
-    },
-    {
-        value: '/images/profileImages/profile9.png',
-        label: 'Red and Yellow Diamonds',
-    },
-    {
-        value: '/images/profileImages/profile2.png',
-        label: 'Purple and Black Waves',
-    },
-    {
-        value: '/images/profileImages/profile3.png',
-        label: 'Pink and Cyan Waves',
-    },
-    {
-        value: '/images/profileImages/profile8.png',
-        label: 'Pink and Cyan Squiggles',
-    },
-    {
-        value: '/images/profileImages/profile14.png',
-        label: 'Pink and Cyan Stars',
-    },
-    {
-        value: '/images/profileImages/profile7.png',
-        label: 'Purple and Green Stars',
-    },
-    {
-        value: '/images/profileImages/profile10.png',
-        label: 'Purple and Green Squiggles',
-    },
-    {
-        value: '/images/profileImages/profile12.png',
-        label: 'Purple and Green Trapezoids',
-    },
-    {
-        value: '/images/profileImages/profile13.png',
-        label: 'Cyan and Green Circles',
-    },
-    {
-        value: '/images/profileImages/profile11.png',
-        label: 'Yellow and Pink Circles',
-    },
-    {
-        value: '/images/profileImages/profile15.png',
-        label: 'Yellow and Cyan Grid',
-    },
-  ];
+import ProfilePictures from '../data/ProfilePictures.jsx';
 
   const defaultFriends = [
     {
@@ -249,9 +188,6 @@ function ProfilePage() {
             }
         })
 
-
-        // console.log("sumUserMetrics returning: ", metrics);
-
         return metrics;
     }
 
@@ -358,7 +294,7 @@ function ProfilePage() {
             name: (nameIn === undefined || nameIn.length > 30 || nameIn.length < 1),
             heightFeet: (heightFeetIn === undefined || heightFeetIn > 7 || heightFeetIn < 1),
             heightInch: (heightInchIn === undefined || heightInchIn > 11 || heightInchIn < 0),
-            weight: (weightIn === undefined || weightIn > 1000 || weightIn < 0),
+            weight: (weightIn === undefined || weightIn > 1000 || weightIn < 1),
             description: (description != undefined && description.length > 200),
             pfp: (pfp === undefined)
         }
@@ -470,7 +406,7 @@ function ProfilePage() {
                                 select
                                 onChange={(e) => setPfpIn(e.target.value)}
                             >
-                                {profilePictures.map((option) => (
+                                {ProfilePictures.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
                                     {option.label}
                                     </MenuItem>
