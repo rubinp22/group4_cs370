@@ -1,160 +1,458 @@
-import React, {use, useState} from 'react';
-import { useNavigate, Link  } from 'react-router-dom';
-import { Stack, Avatar, Button, ButtonGroup, Typography} from '@mui/material';
-import { amber, blueGrey, orange } from '@mui/material/colors';
+import axios from 'axios';
+import { useTheme } from '@emotion/react';
+import { useContext, useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { BarChart } from '@mui/x-charts';
+import { Button, ButtonGroup, Card, Link as MuiLink, Stack, Typography} from '@mui/material';
+
+import GlobalStateContext from '../contexts/GlobalStateContext';
 import ToolBar from '../components/ToolBar';
 
-import { Link as RouterLink } from 'react-router-dom';
-import MuiLink from '@mui/material/Link';
-
-// The arrays for testing that will be replaced when we get user data proper
-var userName = ["Abel", "Bender", "Chirst", "Don", "Eve"];
-var userDistance = [1.5, 2, 2.5, 4, 1];
-var userMaxHeartRate = [145, 150, 155, 135, 115];
-var userDuration = [0.5, 0.25, 0.3, 0.35, 0.5];
-
-// The arrays needed to store data that will be displayed later
-var leaders = ["1", "2", "3", "4", "5"];
-var leaderData = ["NULL", "NULL", "NULL", "NULL", "NULL"];
-var maxMinMedian = ["max", "min", "median"];
-
-
-function handleButtons(buttonNum, setLeaderType, SetName, SetValues, setMeasure, setMaxMinMedian){
-  // uses a switch state that takes the number value of the button that was used then sets display data accordingly
-  // when setting the display values it uses the arrays at the top and copies them to the html arrays
-  var dataType = "Sorted by ";
-  var unitsOfMeasurement = "";
-  switch (buttonNum){
-    case 1:
-      sortData(userDistance, userName);
-      dataType += "Distance";
-      unitsOfMeasurement = " mi"
-      break;
-    case 2:
-      sortData(userMaxHeartRate, userName);
-      dataType += "MaxHeartRate";
-      unitsOfMeasurement = " bpm"
-      break;
-    case 3:
-      sortData(userDuration, userName);
-      dataType += "Duration";
-      unitsOfMeasurement = "h";
-      break;
-  }
-  setLeaderType(dataType + ":");
-  SetName(leaders.slice(0, 5));
-  SetValues(leaderData.slice(0, 5));
-  setMeasure(unitsOfMeasurement)
-  setMaxMinMedian(maxMinMedian.slice(0, 3));
-}
-
-function makeLeaders(exerciseData, userData){
-// currectly only displays the largest value at the top can be fixed with suggetion below
-// exerciseData[i] < exerciseData[i+1] then display in ascending or descending order
-// stores the data in leaders, used for the names, and leaderData, used for the values
-let n = userData.length;
-leaders = userData.slice(0, n);
-leaderData = exerciseData.slice(0, n);
-for (let i = 1; i <= n; i++){
-  leaders[i-1] = userData[n-i];
-  leaderData[i-1] = exerciseData[n-i];
-}
-}
-
-function findMaxMinMedian(sortedData){
-  //gets the highest lowest and middle value (in that order) from the sorted data
-  // then stores them in the array maxMinMedian which will be in handle buttons
-  var lengthOfArray = sortedData.length;
-  if (sortedData[0] > sortedData[lengthOfArray-1]){
-    maxMinMedian[0] = sortedData[0];
-    maxMinMedian[1] = sortedData[lengthOfArray-1];
-  }
-  else {
-    maxMinMedian[0] = sortedData[lengthOfArray-1];
-    maxMinMedian[1] = sortedData[0];
-  }
-  if (lengthOfArray%2 == 0) {
-    maxMinMedian[2] = sortedData[lengthOfArray/2];
-  }
-  else {
-    maxMinMedian[2] = sortedData[(lengthOfArray/2)-.5];
-  }
-}
-
-function sortData(exerciseData, userData){
-//bubble sort
-//calls makeLeaders and findMaxMinMedian so they can use the sorted data
-let n = exerciseData.length; 
-let swapped = true;
-let temp = exerciseData[0];
-let userTemp = userData[0];
-let sortedData = exerciseData.slice(0, n);
-let sortedUser = userData.slice(0, n);
-
-while(swapped){
-  swapped = false
-  JSON.stringify(temp)
-  for(let i = 1; i < n; i++){
-  if (sortedData[i-1] > sortedData[i]){
-      temp = sortedData[i - 1];
-      sortedData[i - 1] = sortedData[i];
-      sortedData[i] = temp;
-
-      userTemp = sortedUser[i - 1];
-      sortedUser[i - 1] = sortedUser[i];
-      sortedUser[i] = userTemp;
-
-      swapped = true;
-  }
-  }
-  n = n - 1;
-}
-makeLeaders(sortedData, sortedUser);
-findMaxMinMedian(sortedData)
-}
-
 function LeaderBoard () {
-  // arrays that store the dayplay data from the javascript, There might be another way to do this but I can't html good
-  const navigate = useNavigate();
-  const [message, setMessage] = useState('Please Click a Button');
-  const [placeNames, setPlaces] = useState(["1st", "2nd", "3rd", "4th", "5th"]);
-  const [placeValues, setValues] = useState(["XX", "XX", "XX", "XX", "XX"]);
-  const [unitsOfMeasure, setMeasure] = useState([""]);
-  const [maxMinMedian, setMMM] = useState(["__", "__", "__"])
 
-  // most of the is pretty easy to read, but just in case
-  // its starts with header of Leaderboard then the button which call handleButtons when clicked on
-  // in handleButtons we pass in the arrays that will be used to display data later
-  // after that we have the avaters of 1st 2nd and 3rd in that order, something to be expanded apon later
-  // after that we have the top 5 users with their exercise value and unit of measurement for said value
-  // lastly we have the button to return to the main page
+  const { state, dispatch } = useContext(GlobalStateContext)
+  const [userData, setUserData] = useState([]);
+  const [userExercises, setUserExercises] = useState([]);
+  const [cumulativeMetrics, setCumulativeMetrics] = useState([]);
+  const [leaderboardData, setLeaderboardData] = useState();
+  const [selectedMetric, setSelectedMetric] = useState();
+
+  const theme = useTheme();
+
+  // Ex: run, hike, cycle, swim, weights
+  const [exerciseCategory, setExerciseCategory] = useState(undefined);
+  // Ex: distance, duration, steps, totalVolume, lapCount, etc...
+  const [exerciseMetric, setExerciseMetric] = useState(undefined);
+  // This is a graph-friendly version of exerciseMetric that does away with camel case and includes
+  // the respective units 
+  const [graphMetric, setGraphMetric] = useState(undefined);
+
+  // Every time the user selects a new exercise metric, we check which metric it is, so that we can
+  // update graphMetric with the correct message we want to display on the graph. 
+  useEffect(() => {
+    switch (exerciseMetric) {
+      case "distance":
+        setGraphMetric("Distance (miles)");
+        break;
+      case "duration":
+        setGraphMetric("Duration (hours)");
+        break;
+      case "steps":
+        setGraphMetric("Steps");
+        break;
+      case "elevationGain":
+        setGraphMetric("Elevation Gain (feet)");
+        break;
+      case "lapCount":
+        setGraphMetric("Lap Count");
+        break;
+      case "totalLapTime":
+        setGraphMetric("Total Lap Time (seconds)");
+        break;
+      case "totalStrokes":
+        setGraphMetric("Total Strokes");
+        break;
+      case "totalReps":
+        setGraphMetric("Total Reps");
+        break;
+      case "maxWeightOfWeights":
+        setGraphMetric("Max Weight of Weights (pounds)");
+        break;
+      case "totalVolume":
+        setGraphMetric("Total Volume (pounds)");
+        break;
+      default:
+        // Fallback if a non-existant exercise metric is chosen
+        setGraphMetric("Null");
+    }
+  }, [exerciseMetric]);
+
+
+  // Fetching every user from the database
+  async function getUserData() {
+    try {
+        const res = await axios.get('http://localhost:3000/users', {
+            headers: {
+                'Content-Type': 'application/json'
+            }, 
+            params: { }
+        });
+        return res.data
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+// Fetching all the exercises that are associated with a userID
+async function getUserExercises(id) {
+  try {
+    const res = await axios.get('http://localhost:3000/exercises', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      params: {
+        userID: id
+      }
+    });
+      return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// When page loads, fetch all user profile data
+useEffect(() => {
+  async function fetchData() {
+    const response = await getUserData();
+    setUserData(response);
+  }
+
+  // Calling the function above
+  fetchData();
+
+}, [])
+
+// When userData is assigned a value, fetch an array of all exercises associated
+// with a user, but for all users.
+// We want a list of which users have done which exercises
+useEffect(() => {
+  async function fetchExercises() {
+    if (userData.length === 0) return;
+
+    // The result of this sequence of API requests is stored in metricsArray
+    // We make sure that all async promises are fulfilled within metricsArray
+    // before moving on.
+    const metricsArray = await Promise.all(
+      userData.map(async (user, idx) => {
+        const userExercises = await getUserExercises(user._id);
+        return { name: user.name, metrics: userExercises };  
+      })
+    )
+
+    // set user metrics to our newly-fulfilled array of user exercises
+    setUserExercises(metricsArray)
+  }
+
+  // Calling the function above
+  fetchExercises();
+}, [userData])
+
+
+  // This function goes through our list of exercises per user and creates an
+  // object (metric) that holds an accumulation of all relevant stats that we
+  // can use to feed into a leaderboard. 
+  async function sumAllUserMetrics() {
+
+    let allMetrics = [];
+
+    userExercises.map((user, idx) => {
+
+      let metric = {
+        name: user.name,
+        distance: {
+            run: 0,
+            cycle: 0,
+            hike: 0
+        },
+        duration: {
+            run: 0,
+            cycle: 0,
+            hike: 0
+        },
+        elevationGain: {
+            cycle: 0,
+            hike: 0
+        },
+        elevationLoss: 0,
+        maxHeartRate: 1,
+        steps: 0,
+        maxWeightOfWeights: 0,
+        totalVolume: 0,
+        totalReps: 0,
+        lapCount: 0,
+        totalLapTime: 0,
+        totalStrokes: 0
+      }
+
+      user.metrics.map((data, idx) => {
+
+        if (data.type === "run") {
+            metric.distance.run += data.distance;
+            metric.duration.run += data.duration;
+            metric.steps += data.steps;
+        } else if (data.type === "hike") {
+            metric.elevationGain.hike += data.elevationGain;
+            metric.distance.hike += data.distance;
+            metric.duration.hike += data.duration;
+        } else if (data.type === "cycle") {
+            metric.distance.cycle += data.distance;
+            metric.duration.cycle += data.duration;
+            metric.elevationGain.cycle += data.elevationGain;
+        } else if (data.type === "swim") {
+            metric.lapCount += data.lapCount;
+            data.lapTimes.map((data, idx) => {
+                metric.totalLapTime += data;
+            })
+            data.strokeCount.map((data, idx) => {
+                metric.totalStrokes += data
+            })
+        } else if (data.type === "weights") {
+            metric.totalReps += (data.reps * data.sets);
+            if (metric.maxWeightOfWeights < data.weightOfWeights) {
+                metric.maxWeightOfWeights = data.weightOfWeights
+            }
+            metric.totalVolume += (data.reps * data.sets * data.weightOfWeights);
+
+        }
+
+        if (metric.maxHeartRate < data.maxHeartRate) {
+            metric.maxHeartRate = data.maxHeartRate;
+        }
+      })
+
+      allMetrics.push(metric);
+    })
+
+    setCumulativeMetrics(allMetrics);
+  }
+
+  function populateLeaderboard() {
+
+    let leaderboard = {
+      run: {
+        distance: [ ],
+        duration: [ ],
+        steps: [ ]
+      },
+      hike: {
+        distance: [ ],
+        duration: [ ],
+        elevationGain: [ ]
+      },
+      cycle: {
+        distance: [ ],
+        duration: [ ],
+        elevationGain: [ ]
+      },
+      swim: {
+        lapCount: [ ],
+        totalLapTime: [ ],
+        totalStrokes: [ ]
+      },
+      weights: {
+        totalReps: [ ],
+        maxWeightOfWeights: [ ],
+        totalVolume: [ ]
+      }
+    }
+
+    // Loop through all cumulative metrics and store them in the leaderboard object above
+    // first without sorting
+    cumulativeMetrics.map((user, idx) => {
+      leaderboard.run.distance.push({ distance: user.distance.run, name: user.name });
+      leaderboard.run.duration.push({ duration: user.duration.run, name: user.name });
+      leaderboard.run.steps.push({ steps: user.steps, name: user.name });
+
+      leaderboard.hike.distance.push({ distance: user.distance.hike, name: user.name });
+      leaderboard.hike.duration.push({ duration: user.duration.hike, name: user.name });
+      leaderboard.hike.elevationGain.push({ elevationGain: user.elevationGain.hike, name: user.name });
+
+      leaderboard.cycle.distance.push({ distance: user.distance.cycle, name: user.name });
+      leaderboard.cycle.duration.push({ duration: user.duration.cycle, name: user.name });
+      leaderboard.cycle.elevationGain.push({ elevationGain: user.elevationGain.cycle, name: user.name });
+
+      leaderboard.swim.lapCount.push({ lapCount: user.lapCount, name: user.name });
+      leaderboard.swim.totalLapTime.push({ totalLapTime: user.totalLapTime, name: user.name });
+      leaderboard.swim.totalStrokes.push({ totalStrokes: user.totalStrokes, name: user.name });
+
+      leaderboard.weights.totalReps.push({ totalReps: user.totalReps, name: user.name });
+      leaderboard.weights.maxWeightOfWeights.push({ maxWeightOfWeights: user.maxWeightOfWeights, name: user.name });
+      leaderboard.weights.totalVolume.push({ totalVolume: user.totalVolume, name: user.name });
+    })
+
+    return leaderboard;
+  }
+
+  // Use the sort function to sort each object in the array of the respective category of metric
+  // In other words, each object represents a user's cumulative data for a specfic metric, and we 
+  // are sorting these objects by the the value (first element)
+  function sortLeaderboard(leaderboard) {
+    // If we wanted ascending order, our dispatch function we are sending to sort() would look
+    // something like this: (a, b) => a.value - b.value
+    leaderboard.run.distance.sort((a, b) => b.distance - a.distance);
+    leaderboard.run.duration.sort((a, b) => b.duration - a.duration);
+    leaderboard.run.steps.sort((a, b) => b.steps - a.steps);
+
+    leaderboard.hike.distance.sort((a, b) => b.distance - a.distance);
+    leaderboard.hike.duration.sort((a, b) => b.duration - a.duration);
+    leaderboard.hike.elevationGain.sort((a, b) => b.elevationGain - a.elevationGain);
+
+    leaderboard.cycle.distance.sort((a, b) => b.distance - a.distance);
+    leaderboard.cycle.duration.sort((a, b) => b.duration - a.duration);
+    leaderboard.cycle.elevationGain.sort((a, b) => b.elevationGain - a.elevationGain);
+
+    leaderboard.swim.lapCount.sort((a, b) => b.lapCount - a.lapCount);
+    leaderboard.swim.totalLapTime.sort((a, b) => b.totalLapTime - a.totalLapTime);
+    leaderboard.swim.totalStrokes.sort((a, b) => b.totalStrokes - a.totalStrokes);
+
+    leaderboard.weights.totalReps.sort((a, b) => b.totalReps - a.totalReps);
+    leaderboard.weights.maxWeightOfWeights.sort((a, b) => b.maxWeightOfWeights - a.maxWeightOfWeights);
+    leaderboard.weights.totalVolume.sort((a, b) => b.totalVolume - a.totalVolume);
+
+    return leaderboard;
+  }
+
+  // When all user exercises are fetched, run the function above to accumulate
+  // their metrics. 
+  useEffect(() => {
+    if (userExercises.length === 0) return;
+
+    sumAllUserMetrics();
+    const leaderboard = populateLeaderboard();
+    const sortedLeaderboard = sortLeaderboard(leaderboard);
+
+    // Once we have a sorted leaderboard, we store it in state, triggering a DOM re-render, and for 
+    // our data to be visible on screen!
+    setLeaderboardData(sortedLeaderboard);
+
+
+
+  }, [userExercises])
+
+  // Testing whether I can traverse the leaderboardData object
+  useEffect(() => {
+    if (exerciseCategory !== undefined && exerciseMetric !== undefined) {
+      setSelectedMetric(leaderboardData[exerciseCategory][exerciseMetric])
+    } 
+  }, [exerciseCategory, exerciseMetric])
+
+
   return (
     <>
-      <ToolBar /> {/* add new elements */}
-      <Stack direction="column" gap={2} marginBottom={3}>
-        <Typography fontSize={36}>Leaderboard</Typography>
+      <ToolBar />
 
-        <ButtonGroup variant="contained" aria-label="Basic button group">
-          <Button onClick={() => handleButtons(1, setMessage, setPlaces, setValues, setMeasure, setMMM)}>Distance</Button>
-          <Button onClick={() => handleButtons(2, setMessage, setPlaces, setValues, setMeasure, setMMM)}>MaxHeartRate</Button>
-          <Button onClick={() => handleButtons(3, setMessage, setPlaces, setValues, setMeasure, setMMM)}>Duration</Button>
+      <Stack alignItems={"center"}>
+        <Typography fontSize={36} marginBottom={10}>Leaderboard</Typography>
+
+        <Typography marginBottom={2} fontSize={24}>Select an exercise category:</Typography>
+        <ButtonGroup variant="outlined" aria-label="Basic button group">
+          <Button onClick={() => setExerciseCategory("run")}>Running</Button>
+          <Button onClick={() => setExerciseCategory("hike")}>Hiking</Button>
+          <Button onClick={() => setExerciseCategory("cycle")}>Cycling</Button>
+          <Button onClick={() => setExerciseCategory("swim")}>Swimming</Button>
+          <Button onClick={() => setExerciseCategory("weights")}>Weightlifting</Button>
         </ButtonGroup>
-        <Stack direction="row" gap={2} justifyContent={"center"}>
-          <Avatar sx={{ bgcolor: amber[600] }} variant="square">{placeNames[0][0]}</Avatar>
-          <Avatar sx={{ bgcolor: blueGrey[200] }} variant="square">{placeNames[1][0]}</Avatar>
-          <Avatar sx={{ bgcolor: orange[500] }} variant="square">{placeNames[2][0]}</Avatar>
+
+        <Stack margin={5}>
+          <ButtonGroup variant="outlined" aria-label="Basic button group">
+            {exerciseCategory === "run" ? (
+                <>
+                  <Typography 
+                    alignContent={"center"} 
+                    justifyContent={"center"} 
+                    marginRight={5}
+                    fontSize={24}
+                  >
+                    Running Metrics
+                  </Typography>
+
+                  <Button onClick={() => setExerciseMetric("distance")}>Distance</Button>
+                  <Button onClick={() => setExerciseMetric("duration")}>Duration</Button>
+                  <Button onClick={() => setExerciseMetric("steps")}>Steps</Button>
+
+                </>
+              ) : (<></>)}
+            {exerciseCategory === "hike" ? (
+              <>
+                  <Typography 
+                    alignContent={"center"} 
+                    justifyContent={"center"} 
+                    marginRight={5}
+                    fontSize={24}
+                  >
+                    Hiking Metrics
+                  </Typography>
+
+                  <Button onClick={() => setExerciseMetric("distance")}>Distance</Button>
+                  <Button onClick={() => setExerciseMetric("duration")}>Duration</Button>
+                  <Button onClick={() => setExerciseMetric("elevationGain")}>Elevation Gain</Button>
+              </>
+            ) : (<></>)}
+            {exerciseCategory === "cycle" ? (
+              <>
+                  <Typography 
+                    alignContent={"center"} 
+                    justifyContent={"center"} 
+                    marginRight={5}
+                    fontSize={24}
+                  >
+                    Cycling Metrics
+                  </Typography>
+
+                  <Button onClick={() => setExerciseMetric("distance")}>Distance</Button>
+                  <Button onClick={() => setExerciseMetric("duration")}>Duration</Button>
+                  <Button onClick={() => setExerciseMetric("elevationGain")}>Elevation Gain</Button>
+              </>
+            ) : (<></>)}
+            {exerciseCategory === "swim" ? (
+              <>
+                  <Typography 
+                    alignContent={"center"} 
+                    justifyContent={"center"} 
+                    marginRight={5}
+                    fontSize={24}
+                  >
+                    Swimming Metrics
+                  </Typography>
+
+                  <Button onClick={() => setExerciseMetric("lapCount")}>Lap Count</Button>
+                  <Button onClick={() => setExerciseMetric("totalLapTime")}>Total Lap Time</Button>
+                  <Button onClick={() => setExerciseMetric("totalStrokes")}>Total Strokes</Button>
+              </>
+            ) : (<></>)}
+            {exerciseCategory === "weights" ? (
+              <>
+                  <Typography 
+                    alignContent={"center"} 
+                    justifyContent={"center"} 
+                    marginRight={5}
+                    fontSize={24}
+                  >
+                    Weightlifting Metrics
+                  </Typography>
+
+                  <Button onClick={() => setExerciseMetric("totalReps")}>Total Reps</Button>
+                  <Button onClick={() => setExerciseMetric("maxWeightOfWeights")}>Max Weight Of Weights</Button>
+                  <Button onClick={() => setExerciseMetric("totalVolume")}>Total Volume</Button>
+              </>
+            ) : (<></>)}
+          </ButtonGroup>
         </Stack>
-        <Typography fontSize={20}>
-        {message}
-        <br></br>{placeNames[0]} -- {placeValues[0]} {unitsOfMeasure}
-        <br></br>{placeNames[1]} -- {placeValues[1]} {unitsOfMeasure}
-        <br></br>{placeNames[2]} -- {placeValues[2]} {unitsOfMeasure}
-        <br></br>{placeNames[3]} -- {placeValues[3]} {unitsOfMeasure}
-        <br></br>{placeNames[4]} -- {placeValues[4]} {unitsOfMeasure}
-        </Typography>
-        <Typography fontSize={20}>Max:{maxMinMedian[0]}  Min:{maxMinMedian[1]}  Median:{maxMinMedian[2]}</Typography>
+
+        <Stack>
+          <Card>
+            {exerciseCategory !== undefined && exerciseMetric !== undefined && selectedMetric !== undefined ? (
+              <>
+                <BarChart
+                  height={300}
+                  width={600}
+                  dataset={selectedMetric}
+                  xAxis={[{ scaleType: 'band', dataKey: 'name' }]}
+                  series={[{ dataKey: exerciseMetric, label: graphMetric }]}
+                  colors={[theme.palette.secondary.main]}
+                />
+              </>
+            ) : (<></>)}
+
+          </Card>
+        </Stack>
+
+      </Stack>
+
+      <Stack margin={5}>
         <MuiLink to="../HomePage" component={RouterLink}>Back to Home</MuiLink>
       </Stack>
+
     </>
   );
 }
