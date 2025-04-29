@@ -42,6 +42,7 @@ function App() {
           <Route path="/HomePage/fitnessTypes/SwimmingMetrics" element={<SwimmingMetrics/>}/>
           <Route path="/HomePage/LeaderBoard" element={<LeaderBoard/>}/>
           <Route path="/HomePage/profile/:pageID" element={<ProfilePage/>} />
+          <Route path="/HomePage/profile/" element={<LoginPage/>} />
           <Route path="/HomePage/RewardAchievements" element={<RewardAchievements/>}/>
           <Route path="/HomePage/TrainingVideoLibrary" element={<TrainingVideoLibrary/>}/>
           <Route path="/HomePage/RecordExercises" element={<RecordExercises/>}/>
