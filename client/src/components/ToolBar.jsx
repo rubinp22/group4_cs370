@@ -1,6 +1,16 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Typography, AppBar, Toolbar, IconButton, Box, Avatar, Menu, MenuItem } from "@mui/material";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+import {
+  Typography,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Box,
+  Avatar,
+  Menu,
+  MenuItem,
+  Link as MuiLink
+} from "@mui/material";
 import GlobalStateContext from "../contexts/GlobalStateContext";
 
 function ToolBar() {
@@ -21,11 +31,6 @@ function ToolBar() {
     navigate(`/HomePage/profile/${state.user}`);
   };
 
-  const handleLogoutClick = () => {
-    handleMenuClose();
-    navigate("../");
-  };
-
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="absolute">
@@ -41,9 +46,15 @@ function ToolBar() {
             ☰
           </IconButton>
 
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            component={RouterLink}
+            to="/HomePage"
+            sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}
+          >
             Fitness Tracker
           </Typography>
+
           <Avatar src={state.pfp} />
 
           <Menu
@@ -52,12 +63,26 @@ function ToolBar() {
             onClose={handleMenuClose}
             sx={{
               "& .MuiPaper-root": {
-                minWidth: 230, 
-              }
+                minWidth: 230,
+              },
+              "& .MuiMenuItem-root:hover": {
+               backgroundColor: "transparent", 
+               color: "yellow", 
+              },
+               "& a:hover": {
+              color: "yellow", 
+              },
             }}
           >
             <MenuItem onClick={handleProfileClick}>Profile</MenuItem>
-            <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+
+            <MenuItem
+              component={RouterLink}
+               to="../"
+               onClick={handleMenuClose}
+            >
+               {state.user === "" ? "Log In" : "Log Out"}
+            </MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
