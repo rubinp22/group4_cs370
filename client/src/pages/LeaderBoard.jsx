@@ -23,6 +23,50 @@ function LeaderBoard () {
   const [exerciseCategory, setExerciseCategory] = useState(undefined);
   // Ex: distance, duration, steps, totalVolume, lapCount, etc...
   const [exerciseMetric, setExerciseMetric] = useState(undefined);
+  // This is a graph-friendly version of exerciseMetric that does away with camel case and includes
+  // the respective units 
+  const [graphMetric, setGraphMetric] = useState(undefined);
+
+  // Every time the user selects a new exercise metric, we check which metric it is, so that we can
+  // update graphMetric with the correct message we want to display on the graph. 
+  useEffect(() => {
+    switch (exerciseMetric) {
+      case "distance":
+        setGraphMetric("Distance (miles)");
+        break;
+      case "duration":
+        setGraphMetric("Duration (hours)");
+        break;
+      case "steps":
+        setGraphMetric("Steps");
+        break;
+      case "elevationGain":
+        setGraphMetric("Elevation Gain (feet)");
+        break;
+      case "lapCount":
+        setGraphMetric("Lap Count");
+        break;
+      case "totalLapTime":
+        setGraphMetric("Total Lap Time (seconds)");
+        break;
+      case "totalStrokes":
+        setGraphMetric("Total Strokes");
+        break;
+      case "totalReps":
+        setGraphMetric("Total Reps");
+        break;
+      case "maxWeightOfWeights":
+        setGraphMetric("Max Weight of Weights (pounds)");
+        break;
+      case "totalVolume":
+        setGraphMetric("Total Volume (pounds)");
+        break;
+      default:
+        // Fallback if a non-existant exercise metric is chosen
+        setGraphMetric("Null");
+    }
+  }, [exerciseMetric]);
+
 
   // Fetching every user from the database
   async function getUserData() {
@@ -176,29 +220,29 @@ useEffect(() => {
 
     let leaderboard = {
       run: {
-        distance: [ /*{distance: null, name: null}*/ ],
-        duration: [ /*{duration: null, name: null}*/ ],
-        steps: [ /*{steps: null, name: null} */]
+        distance: [ ],
+        duration: [ ],
+        steps: [ ]
       },
       hike: {
-        distance: [ /*{distance: null, name: null}*/ ],
-        duration: [ /*{duration: null, name: null}*/ ],
-        elevationGain: [ /*{elevationGain: null, name: null}*/ ]
+        distance: [ ],
+        duration: [ ],
+        elevationGain: [ ]
       },
       cycle: {
-        distance: [ /*{distance: null, name: null}*/ ],
-        duration: [ /*{duration: null, name: null}*/ ],
-        elevationGain: [ /*{elevationGain: null, name: null}*/ ]
+        distance: [ ],
+        duration: [ ],
+        elevationGain: [ ]
       },
       swim: {
-        lapCount: [ /*{lapCount: null, name: null}*/ ],
-        totalLapTime: [ /*{totalLapTime: null, name: null}*/ ],
-        totalStrokes: [ /*{totalStrokes: null, name: null}*/ ]
+        lapCount: [ ],
+        totalLapTime: [ ],
+        totalStrokes: [ ]
       },
       weights: {
-        totalReps: [ /*{totalReps: null, name: null}*/ ],
-        maxWeightOfWeights: [ /*{maxWeightOfWeights: null, name: null}*/ ],
-        totalVolume: [ /*{totalVolume: null, name: null}*/ ]
+        totalReps: [ ],
+        maxWeightOfWeights: [ ],
+        totalVolume: [ ]
       }
     }
 
@@ -255,10 +299,7 @@ useEffect(() => {
     leaderboard.weights.maxWeightOfWeights.sort((a, b) => b.maxWeightOfWeights - a.maxWeightOfWeights);
     leaderboard.weights.totalVolume.sort((a, b) => b.totalVolume - a.totalVolume);
 
-    console.log("sorted: ", leaderboard);
-
     return leaderboard;
-    
   }
 
   // When all user exercises are fetched, run the function above to accumulate
@@ -267,8 +308,6 @@ useEffect(() => {
     if (userExercises.length === 0) return;
 
     sumAllUserMetrics();
-    //console.log("3rd hook cumulativeMetrics: ", cumulativeMetrics)
-
     const leaderboard = populateLeaderboard();
     const sortedLeaderboard = sortLeaderboard(leaderboard);
 
@@ -283,9 +322,6 @@ useEffect(() => {
   // Testing whether I can traverse the leaderboardData object
   useEffect(() => {
     if (exerciseCategory !== undefined && exerciseMetric !== undefined) {
-      console.log("selected leaderboard metric: ", leaderboardData[exerciseCategory][exerciseMetric]);
-      console.log("selected category: ", exerciseCategory);
-      console.log("selected metric: ", exerciseMetric);
       setSelectedMetric(leaderboardData[exerciseCategory][exerciseMetric])
     } 
   }, [exerciseCategory, exerciseMetric])
@@ -402,7 +438,7 @@ useEffect(() => {
                   width={600}
                   dataset={selectedMetric}
                   xAxis={[{ scaleType: 'band', dataKey: 'name' }]}
-                  series={[{ dataKey: exerciseMetric, label: exerciseMetric }]}
+                  series={[{ dataKey: exerciseMetric, label: graphMetric }]}
                   colors={[theme.palette.secondary.main]}
                 />
               </>
