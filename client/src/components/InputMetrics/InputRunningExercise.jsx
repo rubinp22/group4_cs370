@@ -202,7 +202,6 @@ function InputRunningExercise() {
             <Stack direction="row" justifyContent="center" alignItems="center" spacing={5} marginTop={5}>
                 {exerciseSubmitted ? (
                         <>
-                            <Typography fontSize={18}>Exercise Recorded!</Typography>
                             <Button variant="contained" onClick={handleResubmission}>Submit Another?</Button>
                         </>
                     ) : (
@@ -212,7 +211,6 @@ function InputRunningExercise() {
                         </>
                     )
                 }
-
             </Stack>
         </Card>
     );

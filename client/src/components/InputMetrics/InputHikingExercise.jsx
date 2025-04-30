@@ -11,6 +11,8 @@ function InputHikingExercise() {
     const [durationIn, setDurationIn] = useState(undefined);
     const [avgHeartRateIn, setAvgHeartRateIn] = useState(undefined);
     const [maxHeartRateIn, setMaxHeartRateIn] = useState(undefined);
+    const [exerciseSubmitted, setExerciseSubmitted] = useState(false);
+    
 
     // Global State
     const { state, dispatch } = useContext(GlobalStateContext)
@@ -84,6 +86,8 @@ function InputHikingExercise() {
                 await axios.put('http://localhost:3000/users/', updatedData)
 
                 dispatch({ type: 'SETEXERCISES', payload: updatedData.exercises });
+
+                setExerciseSubmitted(true);
         }
     }
 
@@ -109,6 +113,11 @@ function InputHikingExercise() {
         })
 
         return errorFound;
+    }
+
+    function handleResubmission() {
+        handleClear();
+        setExerciseSubmitted(false);
     }
 
     return (
@@ -183,10 +192,19 @@ function InputHikingExercise() {
                     />
                 </Stack>
                 
-                <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
-                    <Button variant="contained" onClick={handleSubmit}>Submit</Button>
-                    <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
-                </Stack>
+            <Stack direction="row" justifyContent="center" alignItems="center" spacing={5} marginTop={5}>
+                {exerciseSubmitted ? (
+                        <>
+                            <Button variant="contained" onClick={handleResubmission}>Submit Another?</Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                            <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
+                        </>
+                    )
+                }
+            </Stack>
             
             </Card>
     );
