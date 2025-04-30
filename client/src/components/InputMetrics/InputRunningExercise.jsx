@@ -11,6 +11,7 @@ function InputRunningExercise() {
     const [stepsIn, setStepsIn] = useState(undefined);
     const [avgHeartRateIn, setAvgHeartRateIn] = useState(undefined);
     const [maxHeartRateIn, setMaxHeartRateIn] = useState(undefined);
+    const [exerciseSubmitted, setExerciseSubmitted] = useState(false);
 
     // Global State
     const { state, dispatch } = useContext(GlobalStateContext)
@@ -96,6 +97,7 @@ function InputRunningExercise() {
                 // and doesn't just update the last exercise ID in the array.
                 dispatch({ type: 'SETEXERCISES', payload: updatedData.exercises });
 
+                setExerciseSubmitted(true);
             }
         }
     
@@ -134,6 +136,11 @@ function InputRunningExercise() {
             })
     
             return errorFound;
+        }
+
+        function handleResubmission() {
+            handleClear();
+            setExerciseSubmitted(false);
         }
 
     return (
@@ -192,9 +199,20 @@ function InputRunningExercise() {
                     onChange={(e) => setMaxHeartRateIn(e.target.value)}
                 />
             </Stack>
-            <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
-                <Button variant="contained" onClick={handleSubmit}>Submit</Button>
-                <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
+            <Stack direction="row" justifyContent="center" alignItems="center" spacing={5} marginTop={5}>
+                {exerciseSubmitted ? (
+                        <>
+                            <Typography fontSize={18}>Exercise Recorded!</Typography>
+                            <Button variant="contained" onClick={handleResubmission}>Submit Another?</Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                            <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
+                        </>
+                    )
+                }
+
             </Stack>
         </Card>
     );
