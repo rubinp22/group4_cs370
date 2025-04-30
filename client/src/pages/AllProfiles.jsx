@@ -7,6 +7,7 @@ import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid2';
 import { Stack, Card, Typography } from '@mui/material';
 import ToolBar from '../components/ToolBar.jsx';
+import Box from '@mui/material/Box';
 
 function AllProfiles() {
     const { state, dispatch } = useContext(GlobalStateContext);
@@ -43,9 +44,11 @@ function AllProfiles() {
             </Grid>
             {allUsers.map((option) => (
             <Grid size={{xs:6,sm:6,md:3,lg:3}}>
-                <MuiLink to={`../HomePage/profile/${option._id}`} component={RouterLink} className="button-link" sx={{width:165}}>
-                  <Avatar alt={option.name} src={option.pfp} />
-                  {option.name}
+                <MuiLink to={`../HomePage/profile/${option._id}`} component={RouterLink} className="button-link" sx={{minWidth:'100%',minHeight:'100%'}}>
+                  <Grid container spacing={4} alignItems='center' justifyItems='left'>
+                    <Grid size={2}><Avatar alt={option.name} src={option.pfp}/></Grid>
+                    <Grid size={4} padding={1.5}>{option.name}</Grid>
+                  </Grid>
                 </MuiLink> 
             </Grid>
             ))}

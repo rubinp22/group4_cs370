@@ -12,31 +12,9 @@ import ToolBar from '../components/ToolBar';
 import GlobalStateContext from '../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
 import Profile from '../../../api/models/Profile.js';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
 import ProfilePictures from '../data/ProfilePictures.jsx';
-
-  const defaultFriends = [
-    {
-        name:"Remy Sharp",
-        pfp:"/images/profileImages/profile10.png",
-    },
-    {
-        name:"Travis Howard",
-        pfp:"/images/profileImages/profile2.png",
-    },
-    {
-        name:"Cindy Baker",
-        pfp:"/images/profileImages/profile3.png",
-    },
-    {
-        name:"Agnes Walker",
-        pfp:"/images/profileImages/profile4.png",
-    },
-    {
-        name:"Trevor Henderson",
-        pfp:"/images/profileImages/profile5.png",
-    },
-];
 
 function ProfilePage() {
     // taking the id from the dynamic route 
@@ -49,6 +27,7 @@ function ProfilePage() {
     const [achievementData, setAchievementData] = useState([]);
     const [earnedAchievements, setEarnedAchievements] = useState([]);
     const [userExercises, setUserExercises] = useState([]);
+    const [friends, setFriends] = useState([]);
 
     const [nameIn, setnameIn] = useState(undefined);
     const [heightFeetIn, setHeightFeetIn] = useState(undefined);
@@ -79,12 +58,37 @@ function ProfilePage() {
                 }
             });
             setprofileData(res.data);
+            getFriendData(res.data.at(0).friends);
             return res.data
         } catch (err) {
             console.log(err);
         }
     }
 
+    async function getFriendData(friendIds) {
+        const newFriends = [];
+        friendIds.forEach(async id => {
+            try {
+                const res = await axios.get('http://localhost:3000/users', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }, 
+                    params: {
+                        _id: id
+                    }
+                });
+                let newFriend = {
+                    name: res.data.at(0).name,
+                    pfp: res.data.at(0).pfp
+                }
+                newFriends.push(newFriend);
+            } catch (err) {
+                console.log(err);
+            }
+        })
+        setFriends(newFriends);
+        console.log(newFriends);
+    }
     
     async function getUserExercises() {
         try {
@@ -318,8 +322,8 @@ function ProfilePage() {
 
     return (
         <>
-          <ToolBar /> {/* add new elements */}
-          <Stack>
+        <ToolBar /> {/* add new elements */}
+        <Stack>
               <Grid container spacing={2}>
           {/*Profile picture*/}
           <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
@@ -330,41 +334,43 @@ function ProfilePage() {
               ></Avatar>
           </Grid>
 
-                {/*Name*/}
-                <Grid display="flex" justifyContent="flex-start" alignItems="center" size={8}>
-                    <Typography fontSize={24}>{name}</Typography>
-                </Grid>
+            {/*Name*/}
+            <Grid display="flex" justifyContent="flex-start" alignItems="center" size={8}>
+                <Typography fontSize={24}>{name}</Typography>
+            </Grid>
 
-                <br/>
+            <br/>
 
-        {/*Bio*/}
-        <Grid size={{xs:8,sm:7.5,md:7.6}} spacing={4} alignItems="left" justifyContent="left">  
-        <Card sx={{p: 2}} align='left'>
-            <Typography variant="body2">
-            Height: {heightFeet}'{heightInch}" | Weight: {weight} lbs
-            </Typography>
-            <Typography variant="body">
-            {description}
-            </Typography>
-        </Card>
-        </Grid>
+            {/*Bio*/}
+            <Grid size={{xs:8,sm:7.5,md:7.6}} spacing={4} alignItems="left" justifyContent="left">  
+            <Card sx={{p: 2, height: '100%'}} align='left'>
+                <Typography variant="body2">
+                Height: {heightFeet}'{heightInch}" | Weight: {weight} lbs
+                </Typography>
+                <Typography variant="body">
+                {description}
+                </Typography>
+            </Card>
+            </Grid>
     
         
         {/*Friends*/}
-        <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={4} spacing={0}>
-         <Card sx={{p: 1}}>
+        <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={3} spacing={0}>
+        <Card sx={{ p: 1, minWidth: '100%', display: 'flex', justifyContent: 'center'}} >
+          <Box>
           <h3>Friends</h3>
           <AvatarGroup max={4}>
-            {defaultFriends.map((friend) => (
+            {friends.map((friend) => (
                 <Avatar alt={friend.name} src={friend.pfp}></Avatar>
             ))}
           </AvatarGroup>
+          </Box>
          </Card>
         </Grid>
 
         {/*Achievements*/}
         <Grid size={4}>
-            <Card sx={{ pb: 3 }}>
+            <Card sx={{ pb: 3}}>
             <h3>Achievements</h3>
                 {earnedAchievements.map((achievement, idx) => {
                     return (
@@ -379,8 +385,7 @@ function ProfilePage() {
                 })}
             </Card>
         </Grid>
-            
-            </Grid>
+        </Grid>
 
             {/*Editing Form*/}
             <Stack>
@@ -408,6 +413,13 @@ function ProfilePage() {
                             >
                                 {ProfilePictures.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
+                                    <ListItemIcon>
+                                        <Avatar
+                                        src={option.value}
+                                        alt={option.label}
+                                        sx={{ width: 32, height: 32, marginRight: 4 }}
+                                        />
+                                    </ListItemIcon>
                                     {option.label}
                                     </MenuItem>
                                 ))}
