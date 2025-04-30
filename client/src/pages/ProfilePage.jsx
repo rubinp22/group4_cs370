@@ -27,6 +27,7 @@ function ProfilePage() {
     const [achievementData, setAchievementData] = useState([]);
     const [earnedAchievements, setEarnedAchievements] = useState([]);
     const [userExercises, setUserExercises] = useState([]);
+    const [exercisesByDate, setExercisesByDate] = useState();
     const [friends, setFriends] = useState([]);
 
     const [nameIn, setnameIn] = useState(undefined);
@@ -106,8 +107,7 @@ function ProfilePage() {
         } catch (err) {
             console.log(err);
         }
-    }
-    
+    }    
 
     // Fetching the data of all achievements from the DB (name, category, metric, requirement,)
     async function getAchievementData() {
@@ -318,6 +318,49 @@ function ProfilePage() {
 
         return errorFound;
     }
+
+    function parseDate(dateIn) {
+
+    }
+
+    function collectExerciseDates() {
+        console.log("userExercises: ", userExercises);
+
+        let exerciseDates = [ ];
+
+        userExercises.map((exercise, idx) => {
+            console.log("exercise ", idx + 1, " date: ", exercise.date.substring(0, 10));
+            let currentDate = exercise.date.substring(0, 10);
+            let uniqueDate = true;
+
+                exerciseDates.map((data, idx) => {
+                    if (data.date === currentDate) {
+                        console.log(data.date, " and ", currentDate, " are the same!");
+                        data.count++;
+
+                        uniqueDate = false;
+                    } 
+                })
+
+                if (uniqueDate) {
+                    exerciseDates.push({
+                        date: currentDate,
+                        count: 1,
+                        level: 1
+                    })
+                }
+
+        })
+
+        console.log("exerciseDates: ", exerciseDates);
+        setExercisesByDate(exerciseDates);
+
+    }
+
+    useEffect(() => {
+        collectExerciseDates();
+
+    }, [userExercises])
     
 
     return (
