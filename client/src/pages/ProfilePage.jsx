@@ -334,12 +334,14 @@ function ProfilePage() {
                     if (data.date === currentDate) {
                         data.count++;
                         if (data.count === 1) {
-                            data.level = 2;
+                            data.level = 1;
                         } else if (data.count === 2) {
-                            data.level = 3
-                        } else if (data.count >= 3) {
-                            data.level = 4
-                        } 
+                            data.level = 2
+                        } else if (data.count === 3) {
+                            data.level = 3;
+                        } else if (data.count >= 4) {
+                            data.level = 4;
+                        }
 
                         uniqueDate = false;
                     } 
@@ -435,7 +437,7 @@ function ProfilePage() {
         {/*Recent Activity*/}
         <Grid>
             <Card sx={{ padding: "2%", justifyItems: "center"}}>
-                <Typography fontSize={24}>Recent Activity</Typography>
+            <h3>Recent Activity</h3>
             {
             exercisesByDate?.length > 0 ? 
                 <MyActivityCalendar data={exercisesByDate} levels={userExercises.length}/>
