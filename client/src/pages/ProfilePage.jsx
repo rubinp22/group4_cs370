@@ -324,7 +324,13 @@ function ProfilePage() {
     function collectExerciseDates() {
         //console.log("userExercises: ", userExercises);
 
-        let exerciseDates = [ ];
+        // The first date object will be invisible on the calendar, but it will set the starting range of the
+        // calendar to the beginning of the year.
+        let exerciseDates = [{
+            date: '2025-01-01',
+            count: 0,
+            level: 0
+        }];
 
         userExercises.map((exercise, idx) => {
             //console.log("exercise ", idx + 1, " date: ", exercise.date.substring(0, 10));
@@ -363,6 +369,21 @@ function ProfilePage() {
         // first and last dates, so without sorting, we would run into issues where the calendar range
         // is smaller than the date range, resulting in missing data.
         exerciseDates.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
+
+        // Inserting a dummy date object for the current day
+        const today = new Date().toISOString().substring(0, 10);
+
+        // We only want to insert dummy data for the current day if the user hasn't already
+        // exercised today. We don't want to overwrite their data for today. 
+        const exerciseToday = exerciseDates.find(date => today === date.date);
+        if (!exerciseToday) {
+            exerciseDates.push({
+                date: today,
+                count: 0,
+                level: 0
+            })
+        }
+
 
         setExercisesByDate(exerciseDates);
     }
