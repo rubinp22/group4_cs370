@@ -13,6 +13,7 @@ import GlobalStateContext from '../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
 import Profile from '../../../api/models/Profile.js';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import MyActivityCalendar from '../components/MyActivityCalendar.jsx';
 
 import ProfilePictures from '../data/ProfilePictures.jsx';
 
@@ -27,7 +28,7 @@ function ProfilePage() {
     const [achievementData, setAchievementData] = useState([]);
     const [earnedAchievements, setEarnedAchievements] = useState([]);
     const [userExercises, setUserExercises] = useState([]);
-    const [exercisesByDate, setExercisesByDate] = useState();
+    const [exercisesByDate, setExercisesByDate] = useState(null);
     const [friends, setFriends] = useState([]);
 
     const [nameIn, setnameIn] = useState(undefined);
@@ -319,23 +320,19 @@ function ProfilePage() {
         return errorFound;
     }
 
-    function parseDate(dateIn) {
-
-    }
-
     function collectExerciseDates() {
-        console.log("userExercises: ", userExercises);
+        //console.log("userExercises: ", userExercises);
 
         let exerciseDates = [ ];
 
         userExercises.map((exercise, idx) => {
-            console.log("exercise ", idx + 1, " date: ", exercise.date.substring(0, 10));
+            //console.log("exercise ", idx + 1, " date: ", exercise.date.substring(0, 10));
             let currentDate = exercise.date.substring(0, 10);
             let uniqueDate = true;
 
                 exerciseDates.map((data, idx) => {
                     if (data.date === currentDate) {
-                        console.log(data.date, " and ", currentDate, " are the same!");
+                        //console.log(data.date, " and ", currentDate, " are the same!");
                         data.count++;
 
                         uniqueDate = false;
@@ -352,15 +349,15 @@ function ProfilePage() {
 
         })
 
-        console.log("exerciseDates: ", exerciseDates);
+        //console.log("exerciseDates: ", exerciseDates);
         setExercisesByDate(exerciseDates);
 
     }
 
     useEffect(() => {
+        if (!userExercises || userExercises.length === 0) return;
         collectExerciseDates();
-
-    }, [userExercises])
+      }, [userExercises]);
     
 
     return (
@@ -429,6 +426,21 @@ function ProfilePage() {
             </Card>
         </Grid>
         </Grid>
+
+        
+        <Stack marginTop="5%">
+            
+            <Card sx={{ padding: "2%"}}>
+                <Typography fontSize={24}>Recent Activity</Typography>
+            {
+            exercisesByDate?.length > 0 ? 
+                <MyActivityCalendar data={exercisesByDate}/>
+            : 
+                <></>
+            }
+                
+            </Card>
+        </Stack>
 
             {/*Editing Form*/}
             <Stack>
