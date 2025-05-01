@@ -14,6 +14,7 @@ import React, { useContext } from 'react';
 import Profile from '../../../api/models/Profile.js';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import MyActivityCalendar from '../components/MyActivityCalendar.jsx';
+import { parseISO, compareAsc } from 'date-fns'
 
 import ProfilePictures from '../data/ProfilePictures.jsx';
 
@@ -89,7 +90,7 @@ function ProfilePage() {
             }
         })
         setFriends(newFriends);
-        console.log(newFriends);
+        //console.log(newFriends);
     }
     
     async function getUserExercises() {
@@ -357,9 +358,13 @@ function ProfilePage() {
 
         })
 
-        //console.log("exerciseDates: ", exerciseDates);
-        setExercisesByDate(exerciseDates);
+        // The exerciseDates that get fed into the MyActivityCalendar component need to have their dates
+        // be sorted in ascending order. The range of the dates on the calendar are determined by the 
+        // first and last dates, so without sorting, we would run into issues where the calendar range
+        // is smaller than the date range, resulting in missing data.
+        exerciseDates.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
 
+        setExercisesByDate(exerciseDates);
     }
 
     useEffect(() => {
@@ -440,7 +445,7 @@ function ProfilePage() {
             <h3>Recent Activity</h3>
             {
             exercisesByDate?.length > 0 ? 
-                <MyActivityCalendar data={exercisesByDate} levels={userExercises.length}/>
+                <MyActivityCalendar data={exercisesByDate}/>
             : 
                 <></>
             }
