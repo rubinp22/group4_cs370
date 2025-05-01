@@ -332,8 +332,14 @@ function ProfilePage() {
 
                 exerciseDates.map((data, idx) => {
                     if (data.date === currentDate) {
-                        //console.log(data.date, " and ", currentDate, " are the same!");
                         data.count++;
+                        if (data.count === 1) {
+                            data.level = 2;
+                        } else if (data.count === 2) {
+                            data.level = 3
+                        } else if (data.count >= 3) {
+                            data.level = 4
+                        } 
 
                         uniqueDate = false;
                     } 
@@ -364,7 +370,7 @@ function ProfilePage() {
         <>
         <ToolBar /> {/* add new elements */}
         <Stack>
-              <Grid container spacing={2}>
+              <Grid container spacing={2} marginBottom={2}>
           {/*Profile picture*/}
           <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
               <Avatar
@@ -409,8 +415,8 @@ function ProfilePage() {
         </Grid>
 
         {/*Achievements*/}
-        <Grid size={4}>
-            <Card sx={{ pb: 3}}>
+        <Grid size={4} sx={{ display: 'flex' }}>
+            <Card sx={{ pb: 3, width: "100%"} }>
             <h3>Achievements</h3>
                 {earnedAchievements.map((achievement, idx) => {
                     return (
@@ -425,22 +431,22 @@ function ProfilePage() {
                 })}
             </Card>
         </Grid>
-        </Grid>
 
-        
-        <Stack marginTop="5%">
-            
-            <Card sx={{ padding: "2%"}}>
+        {/*Recent Activity*/}
+        <Grid>
+            <Card sx={{ padding: "2%", justifyItems: "center"}}>
                 <Typography fontSize={24}>Recent Activity</Typography>
             {
             exercisesByDate?.length > 0 ? 
-                <MyActivityCalendar data={exercisesByDate}/>
+                <MyActivityCalendar data={exercisesByDate} levels={userExercises.length}/>
             : 
                 <></>
             }
                 
             </Card>
-        </Stack>
+        </Grid>
+        </Grid>
+
 
             {/*Editing Form*/}
             <Stack>
