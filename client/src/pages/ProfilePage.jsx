@@ -23,6 +23,7 @@ function ProfilePage() {
     const { state, dispatch } = useContext(GlobalStateContext)
 
     const [editingData, setEditingData] = useState(false);
+    const [savedData, setSavedData] = useState(false);
     const [profileData, setprofileData] = useState([]);
     const [achievementData, setAchievementData] = useState([]);
     const [earnedAchievements, setEarnedAchievements] = useState([]);
@@ -245,15 +246,13 @@ function ProfilePage() {
 
     function handleEdit() {
         if (editingData === false) {
-            // reset input values
-            {/*if (nameIn === undefined) {
-                setnameIn(name);
-                setHeightFeetIn(heightFeet);
-                setHeightInchIn(heightInch);
-                setWeightIn(weight.at(-1));
-                setDescriptionIn(description);
-                setPfpIn(pfp);
-            }*/}
+            // set input data to current values
+            setnameIn(name);
+            setHeightFeetIn(heightFeet);
+            setHeightInchIn(heightInch);
+            setWeightIn(weight);
+            setDescriptionIn(description);
+            setPfpIn(pfp);
             setEditingData(true);
         } else {
             setEditingData(false);
@@ -271,6 +270,7 @@ function ProfilePage() {
 
     async function handleSubmit() {
         if (!isError()) {
+            setSavedData(true);
             weightArray.push({weight: weightIn, dateLogged: Date.now()});
             let weightArrayIn = weightArray.flat();
             const updatedData = {
@@ -324,15 +324,15 @@ function ProfilePage() {
         <>
         <ToolBar /> {/* add new elements */}
         <Stack>
-              <Grid container spacing={2}>
-          {/*Profile picture*/}
-          <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
-              <Avatar
-              sx={{ width: 100, height: 100}}
-              alt={name}
-              src={pfp}
-              ></Avatar>
-          </Grid>
+        <Grid container spacing={2}>
+            {/*Profile picture*/}
+            <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
+                <Avatar
+                sx={{ width: 100, height: 100}}
+                alt={name}
+                src={pfp}
+                ></Avatar>
+            </Grid>
 
             {/*Name*/}
             <Grid display="flex" justifyContent="flex-start" alignItems="center" size={8}>
@@ -354,135 +354,136 @@ function ProfilePage() {
             </Grid>
     
         
-        {/*Friends*/}
-        <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={3} spacing={0}>
-        <Card sx={{ p: 1, minWidth: '100%', display: 'flex', justifyContent: 'center'}} >
-          <Box>
-          <h3>Friends</h3>
-          <AvatarGroup max={4}>
-            {friends.map((friend) => (
-                <Avatar alt={friend.name} src={friend.pfp}></Avatar>
-            ))}
-          </AvatarGroup>
-          </Box>
-         </Card>
-        </Grid>
-
-        {/*Achievements*/}
-        <Grid size={4}>
-            <Card sx={{ pb: 3}}>
-            <h3>Achievements</h3>
-                {earnedAchievements.map((achievement, idx) => {
-                    return (
-                        <Tooltip title={achievement.tooltip}>
-                            <Chip
-                                key={idx}
-                                label={achievement.name}
-                            />
-                        </Tooltip>
-
-                    )
-                })}
+            {/*Friends*/}
+            <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={3} spacing={0}>
+            <Card sx={{ p: 1, minWidth: '100%', display: 'flex', justifyContent: 'center'}} >
+            <Box>
+            <h3>Friends</h3>
+            <AvatarGroup max={4}>
+                {friends.map((friend) => (
+                    <Avatar alt={friend.name} src={friend.pfp}></Avatar>
+                ))}
+            </AvatarGroup>
+            </Box>
             </Card>
-        </Grid>
+            </Grid>
+
+            {/*Achievements*/}
+            <Grid size={4}>
+                <Card sx={{ pb: 3}}>
+                <h3>Achievements</h3>
+                    {earnedAchievements.map((achievement, idx) => {
+                        return (
+                            <Tooltip title={achievement.tooltip}>
+                                <Chip
+                                    key={idx}
+                                    label={achievement.name}
+                                />
+                            </Tooltip>
+
+                        )
+                    })}
+                </Card>
+            </Grid>
+
         </Grid>
 
-            {/*Editing Form*/}
+        {/*Editing Form*/}
+        {!editingData ? (
+            <></>
+        ) : (
             <Stack>
-                {!editingData ? (
-                    <></>
-                ) : (
-                    <Card sx={{ padding:"40px"}}>
-                        <Typography marginBottom={5} fontSize={24}>Edit Profile</Typography>
-                        <Stack direction="column" spacing={textInputSpacing}>
-                            <TextField 
-                                required
-                                variant="filled" 
-                                label="Name"
-                                error={errors.name}
-                                value={nameIn}
-                                onChange={(e) => setnameIn(e.target.value)}
-                            />
-                            <TextField 
-                                required
-                                variant="filled"
-                                label="Profile"
-                                value={pfpIn}
-                                select
-                                onChange={(e) => setPfpIn(e.target.value)}
-                            >
-                                {ProfilePictures.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                    <ListItemIcon>
-                                        <Avatar
-                                        src={option.value}
-                                        alt={option.label}
-                                        sx={{ width: 32, height: 32, marginRight: 4 }}
-                                        />
-                                    </ListItemIcon>
-                                    {option.label}
-                                    </MenuItem>
-                                ))}
-                                
-                            </TextField>
+            <br/>
+            <Card sx={{ padding:"40px"}}>
+                <Typography marginBottom={5} fontSize={24}>Edit Profile</Typography>
+                <Stack direction="column" spacing={textInputSpacing}>
+                    <TextField 
+                        required
+                        variant="filled" 
+                        label="Name"
+                        error={errors.name}
+                        value={nameIn}
+                        onChange={(e) => {setnameIn(e.target.value); setSavedData(false)}}
+                    />
+                    <TextField 
+                        required
+                        variant="filled"
+                        label="Profile"
+                        value={pfpIn}
+                        select
+                        onChange={(e) => {setPfpIn(e.target.value); setSavedData(false)}}
+                    >
+                        {ProfilePictures.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                            <ListItemIcon>
+                                <Avatar
+                                src={option.value}
+                                alt={option.label}
+                                sx={{ width: 32, height: 32, marginRight: 4 }}
+                                />
+                            </ListItemIcon>
+                            {option.label}
+                            </MenuItem>
+                        ))}
+                        
+                    </TextField>
 
-                            <Stack direction="row">
-                                <TextField 
-                                    required
-                                    variant="filled" 
-                                    label="Height"
-                                    error={errors.heightFeet}
-                                    value={heightFeetIn}
-                                    type="number"
-                                    onChange={(e) => setHeightFeetIn(e.target.value)}
-                                    InputProps={{ 
-                                        endAdornment: <InputAdornment position='end'>Ft</InputAdornment>
-                                    }}
-                                    sx={{width: "50%"}}
-                                    
-                                />
-                                <TextField 
-                                    required
-                                    variant="filled" 
-                                    error={errors.heightInch}
-                                    value={heightInchIn}
-                                    type="number"
-                                    onChange={(e) => setHeightInchIn(e.target.value)}
-                                    InputProps={{ 
-                                        endAdornment: <InputAdornment position='end'>In</InputAdornment>
-                                    }}
-                                    sx={{width: "50%"}}
-                                />
-                                </Stack>
-                            <TextField 
-                                required
-                                variant="filled"
-                                label="Weight" 
-                                error={errors.weight}
-                                value={weightIn}
-                                type="number"
-                                onChange={(e) => setWeightIn(e.target.value)}
-                                InputProps={{ 
-                                    endAdornment: <InputAdornment position='end'>lbs</InputAdornment>
-                                }}
-                            />
-                            <TextField 
-                                variant="filled" 
-                                label="Description"
-                                error={errors.description}
-                                value={descriptionIn}
-                                multiline
-                                maxRows={4}
-                                onChange={(e) => setDescriptionIn(e.target.value)}
-                            />
+                    <Stack direction="row">
+                        <TextField 
+                            required
+                            variant="filled" 
+                            label="Height"
+                            error={errors.heightFeet}
+                            value={heightFeetIn}
+                            type="number"
+                            onChange={(e) => {setHeightFeetIn(e.target.value); setSavedData(false)}}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>Ft</InputAdornment>
+                            }}
+                            sx={{width: "50%"}}
+                            
+                        />
+                        <TextField 
+                            required
+                            variant="filled" 
+                            error={errors.heightInch}
+                            value={heightInchIn}
+                            type="number"
+                            onChange={(e) => {setHeightInchIn(e.target.value); setSavedData(false)}}
+                            InputProps={{ 
+                                endAdornment: <InputAdornment position='end'>In</InputAdornment>
+                            }}
+                            sx={{width: "50%"}}
+                        />
                         </Stack>
-                        <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
-                            <Button variant="contained" onClick={handleSubmit}>Save</Button>
-                            <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
-                        </Stack>
-                    </Card>
-                )}
-            </Stack>
+                    <TextField 
+                        required
+                        variant="filled"
+                        label="Weight" 
+                        error={errors.weight}
+                        value={weightIn}
+                        type="number"
+                        onChange={(e) => {setWeightIn(e.target.value); setSavedData(false)}}
+                        InputProps={{ 
+                            endAdornment: <InputAdornment position='end'>lbs</InputAdornment>
+                        }}
+                    />
+                    <TextField 
+                        variant="filled" 
+                        label="Description"
+                        error={errors.description}
+                        value={descriptionIn}
+                        multiline
+                        maxRows={4}
+                        onChange={(e) => {setDescriptionIn(e.target.value); setSavedData(false)}}
+                    />
+                </Stack>
+                <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
+                <Button variant="contained" onClick={handleSubmit}>{savedData ? (<i>Saved</i>) : ("Save")}</Button>
+                    <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
+                </Stack>
+            </Card>
+        </Stack>)}
 
         {/*Buttons*/}
         <Stack direction="row" marginTop={5} spacing={5} justifyContent="center">
