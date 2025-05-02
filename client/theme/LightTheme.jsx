@@ -168,7 +168,32 @@ const LightTheme = createTheme({
           },
         }),
       },
-    }, 
+    },
+    MuiSlider: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.secondary.main,
+          '& .MuiSlider-valueLabelOpen': {
+            backgroundColor: theme.palette.primary.light,
+          },
+          '& .MuiSlider-valueLabelLabel': {
+            color: theme.palette.primary.dark,
+            fontSize: 18
+          },
+          '& .MuiSlider-mark': {
+            width: "5px",
+            height: "5px",
+            borderRadius: "100%"
+          },
+          '& .MuiSlider-markActive': {
+            backgroundColor: theme.palette.primary.light
+          },
+          '& .MuiSlider-thumb': {
+            color:theme.palette.secondary.dark
+          }
+        })
+      }
+    } 
   },
 });
 
