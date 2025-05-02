@@ -149,7 +149,7 @@ function ViewHikingMetrics() {
             </Stack>
 
                 {/*Date Range Slider*/}
-                {hikingData.length > 0 ? (
+                {hikingData.length > 1 ? (
                         <Stack width="100%" alignItems="center">
                             <Slider
                                 aria-label="Exercise Range"
@@ -170,9 +170,6 @@ function ViewHikingMetrics() {
                         <></>
                     )
                 }
-
-
-
 
         </Stack>
     );

@@ -1,4 +1,4 @@
-import { Stack, Card, Typography } from '@mui/material';
+import { Stack, Card, Typography, Slider } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 import MyBarChart from '../MyBarChart.jsx';
@@ -12,14 +12,18 @@ const restingHeartRates = [100, 70, 50];
 
 function ViewCyclingMetrics() {
     const [cyclingData, setCyclingData] = useState([]);
+    const [selectedData, setSelectedData] = useState([]);
 
-    const distance = cyclingData.map(data => data.distance);
-    const duration = cyclingData.map(data => data.duration);
-    const elevationGain = cyclingData.map(data => data.elevationGain);
-    const avgHeartRate = cyclingData.map(data => data.avgHeartRate);
-    const maxHeartRate = cyclingData.map(data => data.maxHeartRate);
-    const bodyWeight = cyclingData.map(data => data.bodyWeight);
-    const fitnessLevel = cyclingData.map(data => data.fitnessLevel);
+    const distance = selectedData.map(data => data.distance);
+    const duration = selectedData.map(data => data.duration);
+    const elevationGain = selectedData.map(data => data.elevationGain);
+    const avgHeartRate = selectedData.map(data => data.avgHeartRate);
+    const maxHeartRate = selectedData.map(data => data.maxHeartRate);
+    const bodyWeight = selectedData.map(data => data.bodyWeight);
+    const fitnessLevel = selectedData.map(data => data.fitnessLevel);
+
+    const [sliderRange, setSliderRange] = useState([cyclingData.length > 0 ? 1 : 0, cyclingData.length])
+    
 
     const theme = useTheme();
 
@@ -40,7 +44,7 @@ function ViewCyclingMetrics() {
 
     const caloriesBurned = MET.map((data, index) => parseInt(data * duration[index] * bodyWeight[index]));
 
-    const labels = cyclingData.map((data, index) => `ride ${index + 1}`)
+    const labels = selectedData.map((data, index) => `ride ${index + 1}`)
     const graphMargin = 3;
 
     
@@ -58,9 +62,28 @@ function ViewCyclingMetrics() {
                 }
             });
             setCyclingData(res.data);
+            setSelectedData(res.data);
+            setSliderRange([1, res.data.length])
         }
     
     }, [])
+
+        // Changes the selected range of data
+        function handleSliderChange(value, newValue) {
+            const [min, max] = newValue;
+    
+            setSliderRange(newValue)
+            setSelectedData(cyclingData.slice(min - 1, max));
+        }
+    
+        // Formats the labels for each selected mark on the slider
+        function valueText(value) {
+            if (cyclingData.length > 0) {
+                const item = cyclingData[value - 1];
+                return(item.date.slice(0, 10));
+            }
+            
+        }
 
     return (
         <Stack alignItems={"center"}>
@@ -119,6 +142,30 @@ function ViewCyclingMetrics() {
                     />                    
                 </Card>
             </Stack>
+
+                {/*Date Range Slider*/}
+                {cyclingData.length > 1 ? (
+                        <Stack width="100%" alignItems="center">
+                            <Slider
+                                aria-label="Exercise Range"
+                                min={cyclingData.length > 0 ? 1 : 0}
+                                max={cyclingData.length}
+                                marks={true}
+                                onChange={handleSliderChange}
+                                value={sliderRange}
+                                valueLabelDisplay="on"
+                                valueLabelFormat={valueText}
+                                sx={{ marginTop: "5%", marginBottom: "1%", height: "8px"}}
+                                disableSwap
+                            />
+                            <Typography fontSize={24}>Select a date range</Typography>
+                        </Stack>
+
+                    ) : (
+                        <></>
+                    )
+                }
+
         </Stack>
     );
 }
