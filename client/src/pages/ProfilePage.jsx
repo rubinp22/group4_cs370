@@ -28,7 +28,9 @@ function ProfilePage() {
     const [achievementData, setAchievementData] = useState([]);
     const [earnedAchievements, setEarnedAchievements] = useState([]);
     const [userExercises, setUserExercises] = useState([]);
+
     const [friends, setFriends] = useState([]);
+    const [requestSent, setRequestSent] = useState(false)
 
     const [nameIn, setnameIn] = useState(undefined);
     const [heightFeetIn, setHeightFeetIn] = useState(undefined);
@@ -59,15 +61,54 @@ function ProfilePage() {
                 }
             });
             setprofileData(res.data);
-            getFriendData(res.data.at(0).friends);
+
+            const friendIDs = [];
+
+            try {
+                const res = await axios.get('http://localhost:3000/friendrequests', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    params: {
+                        requester: pageID,
+                        accepted: true
+                    }
+                })
+                res.data.forEach(friend => {
+                    friendIDs.push(friend.reciever);
+                })
+            } catch (err) {
+                console.log(err);
+            }
+
+            try {
+                const res = await axios.get('http://localhost:3000/friendrequests', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    params: {
+                        reciever: pageID,
+                        accepted: true
+                    }
+                })
+                res.data.forEach(friend => {
+                    friendIDs.push(friend.requester);
+                })
+            } catch (err) {
+                console.log(err);
+            }
+
+            getFriendData(friendIDs);
             return res.data
         } catch (err) {
             console.log(err);
         }
     }
 
+
     async function getFriendData(friendIds) {
         const newFriends = [];
+
         friendIds.forEach(async id => {
             try {
                 const res = await axios.get('http://localhost:3000/users', {
@@ -87,9 +128,50 @@ function ProfilePage() {
                 console.log(err);
             }
         })
+
         setFriends(newFriends);
-        console.log(newFriends);
+        //console.log(newFriends);
+
+        // check if user has already sent request to this page or if they're already friends
+        if (pageID != state.user) {
+            try {
+                const res = await axios.get('http://localhost:3000/friendrequests', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }, 
+                    params: {
+                        requester: state.user,
+                        reciever: pageID
+                    }
+                });
+
+                if (res.data.length != 0) {
+                    setRequestSent(true);
+                } else {
+                    try {
+                        const res = await axios.get('http://localhost:3000/friendrequests', {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }, 
+                            params: {
+                                requester: pageID,
+                                reciever: state.user,
+                                accepted: true
+                            }
+                        });
+                        if (res.data.length != 0) {
+                            setRequestSent(true);
+                        }
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
     }
+    
     
     async function getUserExercises() {
         try {
@@ -318,6 +400,17 @@ function ProfilePage() {
 
         return errorFound;
     }
+
+    async function handleFriendRequest() {
+        const newRequest = {
+            requester: state.user,
+            reciever: pageID,
+            accepted: false
+        }
+        // update the database
+        await axios.post('http://localhost:3000/friendrequests/', newRequest)
+        setRequestSent(true);
+    }
     
 
     return (
@@ -356,16 +449,20 @@ function ProfilePage() {
         
             {/*Friends*/}
             <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={3} spacing={0}>
-            <Card sx={{ p: 1, minWidth: '100%', display: 'flex', justifyContent: 'center'}} >
-            <Box>
-            <h3>Friends</h3>
-            <AvatarGroup max={4}>
-                {friends.map((friend) => (
-                    <Avatar alt={friend.name} src={friend.pfp}></Avatar>
-                ))}
-            </AvatarGroup>
-            </Box>
-            </Card>
+                <Card sx={{ p: 1, minWidth: '100%', display: 'flex', justifyContent: 'center'}} >
+                <Box justifyItems={'center'}>
+                <h3>Friends</h3>
+                <AvatarGroup max={4}>
+                    {friends.map((friend) => (
+                        <Avatar alt={friend.name} src={friend.pfp}></Avatar>
+                    ))}
+                </AvatarGroup>
+                <br/>
+                {(requestSent || state.user === pageID) ? (<></>) : 
+                        (<Button variant="contained" onClick={handleFriendRequest}>Add</Button>)}
+                </Box>
+                
+                </Card>
             </Grid>
 
             {/*Achievements*/}
