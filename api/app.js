@@ -8,11 +8,12 @@ import Exercise from './models/Exercise.js'
 // This schema represents user profile data
 import Profile from './models/Profile.js'
 import Achievement from './models/Achievement.js';
+import FriendRequest from './models/FriendRequest.js';
 
 // Instantiate the API
 const app = new Hono();
 
-const database = "Fitness-Tracker";
+const database = "test";
 
 // Connect to mongo
 // Here I've added the database variable to the URI. Without specifying this, Mongo defaults to the "test" database
@@ -103,6 +104,57 @@ app.get('/achievements', async (c) => {
 
     const Achievements = await Achievement.find(params);
     return c.json(Achievements);
+})
+
+app.get('/friendrequests', async (c) => {
+    const params = c.req.query();
+
+    const FriendRequests = await FriendRequest.find(params);
+    return c.json(FriendRequests);
+})
+
+app.post('friendrequests/', async (c) => {
+    const body = await c.req.json();
+
+    // look for existing request from the current requester to the reciever
+    const existingRequest = await FriendRequest.findOne(body);
+
+    if (existingRequest != undefined) {
+        if (existingRequest.accepted) {
+            return c.text('Already friends');
+        } else {
+            // change nothing since the reciever must be the one to accept
+            return c.text('Request already exists');
+        }
+    }
+
+    // check for request from the reciever to the requester
+    const reverseBody = { 
+        requester: body.reciever,
+        reciever: body.requester }
+    const reverseRequest = await FriendRequest.findOne(reverseBody);
+
+    if (reverseRequest != undefined) {
+        if (reverseRequest.accepted) {
+            return c.text('Already friends');
+        } else {
+            // update request to accepted
+            await FriendRequest.updateOne(
+                { requester: body.reciever,
+                  reciever: body.requester },
+                { $set: {
+                    requester: body.reciever,
+                    reciever: body.requester,
+                    accepted: true
+                }}
+            );
+            return c.text('Request accepted');
+        }
+    }
+
+    // no request exists between these users in either direction, so create one
+    FriendRequest.create(body);
+    return c.text('Friend request Added');
 })
 
 serve({
