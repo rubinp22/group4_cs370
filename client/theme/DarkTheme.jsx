@@ -14,7 +14,7 @@ const DarkTheme = createTheme({
       // hover 
       mediumLight: grey[400],
       // non-hover
-      main: grey[700],
+      main: grey[600],
       // hover text
       dark: grey[900]
     },
@@ -189,8 +189,8 @@ const DarkTheme = createTheme({
             fontSize: 18
           },
           '& .MuiSlider-mark': {
-            width: "5px",
-            height: "5px",
+            width: "8px",
+            height: "8px",
             borderRadius: "100%"
           },
           '& .MuiSlider-markActive': {
