@@ -244,6 +244,16 @@ function ProfilePage() {
         pfp: false
     })
 
+      const [helperTexts, setHelperTexts] = useState({
+        username: "",
+        password: "",
+        name: "",
+        heightFeet: "",
+        heightInches: "",
+        weight: "",
+        description: ""
+      })
+
     function handleEdit() {
         if (editingData === false) {
             // set input data to current values
@@ -286,21 +296,91 @@ function ProfilePage() {
             dispatch({ type: 'SETWEIGHT', payload: weightArrayIn.at(-1).weight });
             dispatch({ type: 'SETPFP', payload: pfpIn});
             // update the database
+            console.log("new data: ", updatedData);
             await axios.put('http://localhost:3000/users/', updatedData)
             getprofileData();
         }
+        console.log("error data")
     }
 
     // check for errors
     function isError() {
 
+        // let newErrors = {
+        //     name: (nameIn === undefined || nameIn.length > 30 || nameIn.length < 1),
+        //     heightFeet: (heightFeetIn === undefined || heightFeetIn > 7 || heightFeetIn < 1),
+        //     heightInch: (heightInchIn === undefined || heightInchIn > 11 || heightInchIn < 0),
+        //     weight: (weightIn === undefined || weightIn > 1000 || weightIn < 1),
+        //     description: (description != undefined && description.length > 200),
+        //     pfp: (pfp === undefined)
+        // }
+
+        let nameError = true;
+        let nameHelper = "";
+        if (nameIn === "") {
+          nameHelper = "Please enter a name";
+        } else if (nameIn.length > 30) {
+          nameHelper = "Exceeded character limit of 30 by " + (name.length - 30);
+        } else {
+          nameError = false;
+        }
+      
+        let heightFeetError = true;
+        let heightFeetHelper = "";
+        if (heightFeetIn === "") {
+          heightFeetHelper = "Please enter Feet";
+        } else if (heightFeetIn > 7 || heightFeetIn < 1) {
+          heightFeetHelper = "Valid range: 1 - 7";
+        } else {
+          heightFeetError = false;
+        }
+      
+        let heightInchesError = true;
+        let heightInchesHelper = "";
+        if (heightInchIn === "") {
+          heightInchesHelper = "Please enter Inches";
+        } else if (heightInchIn > 11 || heightInchIn < 0) {
+          heightInchesHelper = "Valid range: 0 - 11";
+        } else {
+          heightInchesError = false;
+        }
+      
+        let weightError = true;
+        let weightHelper = "";
+        if (weightIn === "") {
+          weightHelper = "Please enter a weight";
+        } else if (weightIn > 1000 || weightIn < 1) {
+          weightHelper = "Valid range: 1 - 1000";
+        } else {
+          weightError = false;
+        }
+      
+        let descriptionError = true;
+        let descriptionHelper = "";
+        if (descriptionIn === "") {
+          descriptionHelper = "Please enter a description"
+        } else if (descriptionIn.length > 200) {
+          descriptionHelper = "Exceeded character limit of 200 by " + (descriptionIn.length - 200);
+        } else {
+          descriptionError = false;
+        }
+      
+        let newHelper = {
+          name: nameHelper,
+          heightFeet: heightFeetHelper,
+          heightInches: heightInchesHelper,
+          weight: weightHelper,
+          description: descriptionHelper
+        }
+      
+        setHelperTexts(newHelper);
+      
         let newErrors = {
-            name: (nameIn === undefined || nameIn.length > 30 || nameIn.length < 1),
-            heightFeet: (heightFeetIn === undefined || heightFeetIn > 7 || heightFeetIn < 1),
-            heightInch: (heightInchIn === undefined || heightInchIn > 11 || heightInchIn < 0),
-            weight: (weightIn === undefined || weightIn > 1000 || weightIn < 1),
-            description: (description != undefined && description.length > 200),
-            pfp: (pfp === undefined)
+          name: nameError,
+          heightFeet: heightFeetError,
+          heightInches: heightInchesError,
+          weight: weightError,
+          description: descriptionError
         }
 
         setErrors(newErrors);
@@ -402,6 +482,7 @@ function ProfilePage() {
                         variant="filled" 
                         label="Name"
                         error={errors.name}
+                        helperText={helperTexts.name}
                         value={nameIn}
                         onChange={(e) => {setnameIn(e.target.value); setSavedData(false)}}
                     />
@@ -434,6 +515,7 @@ function ProfilePage() {
                             variant="filled" 
                             label="Height"
                             error={errors.heightFeet}
+                            helperText={helperTexts.heightFeet}
                             value={heightFeetIn}
                             type="number"
                             onChange={(e) => {setHeightFeetIn(e.target.value); setSavedData(false)}}
@@ -446,7 +528,8 @@ function ProfilePage() {
                         <TextField 
                             required
                             variant="filled" 
-                            error={errors.heightInch}
+                            error={errors.heightInches}
+                            helperText={helperTexts.heightInches}
                             value={heightInchIn}
                             type="number"
                             onChange={(e) => {setHeightInchIn(e.target.value); setSavedData(false)}}
@@ -461,6 +544,7 @@ function ProfilePage() {
                         variant="filled"
                         label="Weight" 
                         error={errors.weight}
+                        helperText={helperTexts.weight}
                         value={weightIn}
                         type="number"
                         onChange={(e) => {setWeightIn(e.target.value); setSavedData(false)}}
@@ -472,6 +556,7 @@ function ProfilePage() {
                         variant="filled" 
                         label="Description"
                         error={errors.description}
+                        helperText={helperTexts.description}
                         value={descriptionIn}
                         multiline
                         maxRows={4}
