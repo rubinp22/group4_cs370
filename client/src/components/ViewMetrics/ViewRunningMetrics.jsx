@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
+import { parseISO, compareAsc } from 'date-fns'
 
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50]
@@ -64,6 +65,7 @@ function ViewRunningMetrics() {
                     userID: state.user
                 }
             });
+            res.data.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
             setRunningData(res.data);
             setSelectedData(res.data);
             setSliderRange([1, res.data.length])

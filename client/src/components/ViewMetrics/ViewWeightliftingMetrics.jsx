@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
+import { parseISO, compareAsc } from 'date-fns'
 
 // MET (Metabolic Equivalent of Task) is defined as the energy expenditure for a given task
 // An MET of 1 is measured as the energy expenditure at rest. 
@@ -91,6 +92,7 @@ function ViewWeightliftingMetrics() {
                     userID: state.user
                 }
             });
+            res.data.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
             setWeightLiftData(res.data);
             setSelectedData(res.data);
             setSliderRange([1, res.data.length])
