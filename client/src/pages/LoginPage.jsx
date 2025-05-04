@@ -75,7 +75,7 @@ useEffect(() => {
   const handleSubmit = () => {
     // The find method looks through an array until the find condition is fulfilled, then one element
     // gets assigned to the element in which that condition was true
-    const matchingUser = allUsers.find(user => username === user.username && password === user.password);
+    const matchingUser = allUsers.find(user => username.toLowerCase() === user.username.toLowerCase() && password === user.password);
     if (matchingUser) {
       selectUser(matchingUser._id);
       setTheme(matchingUser.lightmodeToggle);
