@@ -43,7 +43,8 @@ function ViewCyclingMetrics() {
 
     const MET = heartRateReserve.map((data, index) => (data * (maxMETs[fitnessLevel[index]] - 1) + 1))
 
-    const caloriesBurned = MET.map((data, index) => parseInt(data * duration[index] * bodyWeight[index]));
+    // Converting lbs to kg
+    const caloriesBurned = MET.map((data, index) => parseInt(data * duration[index] * (bodyWeight[index] / 2.2046)));
 
     const labels = selectedData.map((data, index) => `ride ${index + 1}`)
     const graphMargin = 3;
