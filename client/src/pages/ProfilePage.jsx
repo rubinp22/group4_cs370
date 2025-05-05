@@ -13,6 +13,8 @@ import GlobalStateContext from '../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
 import Profile from '../../../api/models/Profile.js';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import MyActivityCalendar from '../components/MyActivityCalendar.jsx';
+import { parseISO, compareAsc } from 'date-fns'
 
 import ProfilePictures from '../data/ProfilePictures.jsx';
 
@@ -28,6 +30,7 @@ function ProfilePage() {
     const [achievementData, setAchievementData] = useState([]);
     const [earnedAchievements, setEarnedAchievements] = useState([]);
     const [userExercises, setUserExercises] = useState([]);
+    const [exercisesByDate, setExercisesByDate] = useState(null);
     const [friends, setFriends] = useState([]);
 
     const [nameIn, setnameIn] = useState(undefined);
@@ -88,7 +91,7 @@ function ProfilePage() {
             }
         })
         setFriends(newFriends);
-        console.log(newFriends);
+        //console.log(newFriends);
     }
     
     async function getUserExercises() {
@@ -107,8 +110,7 @@ function ProfilePage() {
         } catch (err) {
             console.log(err);
         }
-    }
-    
+    }    
 
     // Fetching the data of all achievements from the DB (name, category, metric, requirement,)
     async function getAchievementData() {
@@ -318,21 +320,93 @@ function ProfilePage() {
 
         return errorFound;
     }
+
+    function collectExerciseDates() {
+        //console.log("userExercises: ", userExercises);
+
+        // The first date object will be invisible on the calendar, but it will set the starting range of the
+        // calendar to the beginning of the year.
+        let exerciseDates = [{
+            date: '2025-01-01',
+            count: 0,
+            level: 0
+        }];
+
+        userExercises.map((exercise, idx) => {
+            //console.log("exercise ", idx + 1, " date: ", exercise.date.substring(0, 10));
+            let currentDate = exercise.date.substring(0, 10);
+            let uniqueDate = true;
+
+                exerciseDates.map((data, idx) => {
+                    if (data.date === currentDate) {
+                        data.count++;
+                        if (data.count === 1) {
+                            data.level = 1;
+                        } else if (data.count === 2) {
+                            data.level = 2
+                        } else if (data.count === 3) {
+                            data.level = 3;
+                        } else if (data.count >= 4) {
+                            data.level = 4;
+                        }
+
+                        uniqueDate = false;
+                    } 
+                })
+
+                if (uniqueDate) {
+                    exerciseDates.push({
+                        date: currentDate,
+                        count: 1,
+                        level: 1
+                    })
+                }
+
+        })
+
+        // The exerciseDates that get fed into the MyActivityCalendar component need to have their dates
+        // be sorted in ascending order. The range of the dates on the calendar are determined by the 
+        // first and last dates, so without sorting, we would run into issues where the calendar range
+        // is smaller than the date range, resulting in missing data.
+        exerciseDates.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
+
+        // Inserting a dummy date object for the current day
+        const today = new Date().toISOString().substring(0, 10);
+
+        // We only want to insert dummy data for the current day if the user hasn't already
+        // exercised today. We don't want to overwrite their data for today. 
+        const exerciseToday = exerciseDates.find(date => today === date.date);
+        if (!exerciseToday) {
+            exerciseDates.push({
+                date: today,
+                count: 0,
+                level: 0
+            })
+        }
+
+
+        setExercisesByDate(exerciseDates);
+    }
+
+    useEffect(() => {
+        if (!userExercises || userExercises.length === 0) return;
+        collectExerciseDates();
+      }, [userExercises]);
     
 
     return (
         <>
         <ToolBar /> {/* add new elements */}
         <Stack>
-        <Grid container spacing={2}>
-            {/*Profile picture*/}
-            <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
-                <Avatar
-                sx={{ width: 100, height: 100}}
-                alt={name}
-                src={pfp}
-                ></Avatar>
-            </Grid>
+          <Grid container spacing={2} marginBottom={2}>
+          {/*Profile picture*/}
+          <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
+              <Avatar
+              sx={{ width: 100, height: 100}}
+              alt={name}
+              src={pfp}
+              ></Avatar>
+          </Grid>
 
             {/*Name*/}
             <Grid display="flex" justifyContent="flex-start" alignItems="center" size={8}>
@@ -353,40 +427,54 @@ function ProfilePage() {
             </Card>
             </Grid>
     
-        
-            {/*Friends*/}
-            <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={3} spacing={0}>
-            <Card sx={{ p: 1, minWidth: '100%', display: 'flex', justifyContent: 'center'}} >
-            <Box>
-            <h3>Friends</h3>
-            <AvatarGroup max={4}>
-                {friends.map((friend) => (
-                    <Avatar alt={friend.name} src={friend.pfp}></Avatar>
-                ))}
-            </AvatarGroup>
-            </Box>
+        {/*Friends*/}
+        <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={3} spacing={0}>
+        <Card sx={{ p: 1, minWidth: '100%', display: 'flex', justifyContent: 'center'}} >
+          <Box>
+          <h3>Friends</h3>
+          <AvatarGroup max={4}>
+            {friends.map((friend) => (
+                <Avatar alt={friend.name} src={friend.pfp}></Avatar>
+            ))}
+          </AvatarGroup>
+          </Box>
+         </Card>
+        </Grid>
+
+        {/*Achievements*/}
+        <Grid size={4} sx={{ display: 'flex' }}>
+            <Card sx={{ pb: 3, width: "100%"} }>
+            <h3>Achievements</h3>
+                {earnedAchievements.map((achievement, idx) => {
+                    return (
+                        <Tooltip title={achievement.tooltip}>
+                            <Chip
+                                key={idx}
+                                label={achievement.name}
+                            />
+                        </Tooltip>
+
+                    )
+                })}
             </Card>
-            </Grid>
+        </Grid>
 
-            {/*Achievements*/}
-            <Grid size={4}>
-                <Card sx={{ pb: 3}}>
-                <h3>Achievements</h3>
-                    {earnedAchievements.map((achievement, idx) => {
-                        return (
-                            <Tooltip title={achievement.tooltip}>
-                                <Chip
-                                    key={idx}
-                                    label={achievement.name}
-                                />
-                            </Tooltip>
-
-                        )
-                    })}
-                </Card>
-            </Grid>
+        {/*Recent Activity*/}
+        <Grid>
+            <Card sx={{ padding: "2%", justifyItems: "center"}}>
+            <h3>Recent Activity</h3>
+            {
+            exercisesByDate?.length > 0 ? 
+                <MyActivityCalendar data={exercisesByDate}/>
+            : 
+                <></>
+            }
+                
+            </Card>
 
         </Grid>
+        </Grid>
+
 
         {/*Editing Form*/}
         {!editingData ? (

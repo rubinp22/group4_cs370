@@ -1,5 +1,6 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { grey, amber } from '@mui/material/colors';
+import { backdropClasses } from '@mui/material';
 
 // This theme overrides all components that are listed (All MUI Buttons, Links, Cards, and some TextFields)
 // The override for MuiCard has special rules for styling text fields that are located within
@@ -13,7 +14,7 @@ const DarkTheme = createTheme({
       // hover 
       mediumLight: grey[400],
       // non-hover
-      main: grey[700],
+      main: grey[600],
       // hover text
       dark: grey[900]
     },
@@ -176,6 +177,31 @@ const DarkTheme = createTheme({
         }),
       },
     },
+    MuiSlider: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          color: theme.palette.secondary.main,
+          '& .MuiSlider-valueLabelOpen': {
+            backgroundColor: theme.palette.secondary.main
+          },
+          '& .MuiSlider-valueLabelLabel': {
+            color: theme.palette.primary.dark,
+            fontSize: 18
+          },
+          '& .MuiSlider-mark': {
+            width: "8px",
+            height: "8px",
+            borderRadius: "100%"
+          },
+          '& .MuiSlider-markActive': {
+            backgroundColor: theme.palette.primary.dark
+          },
+          '& .MuiSlider-thumb': {
+            color:theme.palette.secondary.dark
+          }
+        })
+      }
+    }
   },
 });
 
