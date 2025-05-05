@@ -37,13 +37,18 @@ function ProfilePage() {
     const [descriptionIn, setDescriptionIn] = useState(undefined); 
     const [pfpIn, setPfpIn] = useState(undefined);
 
-    const name = profileData.map(data => data.name);
-    const heightFeet = profileData.map(data => data.heightFeet);
-    const heightInch = profileData.map(data => data.heightInch);
-    const weight = profileData.map(data => data.weightArray.at(-1).weight);
-    const weightArray = profileData.map(data => data.weightArray)
-    const description = profileData.map(data => data.description);
-    const pfp = profileData.map(data => data.pfp);
+    // Not ideal, but using map to like this turns all of these variables into an array
+    // that holds one value. This broke the ability to edit a user profile. By indexing
+    // to the first element, we eliminate this problem. Map however, is nice because it
+    // doesn't throw errors when iterating over profileData when its empty, before the 
+    // API promise is fulfilled. 
+    const name = profileData.map(data => data.name)[0];
+    const heightFeet = profileData.map(data => data.heightFeet)[0];
+    const heightInch = profileData.map(data => data.heightInch)[0];
+    const weight = profileData.map(data => data.weightArray.at(-1).weight)[0];
+    const weightArray = profileData.map(data => data.weightArray)[0];
+    const description = profileData.map(data => data.description)[0];
+    const pfp = profileData.map(data => data.pfp)[0];
 
     const textInputSpacing = 3;
 
