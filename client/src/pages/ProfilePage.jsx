@@ -40,6 +40,7 @@ function ProfilePage() {
     const [weightIn, setWeightIn] = useState(undefined);
     const [descriptionIn, setDescriptionIn] = useState(undefined); 
     const [pfpIn, setPfpIn] = useState(undefined);
+    const [goalIn, setGoalIn] = useState(undefined);
 
     // Not ideal, but using map to like this turns all of these variables into an array
     // that holds one value. This broke the ability to edit a user profile. By indexing
@@ -53,6 +54,7 @@ function ProfilePage() {
     const weightArray = profileData.map(data => data.weightArray)[0];
     const description = profileData.map(data => data.description)[0];
     const pfp = profileData.map(data => data.pfp)[0];
+    const goal = profileData.map(data => data.goal)[0];
 
     const textInputSpacing = 3;
 
@@ -318,7 +320,8 @@ function ProfilePage() {
         heightInch: false,
         weight: false,
         description: false,
-        pfp: false
+        pfp: false,
+        goal: false
     })
 
       const [helperTexts, setHelperTexts] = useState({
@@ -328,7 +331,8 @@ function ProfilePage() {
         heightFeet: "",
         heightInches: "",
         weight: "",
-        description: ""
+        description: "",
+        goal: ""
       })
 
     function handleEdit() {
@@ -340,6 +344,7 @@ function ProfilePage() {
             setWeightIn(weight);
             setDescriptionIn(description);
             setPfpIn(pfp);
+            setGoalIn(goal);
             setEditingData(true);
         } else {
             setEditingData(false);
@@ -353,6 +358,7 @@ function ProfilePage() {
         setWeightIn("");
         setDescriptionIn("");
         setPfpIn("");
+        setGoalIn("");
     }
 
     async function handleSubmit() {
@@ -367,7 +373,8 @@ function ProfilePage() {
                 heightInch: heightInchIn,
                 description: descriptionIn,
                 pfp: pfpIn,
-                weightArray: weightArrayIn
+                weightArray: weightArrayIn,
+                goal: goalIn
             }
 
             dispatch({ type: 'SETWEIGHT', payload: weightArrayIn.at(-1).weight });
@@ -441,13 +448,24 @@ function ProfilePage() {
         } else {
           descriptionError = false;
         }
+
+        let goalError = true;
+        let goalHelper = "";
+        if (goalIn === "") {
+          goalHelper = "Please enter a goal"
+        } else if (goalIn.length > 200) {
+          goalHelper = "Exceeded character limit of 200 by " + (goalIn.length - 200);
+        } else {
+          goalError = false;
+        }
       
         let newHelper = {
           name: nameHelper,
           heightFeet: heightFeetHelper,
           heightInches: heightInchesHelper,
           weight: weightHelper,
-          description: descriptionHelper
+          description: descriptionHelper,
+          goal: goalHelper
         }
       
         setHelperTexts(newHelper);
@@ -457,7 +475,8 @@ function ProfilePage() {
           heightFeet: heightFeetError,
           heightInches: heightInchesError,
           weight: weightError,
-          description: descriptionError
+          description: descriptionError,
+          goal: goalError
         }
 
         setErrors(newErrors);
@@ -584,7 +603,7 @@ function ProfilePage() {
             <br/>
 
             {/*Bio*/}
-            <Grid size={{xs:8,sm:7.5,md:7.6}} spacing={4} alignItems="left" justifyContent="left">  
+            <Grid size={{xs:5,sm:4.5,md:4.6}} spacing={4} alignItems="left" justifyContent="left">  
             <Card sx={{p: 2, height: '100%'}} align='left'>
                 <Typography variant="body2">
                 Height: {heightFeet}'{heightInch}" | Weight: {weight} lbs
@@ -594,6 +613,15 @@ function ProfilePage() {
                 </Typography>
             </Card>
             </Grid>
+            {/*Goal*/}
+            <Grid size={3} sx={{ display: 'flex' }}>
+                <Card sx={{ paddingLeft: 2, width: "100%"} } align='left'>
+                <h3>Current Goal:</h3>
+                <Typography variant="body">
+                    {goal}
+                </Typography>
+                </Card>
+            </Grid>
     
             {/*Friends*/}
             <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={3} spacing={0}>
@@ -602,7 +630,7 @@ function ProfilePage() {
                 <h3>Friends</h3>
                 <AvatarGroup max={4}>
                     {friends.map((friend) => (
-                        <Avatar title={friend.name} src={friend.pfp}></Avatar>
+                        <Avatar alt={friend.name} src={friend.pfp}></Avatar>
                     ))}
                 </AvatarGroup>
                 <br/>
@@ -741,6 +769,16 @@ function ProfilePage() {
                         multiline
                         maxRows={4}
                         onChange={(e) => {setDescriptionIn(e.target.value); setSavedData(false)}}
+                    />
+                    <TextField 
+                        variant="filled" 
+                        label="Goal"
+                        error={errors.goal}
+                        helperText={helperTexts.goal}
+                        value={goalIn}
+                        multiline
+                        maxRows={4}
+                        onChange={(e) => {setGoalIn(e.target.value); setSavedData(false)}}
                     />
                 </Stack>
                 <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
