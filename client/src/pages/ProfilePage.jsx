@@ -32,6 +32,7 @@ function ProfilePage() {
     const [userExercises, setUserExercises] = useState([]);
     const [exercisesByDate, setExercisesByDate] = useState(null);
     const [friends, setFriends] = useState([]);
+    const [requestSent, setRequestSent] = useState(false);
 
     const [nameIn, setnameIn] = useState(undefined);
     const [heightFeetIn, setHeightFeetIn] = useState(undefined);
@@ -67,7 +68,37 @@ function ProfilePage() {
                 }
             });
             setprofileData(res.data);
-            getFriendData(res.data.at(0).friends);
+            
+            const friendIDs = [];
+
+            const requested = await axios.get('http://localhost:3000/friendrequests', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    requester: pageID,
+                    accepted: true
+                }
+            })
+            requested.data.forEach(friend => {
+                friendIDs.push(friend.reciever);
+            })
+
+            const recieved = await axios.get('http://localhost:3000/friendrequests', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    reciever: pageID,
+                    accepted: true
+                }
+            })
+            recieved.data.forEach(friend => {
+                friendIDs.push(friend.requester);
+            })
+
+            getFriendData(friendIDs);
+
             return res.data
         } catch (err) {
             console.log(err);
@@ -97,6 +128,45 @@ function ProfilePage() {
         })
         setFriends(newFriends);
         //console.log(newFriends);
+
+        // check if user has already sent request to this page or if they're already friends
+        if (pageID != state.user) {
+            try {
+                const res = await axios.get('http://localhost:3000/friendrequests', {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }, 
+                    params: {
+                        requester: state.user,
+                        reciever: pageID
+                    }
+                });
+
+                if (res.data.length != 0) {
+                    setRequestSent(true);
+                } else {
+                    try {
+                        const res = await axios.get('http://localhost:3000/friendrequests', {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }, 
+                            params: {
+                                requester: pageID,
+                                reciever: state.user,
+                                accepted: true
+                            }
+                        });
+                        if (res.data.length != 0) {
+                            setRequestSent(true);
+                        }
+                    } catch (err) {
+                        console.log(err);
+                    }
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
     }
     
     async function getUserExercises() {
@@ -406,6 +476,19 @@ function ProfilePage() {
         return errorFound;
     }
 
+    async function handleFriendRequest() {
+        const newRequest = {
+            requester: state.user,
+            reciever: pageID,
+            accepted: false
+        }
+        // update the database
+        await axios.post('http://localhost:3000/friendrequests/', newRequest);
+        //handleSubmit();
+        getprofileData();
+        setRequestSent(true);
+    }
+
     function collectExerciseDates() {
         //console.log("userExercises: ", userExercises);
 
@@ -512,19 +595,23 @@ function ProfilePage() {
             </Card>
             </Grid>
     
-        {/*Friends*/}
-        <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={3} spacing={0}>
-        <Card sx={{ p: 1, minWidth: '100%', display: 'flex', justifyContent: 'center'}} >
-          <Box>
-          <h3>Friends</h3>
-          <AvatarGroup max={4}>
-            {friends.map((friend) => (
-                <Avatar alt={friend.name} src={friend.pfp}></Avatar>
-            ))}
-          </AvatarGroup>
-          </Box>
-         </Card>
-        </Grid>
+            {/*Friends*/}
+            <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={3} spacing={0}>
+                <Card sx={{ p: 1, minWidth: '100%', display: 'flex', justifyContent: 'center'}} >
+                <Box justifyItems={'center'}>
+                <h3>Friends</h3>
+                <AvatarGroup max={4}>
+                    {friends.map((friend) => (
+                        <Avatar title={friend.name} src={friend.pfp}></Avatar>
+                    ))}
+                </AvatarGroup>
+                <br/>
+                {(requestSent || state.user === "" || state.user === pageID) ? (<></>) : 
+                        (<Button variant="contained" onClick={handleFriendRequest}>Add</Button>)}
+                </Box>
+                
+                </Card>
+            </Grid>
 
         {/*Achievements*/}
         <Grid size={4} sx={{ display: 'flex' }}>
