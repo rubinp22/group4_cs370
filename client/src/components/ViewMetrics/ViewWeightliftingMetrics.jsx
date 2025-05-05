@@ -1,4 +1,4 @@
-import { Stack, Card, Typography } from '@mui/material';
+import { Stack, Card, Typography, Slider } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 import MyBarChart from '../MyBarChart.jsx';
@@ -6,6 +6,7 @@ import axios from 'axios';
 
 import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
+import { parseISO, compareAsc } from 'date-fns'
 
 // MET (Metabolic Equivalent of Task) is defined as the energy expenditure for a given task
 // An MET of 1 is measured as the energy expenditure at rest. 
@@ -26,15 +27,18 @@ const restingHeartRates = [100, 70, 50]
 
 function ViewWeightliftingMetrics() {
     const [weightLiftData, setWeightLiftData] = useState([]);
+    const [selectedData, setSelectedData] = useState([]);
 
-    const reps = weightLiftData.map(data => data.reps);
-    const sets = weightLiftData.map(data => data.sets);
-    const weightOfWeights = weightLiftData.map(data => data.weightOfWeights);
-    const duration = weightLiftData.map(data => data.duration);
-    const avgHeartRate = weightLiftData.map(data => data.avgHeartRate);
-    const maxHeartRate = weightLiftData.map(data => data.maxHeartRate);
-    const bodyWeight = weightLiftData.map(data => data.bodyWeight);
-    const fitnessLevel = weightLiftData.map(data => data.fitnessLevel);
+    const reps = selectedData.map(data => data.reps);
+    const sets = selectedData.map(data => data.sets);
+    const weightOfWeights = selectedData.map(data => data.weightOfWeights);
+    const duration = selectedData.map(data => data.duration);
+    const avgHeartRate = selectedData.map(data => data.avgHeartRate);
+    const maxHeartRate = selectedData.map(data => data.maxHeartRate);
+    const bodyWeight = selectedData.map(data => data.bodyWeight);
+    const fitnessLevel = selectedData.map(data => data.fitnessLevel);
+
+    const [sliderRange, setSliderRange] = useState([weightLiftData.length > 0 ? 1 : 0, weightLiftData.length])
 
     const theme = useTheme();
 
@@ -71,7 +75,7 @@ function ViewWeightliftingMetrics() {
     // caloriesBurned = MET * duration(hours) * bodyWeight(kg)
     const caloriesBurned = MET.map((data, index) => parseInt(data * duration[index] * bodyWeight[index]));
 
-    const labels = weightLiftData.map((_, index) => `Session ${index + 1}`);
+    const labels = selectedData.map((_, index) => `Session ${index + 1}`);
     const graphMargin = 3;
 
     // Put DB fetching here:
@@ -88,10 +92,31 @@ function ViewWeightliftingMetrics() {
                     userID: state.user
                 }
             });
+            res.data.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
             setWeightLiftData(res.data);
+            setSelectedData(res.data);
+            setSliderRange([1, res.data.length])
         }
     
     }, [])
+
+        // Changes the selected range of data
+        function handleSliderChange(value, newValue) {
+            const [min, max] = newValue;
+    
+            setSliderRange(newValue)
+            setSelectedData(weightLiftData.slice(min - 1, max));
+        }
+    
+        // Formats the labels for each selected mark on the slider
+        function valueText(value) {
+            if (weightLiftData.length > 0) {
+                const item = weightLiftData[value - 1];
+                return(item.date.slice(0, 10));
+            }
+            
+        }
+    
 
     return (
         <Stack alignItems={"center"}>
@@ -150,6 +175,30 @@ function ViewWeightliftingMetrics() {
                     />                    
                 </Card>
             </Stack>
+
+                {/*Date Range Slider*/}
+                {weightLiftData.length > 1 ? (
+                        <Stack width="100%" alignItems="center">
+                            <Slider
+                                aria-label="Exercise Range"
+                                min={weightLiftData.length > 0 ? 1 : 0}
+                                max={weightLiftData.length}
+                                marks={true}
+                                onChange={handleSliderChange}
+                                value={sliderRange}
+                                valueLabelDisplay="on"
+                                valueLabelFormat={valueText}
+                                sx={{ marginTop: "5%", marginBottom: "1%", height: "8px"}}
+                                disableSwap
+                            />
+                            <Typography fontSize={24}>Select a date range</Typography>
+                        </Stack>
+
+                    ) : (
+                        <></>
+                    )
+                }
+
         </Stack>
     );
 

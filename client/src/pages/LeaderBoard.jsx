@@ -440,6 +440,7 @@ useEffect(() => {
                   xAxis={[{ scaleType: 'band', dataKey: 'name' }]}
                   series={[{ dataKey: exerciseMetric, label: graphMetric }]}
                   colors={[theme.palette.secondary.main]}
+                  sx={{ padding: "1%"}}
                 />
               </>
             ) : (<></>)}

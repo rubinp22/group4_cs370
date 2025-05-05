@@ -96,7 +96,7 @@ function InputHikingExercise() {
             distance: (distanceIn === undefined || distanceIn < 1),
             elevationGain: (elevationGainIn === undefined || elevationGainIn < 1),
             elevationLoss: (elevationLossIn === undefined || elevationLossIn < 1),
-            duration: (durationIn === undefined || durationIn < 1),
+            duration: (durationIn === undefined || durationIn < 0),
             avgHeartRate: (avgHeartRateIn === undefined || avgHeartRateIn < 1),
             maxHeartRate: (maxHeartRateIn === undefined || maxHeartRateIn < 1),
         }

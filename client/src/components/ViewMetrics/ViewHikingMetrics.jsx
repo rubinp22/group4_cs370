@@ -1,4 +1,4 @@
-import { Stack, Card, Typography } from '@mui/material';
+import { Stack, Card, Typography, Slider } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 import MyBarChart from '../MyBarChart.jsx';
@@ -6,21 +6,28 @@ import axios from 'axios';
 
 import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
+import { parseISO, compareAsc } from 'date-fns'
 
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50];
 
 function ViewHikingMetrics() {
+    // Represents all data from our query
     const [hikingData, setHikingData] = useState([]);
+    // Represnts the range of data selected from our query
+    const [selectedData, setSelectedData] = useState([]);
 
-    const distance = hikingData.map(data => data.distance);
-    const elevationGain = hikingData.map(data => data.elevationGain);
-    const elevationLoss = hikingData.map(data => data.elevationLoss);
-    const duration = hikingData.map(data => data.duration);
-    const avgHeartRate = hikingData.map(data => data.avgHeartRate);
-    const maxHeartRate = hikingData.map(data => data.maxHeartRate);
-    const bodyWeight = hikingData.map(data => data.bodyWeight);
-    const fitnessLevel = hikingData.map(data => data.fitnessLevel);
+    const distance = selectedData.map(data => data.distance);
+    const elevationGain = selectedData.map(data => data.elevationGain);
+    const elevationLoss = selectedData.map(data => data.elevationLoss);
+    const duration = selectedData.map(data => data.duration);
+    const avgHeartRate = selectedData.map(data => data.avgHeartRate);
+    const maxHeartRate = selectedData.map(data => data.maxHeartRate);
+    const bodyWeight = selectedData.map(data => data.bodyWeight);
+    const fitnessLevel = selectedData.map(data => data.fitnessLevel);
+
+    // If hikingData is of length 0, we don't want our minimum value to be 1
+    const [sliderRange, setSliderRange] = useState([hikingData.length > 0 ? 1 : 0, hikingData.length])
 
     const theme = useTheme();
 
@@ -41,7 +48,7 @@ function ViewHikingMetrics() {
   
     const caloriesBurned = MET.map((data, index) => parseInt(data * duration[index] * bodyWeight[index]));
 
-    const labels = hikingData.map((data, index) => `hike ${index + 1}`)
+    const labels = selectedData.map((data, index) => `hike ${index + 1}`)
     const graphMargin = 3;
 
     // Put DB fetching here:
@@ -58,10 +65,32 @@ function ViewHikingMetrics() {
                     userID: state.user
                 }
             });
+            res.data.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
             setHikingData(res.data);
+            setSelectedData(res.data);
+            setSliderRange([1, res.data.length])
         }
     
     }, [])
+
+
+    // Changes the selected range of data
+    function handleSliderChange(value, newValue) {
+        const [min, max] = newValue;
+
+        setSliderRange(newValue)
+        setSelectedData(hikingData.slice(min - 1, max));
+    }
+
+    // Formats the labels for each selected mark on the slider
+    function valueText(value) {
+        if (hikingData.length > 0) {
+            const item = hikingData[value - 1];
+            return(item.date.slice(0, 10));
+        }
+        
+    }
+
 
     return (
         <Stack alignItems={"center"}>
@@ -120,6 +149,30 @@ function ViewHikingMetrics() {
                     />                    
                 </Card>
             </Stack>
+
+                {/*Date Range Slider*/}
+                {hikingData.length > 1 ? (
+                        <Stack width="100%" alignItems="center">
+                            <Slider
+                                aria-label="Exercise Range"
+                                min={hikingData.length > 0 ? 1 : 0}
+                                max={hikingData.length}
+                                marks={true}
+                                onChange={handleSliderChange}
+                                value={sliderRange}
+                                valueLabelDisplay="on"
+                                valueLabelFormat={valueText}
+                                sx={{ marginTop: "5%", marginBottom: "1%", height: "8px"}}
+                                disableSwap
+                            />
+                            <Typography fontSize={24}>Select a date range</Typography>
+                        </Stack>
+
+                    ) : (
+                        <></>
+                    )
+                }
+
         </Stack>
     );
 }

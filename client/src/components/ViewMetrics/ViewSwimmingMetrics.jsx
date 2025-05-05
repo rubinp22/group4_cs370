@@ -1,4 +1,4 @@
-import { Stack, Card, Typography } from '@mui/material';
+import { Stack, Card, Typography, Slider } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useTheme } from '@emotion/react';
 import { BarChart } from '@mui/x-charts';
@@ -10,20 +10,25 @@ import MyLapBarChart from '../MyLapBarChart.jsx';
 
 import GlobalStateContext from '../../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
+import { parseISO, compareAsc } from 'date-fns'
+
 
 const maxMETs = [10, 14, 18];
 const restingHeartRates = [100, 70, 50];
 
 function ViewSwimmingMetrics() {
     const [swimmingData, setSwimmingData] = useState([]);
+    const [selectedData, setSelectedData] = useState([]);
 
-    const lapCount = swimmingData.map(data => data.lapCount);
-    const lapTimes = swimmingData.map(data => data.lapTimes);
-    const strokeCount = swimmingData.map(data => data.strokeCount);
-    const avgHeartRate = swimmingData.map(data => data.avgHeartRate);
-    const maxHeartRate = swimmingData.map(data => data.maxHeartRate);
-    const bodyWeight = swimmingData.map(data => data.bodyWeight);
-    const fitnessLevel = swimmingData.map(data => data.fitnessLevel);
+    const lapCount = selectedData.map(data => data.lapCount);
+    const lapTimes = selectedData.map(data => data.lapTimes);
+    const strokeCount = selectedData.map(data => data.strokeCount);
+    const avgHeartRate = selectedData.map(data => data.avgHeartRate);
+    const maxHeartRate = selectedData.map(data => data.maxHeartRate);
+    const bodyWeight = selectedData.map(data => data.bodyWeight);
+    const fitnessLevel = selectedData.map(data => data.fitnessLevel);
+
+    const [sliderRange, setSliderRange] = useState([swimmingData.length > 0 ? 1 : 0, swimmingData.length])
 
     const theme = useTheme();
 
@@ -84,7 +89,7 @@ function ViewSwimmingMetrics() {
 
     const caloriesBurned = MET.map((data, index) => parseInt(data * (duration[index] / 60) * bodyWeight[index]));
 
-    const labels = swimmingData.map((_, index) => `swim ${index + 1}`)
+    const labels = selectedData.map((_, index) => `swim ${index + 1}`)
     const graphMargin = 3;
 
     // Put DB fetching here:
@@ -101,10 +106,30 @@ function ViewSwimmingMetrics() {
                     userID: state.user
                 }
             });
+            res.data.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
             setSwimmingData(res.data);
+            setSelectedData(res.data);
+            setSliderRange([1, res.data.length])
         }
     
     }, [])
+
+        // Changes the selected range of data
+        function handleSliderChange(value, newValue) {
+            const [min, max] = newValue;
+    
+            setSliderRange(newValue)
+            setSelectedData(swimmingData.slice(min - 1, max));
+        }
+    
+        // Formats the labels for each selected mark on the slider
+        function valueText(value) {
+            if (swimmingData.length > 0) {
+                const item = swimmingData[value - 1];
+                return(item.date.slice(0, 10));
+            }
+            
+        }
 
     return (
         <Stack alignItems={"center"}>
@@ -166,6 +191,30 @@ function ViewSwimmingMetrics() {
                     />
                 </Card>
             </Stack>
+
+                {/*Date Range Slider*/}
+                {swimmingData.length > 1 ? (
+                        <Stack width="100%" alignItems="center">
+                            <Slider
+                                aria-label="Exercise Range"
+                                min={swimmingData.length > 0 ? 1 : 0}
+                                max={swimmingData.length}
+                                marks={true}
+                                onChange={handleSliderChange}
+                                value={sliderRange}
+                                valueLabelDisplay="on"
+                                valueLabelFormat={valueText}
+                                sx={{ marginTop: "5%", marginBottom: "1%", height: "8px"}}
+                                disableSwap
+                            />
+                            <Typography fontSize={24}>Select a date range</Typography>
+                        </Stack>
+
+                    ) : (
+                        <></>
+                    )
+                }
+
         </Stack>
     );
 }
