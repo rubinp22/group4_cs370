@@ -630,7 +630,7 @@ function ProfilePage() {
                 <h3>Friends</h3>
                 <AvatarGroup max={4}>
                     {friends.map((friend) => (
-                        <Avatar alt={friend.name} src={friend.pfp}></Avatar>
+                        <Avatar title={friend.name} src={friend.pfp}></Avatar>
                     ))}
                 </AvatarGroup>
                 <br/>
