@@ -15,7 +15,8 @@ const Profile = new mongoose.Schema({
     heightInch: { type: Number, default: -1},
     weightArray: { type: Array, default: {weight: "0", dateLogged: Date.now}},
     pfp: { type: String, default: '/images/profileImages/profile13.png'},
-    description: { type: String, default: '' }
+    description: { type: String, default: '' },
+    goal: { type: String, default: ''}
 });
 
 export default mongoose.model('users', Profile);
