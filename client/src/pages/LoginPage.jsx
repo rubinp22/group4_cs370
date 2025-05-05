@@ -21,6 +21,11 @@ function LoginPage() {
   const [allUsers, setAllUsers] = useState([]);
   const [isError, setIsError] = useState(false);
 
+  const [helperTexts, setHelperTexts] = useState({
+    username:"",
+    password:""
+  })
+
 useEffect(() => {
   async function getProfileData() {
     try {
@@ -85,6 +90,11 @@ useEffect(() => {
       setExercises(matchingUser.exercises)
       navigate('/HomePage');
     } else {
+      let newHelper = {
+        username:"",
+        password: "Username and Password don't match"
+      }
+      setHelperTexts(newHelper);
       setIsError(true);
     }
   }
@@ -101,6 +111,7 @@ useEffect(() => {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           error={isError}
+          helperText={helperTexts.username}
         />
         <Typography>Password:</Typography>
         <TextField
@@ -110,6 +121,7 @@ useEffect(() => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           error={isError}
+          helperText={helperTexts.password}
         />
       </Stack>
       <Stack alignItems={"center"}>
