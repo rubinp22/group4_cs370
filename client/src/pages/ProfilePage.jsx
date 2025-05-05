@@ -13,6 +13,8 @@ import GlobalStateContext from '../contexts/GlobalStateContext.jsx';
 import React, { useContext } from 'react';
 import Profile from '../../../api/models/Profile.js';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import MyActivityCalendar from '../components/MyActivityCalendar.jsx';
+import { parseISO, compareAsc } from 'date-fns'
 
 import ProfilePictures from '../data/ProfilePictures.jsx';
 
@@ -28,9 +30,9 @@ function ProfilePage() {
     const [achievementData, setAchievementData] = useState([]);
     const [earnedAchievements, setEarnedAchievements] = useState([]);
     const [userExercises, setUserExercises] = useState([]);
-
+    const [exercisesByDate, setExercisesByDate] = useState(null);
     const [friends, setFriends] = useState([]);
-    const [requestSent, setRequestSent] = useState(false)
+    const [requestSent, setRequestSent] = useState(false);
 
     const [nameIn, setnameIn] = useState(undefined);
     const [heightFeetIn, setHeightFeetIn] = useState(undefined);
@@ -39,13 +41,18 @@ function ProfilePage() {
     const [descriptionIn, setDescriptionIn] = useState(undefined); 
     const [pfpIn, setPfpIn] = useState(undefined);
 
-    const name = profileData.map(data => data.name);
-    const heightFeet = profileData.map(data => data.heightFeet);
-    const heightInch = profileData.map(data => data.heightInch);
-    const weight = profileData.map(data => data.weightArray.at(-1).weight);
-    const weightArray = profileData.map(data => data.weightArray)
-    const description = profileData.map(data => data.description);
-    const pfp = profileData.map(data => data.pfp);
+    // Not ideal, but using map to like this turns all of these variables into an array
+    // that holds one value. This broke the ability to edit a user profile. By indexing
+    // to the first element, we eliminate this problem. Map however, is nice because it
+    // doesn't throw errors when iterating over profileData when its empty, before the 
+    // API promise is fulfilled. 
+    const name = profileData.map(data => data.name)[0];
+    const heightFeet = profileData.map(data => data.heightFeet)[0];
+    const heightInch = profileData.map(data => data.heightInch)[0];
+    const weight = profileData.map(data => data.weightArray.at(-1).weight)[0];
+    const weightArray = profileData.map(data => data.weightArray)[0];
+    const description = profileData.map(data => data.description)[0];
+    const pfp = profileData.map(data => data.pfp)[0];
 
     const textInputSpacing = 3;
 
@@ -61,54 +68,45 @@ function ProfilePage() {
                 }
             });
             setprofileData(res.data);
-
+            
             const friendIDs = [];
 
-            try {
-                const res = await axios.get('http://localhost:3000/friendrequests', {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    params: {
-                        requester: pageID,
-                        accepted: true
-                    }
-                })
-                res.data.forEach(friend => {
-                    friendIDs.push(friend.reciever);
-                })
-            } catch (err) {
-                console.log(err);
-            }
+            const requested = await axios.get('http://localhost:3000/friendrequests', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    requester: pageID,
+                    accepted: true
+                }
+            })
+            requested.data.forEach(friend => {
+                friendIDs.push(friend.reciever);
+            })
 
-            try {
-                const res = await axios.get('http://localhost:3000/friendrequests', {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    params: {
-                        reciever: pageID,
-                        accepted: true
-                    }
-                })
-                res.data.forEach(friend => {
-                    friendIDs.push(friend.requester);
-                })
-            } catch (err) {
-                console.log(err);
-            }
+            const recieved = await axios.get('http://localhost:3000/friendrequests', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    reciever: pageID,
+                    accepted: true
+                }
+            })
+            recieved.data.forEach(friend => {
+                friendIDs.push(friend.requester);
+            })
 
             getFriendData(friendIDs);
+
             return res.data
         } catch (err) {
             console.log(err);
         }
     }
 
-
     async function getFriendData(friendIds) {
         const newFriends = [];
-
         friendIds.forEach(async id => {
             try {
                 const res = await axios.get('http://localhost:3000/users', {
@@ -128,7 +126,6 @@ function ProfilePage() {
                 console.log(err);
             }
         })
-
         setFriends(newFriends);
         //console.log(newFriends);
 
@@ -172,7 +169,6 @@ function ProfilePage() {
         }
     }
     
-    
     async function getUserExercises() {
         try {
             const res = await axios.get('http://localhost:3000/exercises', {
@@ -189,8 +185,7 @@ function ProfilePage() {
         } catch (err) {
             console.log(err);
         }
-    }
-    
+    }    
 
     // Fetching the data of all achievements from the DB (name, category, metric, requirement,)
     async function getAchievementData() {
@@ -326,6 +321,16 @@ function ProfilePage() {
         pfp: false
     })
 
+      const [helperTexts, setHelperTexts] = useState({
+        username: "",
+        password: "",
+        name: "",
+        heightFeet: "",
+        heightInches: "",
+        weight: "",
+        description: ""
+      })
+
     function handleEdit() {
         if (editingData === false) {
             // set input data to current values
@@ -368,21 +373,91 @@ function ProfilePage() {
             dispatch({ type: 'SETWEIGHT', payload: weightArrayIn.at(-1).weight });
             dispatch({ type: 'SETPFP', payload: pfpIn});
             // update the database
+            console.log("new data: ", updatedData);
             await axios.put('http://localhost:3000/users/', updatedData)
             getprofileData();
         }
+        console.log("error data")
     }
 
     // check for errors
     function isError() {
 
+        // let newErrors = {
+        //     name: (nameIn === undefined || nameIn.length > 30 || nameIn.length < 1),
+        //     heightFeet: (heightFeetIn === undefined || heightFeetIn > 7 || heightFeetIn < 1),
+        //     heightInch: (heightInchIn === undefined || heightInchIn > 11 || heightInchIn < 0),
+        //     weight: (weightIn === undefined || weightIn > 1000 || weightIn < 1),
+        //     description: (description != undefined && description.length > 200),
+        //     pfp: (pfp === undefined)
+        // }
+
+        let nameError = true;
+        let nameHelper = "";
+        if (nameIn === "") {
+          nameHelper = "Please enter a name";
+        } else if (nameIn.length > 30) {
+          nameHelper = "Exceeded character limit of 30 by " + (name.length - 30);
+        } else {
+          nameError = false;
+        }
+      
+        let heightFeetError = true;
+        let heightFeetHelper = "";
+        if (heightFeetIn === "") {
+          heightFeetHelper = "Please enter Feet";
+        } else if (heightFeetIn > 7 || heightFeetIn < 1) {
+          heightFeetHelper = "Valid range: 1 - 7";
+        } else {
+          heightFeetError = false;
+        }
+      
+        let heightInchesError = true;
+        let heightInchesHelper = "";
+        if (heightInchIn === "") {
+          heightInchesHelper = "Please enter Inches";
+        } else if (heightInchIn > 11 || heightInchIn < 0) {
+          heightInchesHelper = "Valid range: 0 - 11";
+        } else {
+          heightInchesError = false;
+        }
+      
+        let weightError = true;
+        let weightHelper = "";
+        if (weightIn === "") {
+          weightHelper = "Please enter a weight";
+        } else if (weightIn > 1000 || weightIn < 1) {
+          weightHelper = "Valid range: 1 - 1000";
+        } else {
+          weightError = false;
+        }
+      
+        let descriptionError = true;
+        let descriptionHelper = "";
+        if (descriptionIn === "") {
+          descriptionHelper = "Please enter a description"
+        } else if (descriptionIn.length > 200) {
+          descriptionHelper = "Exceeded character limit of 200 by " + (descriptionIn.length - 200);
+        } else {
+          descriptionError = false;
+        }
+      
+        let newHelper = {
+          name: nameHelper,
+          heightFeet: heightFeetHelper,
+          heightInches: heightInchesHelper,
+          weight: weightHelper,
+          description: descriptionHelper
+        }
+      
+        setHelperTexts(newHelper);
+      
         let newErrors = {
-            name: (nameIn === undefined || nameIn.length > 30 || nameIn.length < 1),
-            heightFeet: (heightFeetIn === undefined || heightFeetIn > 7 || heightFeetIn < 1),
-            heightInch: (heightInchIn === undefined || heightInchIn > 11 || heightInchIn < 0),
-            weight: (weightIn === undefined || weightIn > 1000 || weightIn < 1),
-            description: (description != undefined && description.length > 200),
-            pfp: (pfp === undefined)
+          name: nameError,
+          heightFeet: heightFeetError,
+          heightInches: heightInchesError,
+          weight: weightError,
+          description: descriptionError
         }
 
         setErrors(newErrors);
@@ -408,24 +483,98 @@ function ProfilePage() {
             accepted: false
         }
         // update the database
-        await axios.post('http://localhost:3000/friendrequests/', newRequest)
+        await axios.post('http://localhost:3000/friendrequests/', newRequest);
+        //handleSubmit();
+        getprofileData();
         setRequestSent(true);
     }
+
+    function collectExerciseDates() {
+        //console.log("userExercises: ", userExercises);
+
+        // The first date object will be invisible on the calendar, but it will set the starting range of the
+        // calendar to the beginning of the year.
+        let exerciseDates = [{
+            date: '2025-01-01',
+            count: 0,
+            level: 0
+        }];
+
+        userExercises.map((exercise, idx) => {
+            //console.log("exercise ", idx + 1, " date: ", exercise.date.substring(0, 10));
+            let currentDate = exercise.date.substring(0, 10);
+            let uniqueDate = true;
+
+                exerciseDates.map((data, idx) => {
+                    if (data.date === currentDate) {
+                        data.count++;
+                        if (data.count === 1) {
+                            data.level = 1;
+                        } else if (data.count === 2) {
+                            data.level = 2
+                        } else if (data.count === 3) {
+                            data.level = 3;
+                        } else if (data.count >= 4) {
+                            data.level = 4;
+                        }
+
+                        uniqueDate = false;
+                    } 
+                })
+
+                if (uniqueDate) {
+                    exerciseDates.push({
+                        date: currentDate,
+                        count: 1,
+                        level: 1
+                    })
+                }
+
+        })
+
+        // The exerciseDates that get fed into the MyActivityCalendar component need to have their dates
+        // be sorted in ascending order. The range of the dates on the calendar are determined by the 
+        // first and last dates, so without sorting, we would run into issues where the calendar range
+        // is smaller than the date range, resulting in missing data.
+        exerciseDates.sort((a, b) => compareAsc(parseISO(a.date), parseISO(b.date)));
+
+        // Inserting a dummy date object for the current day
+        const today = new Date().toISOString().substring(0, 10);
+
+        // We only want to insert dummy data for the current day if the user hasn't already
+        // exercised today. We don't want to overwrite their data for today. 
+        const exerciseToday = exerciseDates.find(date => today === date.date);
+        if (!exerciseToday) {
+            exerciseDates.push({
+                date: today,
+                count: 0,
+                level: 0
+            })
+        }
+
+
+        setExercisesByDate(exerciseDates);
+    }
+
+    useEffect(() => {
+        if (!userExercises || userExercises.length === 0) return;
+        collectExerciseDates();
+      }, [userExercises]);
     
 
     return (
         <>
         <ToolBar /> {/* add new elements */}
         <Stack>
-        <Grid container spacing={2}>
-            {/*Profile picture*/}
-            <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
-                <Avatar
-                sx={{ width: 100, height: 100}}
-                alt={name}
-                src={pfp}
-                ></Avatar>
-            </Grid>
+          <Grid container spacing={2} marginBottom={2}>
+          {/*Profile picture*/}
+          <Grid display="flex" justifyContent="left" alignItems="left" size="auto"> 
+              <Avatar
+              sx={{ width: 100, height: 100}}
+              alt={name}
+              src={pfp}
+              ></Avatar>
+          </Grid>
 
             {/*Name*/}
             <Grid display="flex" justifyContent="flex-start" alignItems="center" size={8}>
@@ -446,7 +595,6 @@ function ProfilePage() {
             </Card>
             </Grid>
     
-        
             {/*Friends*/}
             <Grid container direction="column" display="flex" justifyContent="flex-start" alignItems="center" size={3} spacing={0}>
                 <Card sx={{ p: 1, minWidth: '100%', display: 'flex', justifyContent: 'center'}} >
@@ -458,32 +606,47 @@ function ProfilePage() {
                     ))}
                 </AvatarGroup>
                 <br/>
-                {(requestSent || state.user === pageID) ? (<></>) : 
+                {(requestSent || state.user === "" || state.user === pageID) ? (<></>) : 
                         (<Button variant="contained" onClick={handleFriendRequest}>Add</Button>)}
                 </Box>
                 
                 </Card>
             </Grid>
 
-            {/*Achievements*/}
-            <Grid size={4}>
-                <Card sx={{ pb: 3}}>
-                <h3>Achievements</h3>
-                    {earnedAchievements.map((achievement, idx) => {
-                        return (
-                            <Tooltip title={achievement.tooltip}>
-                                <Chip
-                                    key={idx}
-                                    label={achievement.name}
-                                />
-                            </Tooltip>
+        {/*Achievements*/}
+        <Grid size={4} sx={{ display: 'flex' }}>
+            <Card sx={{ pb: 3, width: "100%"} }>
+            <h3>Achievements</h3>
+                {earnedAchievements.map((achievement, idx) => {
+                    return (
+                        <Tooltip title={achievement.tooltip}>
+                            <Chip
+                                key={idx}
+                                label={achievement.name}
+                            />
+                        </Tooltip>
 
-                        )
-                    })}
-                </Card>
-            </Grid>
+                    )
+                })}
+            </Card>
+        </Grid>
+
+        {/*Recent Activity*/}
+        <Grid>
+            <Card sx={{ padding: "2%", justifyItems: "center"}}>
+            <h3>Recent Activity</h3>
+            {
+            exercisesByDate?.length > 0 ? 
+                <MyActivityCalendar data={exercisesByDate}/>
+            : 
+                <></>
+            }
+                
+            </Card>
 
         </Grid>
+        </Grid>
+
 
         {/*Editing Form*/}
         {!editingData ? (
@@ -499,6 +662,7 @@ function ProfilePage() {
                         variant="filled" 
                         label="Name"
                         error={errors.name}
+                        helperText={helperTexts.name}
                         value={nameIn}
                         onChange={(e) => {setnameIn(e.target.value); setSavedData(false)}}
                     />
@@ -531,6 +695,7 @@ function ProfilePage() {
                             variant="filled" 
                             label="Height"
                             error={errors.heightFeet}
+                            helperText={helperTexts.heightFeet}
                             value={heightFeetIn}
                             type="number"
                             onChange={(e) => {setHeightFeetIn(e.target.value); setSavedData(false)}}
@@ -543,7 +708,8 @@ function ProfilePage() {
                         <TextField 
                             required
                             variant="filled" 
-                            error={errors.heightInch}
+                            error={errors.heightInches}
+                            helperText={helperTexts.heightInches}
                             value={heightInchIn}
                             type="number"
                             onChange={(e) => {setHeightInchIn(e.target.value); setSavedData(false)}}
@@ -558,6 +724,7 @@ function ProfilePage() {
                         variant="filled"
                         label="Weight" 
                         error={errors.weight}
+                        helperText={helperTexts.weight}
                         value={weightIn}
                         type="number"
                         onChange={(e) => {setWeightIn(e.target.value); setSavedData(false)}}
@@ -569,6 +736,7 @@ function ProfilePage() {
                         variant="filled" 
                         label="Description"
                         error={errors.description}
+                        helperText={helperTexts.description}
                         value={descriptionIn}
                         multiline
                         maxRows={4}
