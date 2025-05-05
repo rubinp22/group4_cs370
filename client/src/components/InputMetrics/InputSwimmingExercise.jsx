@@ -10,6 +10,8 @@ function InputSwimmingExercise() {
     const [strokeCountIn, setStrokeCountIn] = useState([]);
     const [avgHeartRateIn, setAvgHeartRateIn] = useState(undefined);
     const [maxHeartRateIn, setMaxHeartRateIn] = useState(undefined);
+    const [exerciseSubmitted, setExerciseSubmitted] = useState(false);
+
 
     // Global State
     const { state, dispatch } = useContext(GlobalStateContext)
@@ -80,6 +82,8 @@ function InputSwimmingExercise() {
             await axios.put('http://localhost:3000/users/', updatedData)
 
             dispatch({ type: 'SETEXERCISES', payload: updatedData.exercises });
+
+            setExerciseSubmitted(true);
         }
     }
     
@@ -122,6 +126,11 @@ function InputSwimmingExercise() {
         // Then three text fields are created to input into.
         setLapTimesIn(new Array(count).fill(""));
         setStrokeCountIn(new Array(count).fill(""));
+    }
+
+    function handleResubmission() {
+        handleClear();
+        setExerciseSubmitted(false);
     }
 
     return (
@@ -194,9 +203,18 @@ function InputSwimmingExercise() {
                 />
             </Stack>
 
-            <Stack direction="row" justifyContent="center" spacing={5} marginTop={5}>
-                <Button variant="contained" onClick={handleSubmit}>Submit</Button>
-                <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
+            <Stack direction="row" justifyContent="center" alignItems="center" spacing={5} marginTop={5}>
+                {exerciseSubmitted ? (
+                        <>
+                            <Button variant="contained" onClick={handleResubmission}>Submit Another?</Button>
+                        </>
+                    ) : (
+                        <>
+                            <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                            <Button variant="contained" color="secondary" onClick={handleClear}>Clear</Button>
+                        </>
+                    )
+                }
             </Stack>
 
         </Card>
